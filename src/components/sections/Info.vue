@@ -30,14 +30,14 @@
               cols="12"
               md="3"
             >
-              <info-features />
+              <insurance-info />
             </v-col>
 
             <v-col
               cols="12"
               md="3"
             >
-              <instagram />
+              <partners />
             </v-col>
           </v-row>
         </v-container>
@@ -51,8 +51,8 @@
     name: 'SectionBusinessInfo',
 
     components: {
-      InfoFeatures: () => import('@/components/InfoFeatures'),
-      Instagram: () => import('@/components/Instagram'),
+      InsuranceInfo: () => import('@/components/InsuranceInfo'),
+      Partners: () => import('@/components/Partners'),
     },
   }
 </script>

@@ -4,11 +4,10 @@
     <ucore-app-bar/>
     <v-main>         
         <section-hero/>
-        <section-theme-features/>
-        <section-features/>
-        <section-contact-us/>
-        <section-affiliates/>
-        <section-social-media/>
+        <section-partners/>
+        <section-all-covers/>
+        <section-how-it-works/>
+        <section-contact-us/>                
         <section-keep-in-touch/>
         <section-newsletter/>
         <!-- <section-pro-features/> -->

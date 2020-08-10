@@ -17,11 +17,11 @@
 
     data: () => ({
       features: [
-        'Zero Installation',
-        'Easy Customization',
-        'User Friendly Design',
-        '24/7 Support Desk',
-        'SEO Optimized',
+        'Health Insurance',
+        'Life Insurance',
+        'Motor Insurance',
+        'Family Health',
+        'Golf insurance',
       ],
     }),
   }

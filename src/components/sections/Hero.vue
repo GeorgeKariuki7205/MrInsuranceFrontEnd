@@ -24,13 +24,13 @@
             class="d-flex flex-wrap"
           >
             <base-btn>
-              Discover More
+              Show More
             </base-btn>
 
             <span class="font-weight-bold ml-6 mr-4 my-4">or</span>
 
             <base-btn :ripple="false" class="pa-1" height="auto" text>
-              Get Started Now
+              Get In Touch With Out Staff Now
             </base-btn>
           </div>
         </v-responsive>

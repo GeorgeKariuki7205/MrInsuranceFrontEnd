@@ -40,7 +40,7 @@
           text: 'Efficiently unleash media information without cross-media value. Quickly maximize value timely deliverables schemas.',
         },
         {
-          icon: 'mdi-medical_services',
+          icon: 'local_hospital',
           title: 'Health Insurance.',
           text: 'Efficiently unleash media information without cross-media value. Quickly maximize value timely deliverables schemas.',
         },

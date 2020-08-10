@@ -48,17 +48,17 @@
         {
           icon: 'mdi-map-marker-outline',
           title: 'Address',
-          text: '8553 N. Beach St. Ste. 227<br>Fort Worth, Texas 76137',
+          text: '121 Moi Avenue',
         },
         {
           icon: 'mdi-cellphone',
           title: 'Phone',
-          text: '01 (800) 433 744<br>01 (800) 433 633',
+          text: '(+254) 3333333',
         },
         {
           icon: 'mdi-email',
           title: 'Email',
-          text: 'john@vuetifyjs.com<br>heather@vuetifyjs.com',
+          text: 'mail@mail.com',
         },
       ],
     }),
