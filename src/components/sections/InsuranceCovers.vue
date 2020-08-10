@@ -45,13 +45,13 @@
           text: 'Efficiently unleash media information without cross-media value. Quickly maximize value timely deliverables schemas.',
         },
         {
-          icon: 'mdi-pencil-outline',
-          title: 'Brand Making',
+          icon: 'group',
+          title: 'Family Health',
           text: 'Efficiently unleash media information without cross-media value. Quickly maximize value timely deliverables schemas.',
         },
         {
-          icon: 'mdi-puzzle-outline',
-          title: '24/7 Support',
+          icon: 'local_florist',
+          title: 'Agricultural Insurance',
           text: 'Efficiently unleash media information without cross-media value. Quickly maximize value timely deliverables schemas.',
         },
         
