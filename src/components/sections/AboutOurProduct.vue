@@ -3,7 +3,7 @@
     <base-section-heading
       color="grey lighten-2"
       icon="mdi-vuetify"
-      title="About our Product"
+      title="About Mr Insurance"
     />
 
     <v-container>
@@ -28,7 +28,7 @@
     data: () => ({
       cards: [
         {
-          title: 'Grow your Revenue',
+          title: 'Efficiency',
           subtitle: 'Best Productivity',
           text: 'Similique sunt in culpa qui officia deserunt mollitia animi, id est laborut dolorum fuga.harum quidem rerum facilis estexpedita distinctio.',
           callout: '01',
@@ -40,8 +40,8 @@
           callout: '02',
         },
         {
-          title: 'Target Setting',
-          subtitle: 'Income Flow',
+          title: 'Easy To Use',
+          subtitle: 'Easy To Use',
           text: 'Similique sunt in culpa qui officia deserunt mollitia animi, id est laborut dolorum fuga.harum quidem rerum facilis estexpedita distinctio.',
           callout: '03',
         },

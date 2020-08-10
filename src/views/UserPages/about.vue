@@ -4,8 +4,8 @@
     <v-main>
       <section-hero-alt :name="pageName"/>
       <section-about-our-product />
-      <section-theme-features />
-      <section-affiliates />
+      <section-all-covers/>
+      <section-partners/>
       <section-newsletter />
       <!-- <section-pro-features/> -->
       <section-info />
