@@ -6,23 +6,21 @@
       class="white--text"
       gradient="to right, rgba(5, 11, 31, .8), rgba(5, 11, 31, .8)"
     >
-      <v-container class="fill-height px-4 py-12">
+      <v-container class=" px-4 py-12">
         <v-responsive
-          class="d-flex align-center"
+          class="d-flex align-center py-4"
           height="100%"
-          max-width="700"
+          max-width="100%"
           width="100%"
         >
-          <base-heading title="PROMOTE YOUR BUSINESS WITH ZERO" />
-
-          <base-body>
-            Infographic hypotheses influencer user experience Long madel ture gen-z paradigm shift client partner network product seilans solve management influencer analytics leverage virality.
-            incubator seed round massmarket.
-            buyer agile development growth hacking business-to-consumer ecosystem
-          </base-body>
-
+          <base-heading class="text-center" title="Mr Insurance, Be Insured." />
+          <section-insurance-covers />
           <div
-            :class="$vuetify.breakpoint.smAndDown ? 'flex-column align-start' : 'align-center'"
+            :class="
+              $vuetify.breakpoint.smAndDown
+                ? 'flex-column align-start'
+                : 'align-center'
+            "
             class="d-flex flex-wrap"
           >
             <base-btn>
@@ -31,12 +29,7 @@
 
             <span class="font-weight-bold ml-6 mr-4 my-4">or</span>
 
-            <base-btn
-              :ripple="false"
-              class="pa-1"
-              height="auto"
-              text
-            >
+            <base-btn :ripple="false" class="pa-1" height="auto" text>
               Get Started Now
             </base-btn>
           </div>
@@ -47,19 +40,49 @@
 </template>
 
 <script>
-  export default {
-    name: 'SectionHero',
+export default {
+  name: "SectionHero",
 
-    provide: {
-      theme: { isDark: true },
+  provide: {
+    theme: { isDark: true },
+  },
+
+  computed: {
+    minHeight() {
+      const height = this.$vuetify.breakpoint.mdAndUp ? "10vh" : "50vh";
+
+      return `calc(${height} - ${this.$vuetify.application.top}px)`;
     },
-
-    computed: {
-      minHeight () {
-        const height = this.$vuetify.breakpoint.mdAndUp ? '100vh' : '50vh'
-
-        return `calc(${height} - ${this.$vuetify.application.top}px)`
+  },
+  data: () => ({
+    features: [
+      {
+        title: "Pixel Perfect Design",
+        icon: "fountain-pen-tip",
       },
-    },
-  }
+      {
+        title: "Retina Ready",
+        icon: "cellphone",
+      },
+      {
+        color: "primary",
+        dark: true,
+        title: "Easily Customizable",
+        icon: "pencil-box-outline",
+      },
+      {
+        title: "Image Parallax",
+        icon: "mdi-image-size-select-actual",
+      },
+      {
+        title: "Seo Optimized",
+        icon: "mdi-ice-pop",
+      },
+      {
+        title: "24/7 Support",
+        icon: "mdi-help-circle-outline",
+      },
+    ],
+  }),
+};
 </script>
