@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/UserPages/Landing'
 import About from '../views/UserPages/about'
 import Contact from '../views/UserPages/contactUs'
+import Health from '../views/Health/HealthLanding'
 Vue.use(VueRouter)
 
   const routes = [
@@ -20,6 +21,11 @@ Vue.use(VueRouter)
     path: '/contact-us',
     name: 'Contact',
     component: Contact
+  },
+  {
+    path: '/health',
+    name: 'Health',
+    component: Health
   },
 
 ]
