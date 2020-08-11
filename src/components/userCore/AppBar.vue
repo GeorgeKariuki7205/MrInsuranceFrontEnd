@@ -4,16 +4,16 @@
       id="home-app-bar"
       app
       light
-      color="white"
+      color="#29AB87"
       elevation="1"
       height="80"
     >   
     <v-app-bar-nav-icon class="hidden-md-and-up" @click="drawer = !drawer" />
-      <h1 style="font-family:'cursive'">Mr Insurance</h1>
+      <h1  style="font-family:'cursive';">Mr Insurance</h1>
       <v-spacer />
 
-      <div color="gray">
-        <v-tabs class="hidden-sm-and-down icons-and-text" optional>
+      <div color="#29AB87">
+        <v-tabs background-color="#29AB87" class="hidden-sm-and-down icons-and-text" optional>
           <v-tab
             
             v-for="(name, i) in items"
@@ -26,10 +26,11 @@
             class="font-weight-bold"
             min-width="96"
             text
+            white--text
           >
             <v-icon>{{icons[i]}}</v-icon>
             <v-spacer></v-spacer>
-            {{ name }}
+           {{ name }}
             
           </v-tab>
         </v-tabs>
