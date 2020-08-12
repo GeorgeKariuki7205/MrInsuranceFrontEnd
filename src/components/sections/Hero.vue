@@ -13,7 +13,7 @@
           max-width="100%"
           width="100%"
         >
-          <base-heading class="text-center" title="Mr Insurance, Be Insured." />
+          <base-heading class="text-center" title="Mr Insurance, Live Your Best." />
           <section-insurance-covers />
           <div
             :class="

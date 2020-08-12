@@ -20,71 +20,94 @@
         >
           <v-tabs-slider color="black"></v-tabs-slider>
           <v-tab
-            color="red"
-            v-for="(name, i) in items"
-            :key="i"
-            :to="{ name }"
-            :exact="name === 'Home'"
-            :ripple="false"
+            to="/"
+            ripple="false"
             active-class="text--primary"
             class="font-weight-bold"
             min-width="96"
             text
-            white--text
           >
-            <v-icon>{{ icons[i] }}</v-icon>
+            <v-icon>home</v-icon>
             <v-spacer></v-spacer>
-            {{ name }}
+            Home
           </v-tab>
-          <v-menu openOnHover offsetX>
-            <template v-slot:activator="{ on, attrs }">              
-                <v-btn
-                  text
-                  class="align-self-center mr-4"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon left>local_hospital</v-icon>
-                  Health
-                  <!-- <span> </span> -->
-                  <v-icon right>mdi-menu-down</v-icon>
-                </v-btn>                              
+          <v-menu
+            openOnHover
+            offsetY
+            v-for="item in navigationStateGetter"
+            :key="item"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                text
+                class="align-self-center mr-4"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon left>local_hospital</v-icon>
+                {{ item["cover"] }}
+                <!-- <span> </span> -->
+                <v-icon right>mdi-menu-down</v-icon>
+              </v-btn>
             </template>
 
             <v-list background-color="primary" dense class="grey lighten-3">
+              <v-subheader>{{ item["cover"] }}</v-subheader>
               <v-list-item
-                v-for="item in more"
+                v-for="item in item['subCategories']"
                 :key="item"
                 @click="addItem(item)"
               >
-                <!-- {{ item }} -->
                 <v-list-item-content>
                   <v-list-item-title v-text="item"></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
           </v-menu>
+          <v-tab
+            to="/about"
+            active-class="text--primary"
+            class="font-weight-bold"
+            min-width="96"
+            text
+          >
+            <v-icon>group</v-icon>
+            <v-spacer></v-spacer>
+            About
+          </v-tab>
+          <v-tab
+            to="/contact-us"
+            active-class="text--primary"
+            class="font-weight-bold"
+            min-width="96"
+            text
+          >
+            <v-icon>call</v-icon>
+            <v-spacer></v-spacer>
+            Contact Us
+          </v-tab>
         </v-tabs>
       </div>
     </v-app-bar>
 
-    <home-drawer v-model="drawer" :items="items" :icons="icons" />
+    <home-drawer v-model="drawer" :navigationStateGetters="navigationStateGetter"/>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "HomeAppBar",
 
   components: {
     HomeDrawer: () => import("./Drawer"),
   },
-
+  computed: {
+    ...mapGetters(["navigationStateGetter"]),
+  },
   data: () => ({
     drawer: false,
-    more: ["Audience1", "Audience 1", "Audience 1", "Audience 1", "Audience 1"],
-    items: ["Home", "About", "Contact"],
-    icons: ["home", "group", "call"],
+
   }),
 };
 </script>
