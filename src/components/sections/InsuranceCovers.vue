@@ -11,7 +11,7 @@
             md="3"            
           >
             <router-link class="text-decoration-none" to="/health">            
-            <base-info-card
+            <base-insurance-info-card
               align="center"
               dark              
               :covers="covers"
