@@ -28,22 +28,36 @@
               <v-list-item-title> Home </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-subheader inset>Insurance Covers.</v-subheader>
+          <v-subheader>Insurance Covers.</v-subheader>
 
-          <v-list-group v-for="item in navigationStateGetters"
-            :key="item" prepend-icon="local_hospital">
-            <template v-slot:activator>
-              <v-list-item-title>{{ item["cover"] }}</v-list-item-title>
-            </template>
+          <div v-for="(item, index) in navigationStateGetters" :key="index">
+            <v-list-group
+              v-if="item['subCategories']"
+              prepend-icon="local_hospital"
+            >
+              <template v-slot:activator>
+                <v-list-item-title>{{ item["cover"] }}</v-list-item-title>
+              </template>
+              <v-list-item
+                v-for="item in item['subCategories']"
+                :key="item"
+                link
+              >
+                <v-list-item-title v-text="item"></v-list-item-title>
+              </v-list-item>
+            </v-list-group>
 
+            <v-list-item v-else color="primary">
+              <v-list-item-icon>
+                <v-icon>email</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title> {{ item["cover"] }} </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </div>
 
-                
-                <v-list-item v-for="item in item['subCategories']" :key="item" link>
-                <v-list-item-title v-text="item"></v-list-item-title>                
-              </v-list-item>                      
-          </v-list-group>
-
-           <v-list-item to="/about" color="primary">
+          <v-list-item to="/about" color="primary">
             <v-list-item-icon>
               <v-icon>group</v-icon>
             </v-list-item-icon>
@@ -52,7 +66,7 @@
             </v-list-item-content>
           </v-list-item>
 
-           <v-list-item to="/contact-us" color="primary">
+          <v-list-item to="/contact-us" color="primary">
             <v-list-item-icon>
               <v-icon>call</v-icon>
             </v-list-item-icon>
@@ -60,7 +74,6 @@
               <v-list-item-title> Contact Us </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-
         </v-list>
         <v-divider></v-divider>
       </v-list-item-group>
@@ -88,7 +101,7 @@ export default {
     navigationStateGetters: {
       type: Array,
       default: () => [],
-    },    
+    },
   },
 };
 </script>

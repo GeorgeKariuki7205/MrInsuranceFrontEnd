@@ -31,39 +31,49 @@
             <v-spacer></v-spacer>
             Home
           </v-tab>
-          <v-menu
-            openOnHover
-            offsetY
-            v-for="item in navigationStateGetter"
-            :key="item"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                text
-                class="align-self-center mr-4"
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon left>local_hospital</v-icon>
-                {{ item["cover"] }}
-                <!-- <span> </span> -->
-                <v-icon right>mdi-menu-down</v-icon>
-              </v-btn>
-            </template>
+          <template v-for="item in navigationStateGetter">
+            <v-menu v-if="item.subCategories" openOnHover offsetY :key="item">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  text
+                  class="align-self-center mr-4"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon left>local_hospital</v-icon>
+                  {{ item["cover"] }}
+                  <!-- <span> </span> -->
+                  <v-icon right>mdi-menu-down</v-icon>
+                </v-btn>
+              </template>
 
-            <v-list background-color="primary" dense class="grey lighten-3">
-              <v-subheader>{{ item["cover"] }}</v-subheader>
-              <v-list-item
-                v-for="item in item['subCategories']"
-                :key="item"
-                @click="addItem(item)"
-              >
-                <v-list-item-content>
-                  <v-list-item-title v-text="item"></v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+              <v-list background-color="primary" dense class="grey lighten-3">
+                <v-subheader>{{ item["cover"] }}</v-subheader>
+                <v-list-item
+                  v-for="item in item['subCategories']"
+                  :key="item"
+                  @click="addItem(item)"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item"></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+            <v-tab
+              :key="item"
+              v-else
+              ripple="false"
+              active-class="text--primary"
+              class="font-weight-bold"
+              min-width="96"
+              text
+            >
+              <v-icon>home</v-icon>
+              <v-spacer></v-spacer>
+              {{ item["cover"] }}
+            </v-tab>
+          </template>
           <v-tab
             to="/about"
             active-class="text--primary"
@@ -90,7 +100,10 @@
       </div>
     </v-app-bar>
 
-    <home-drawer v-model="drawer" :navigationStateGetters="navigationStateGetter"/>
+    <home-drawer
+      v-model="drawer"
+      :navigationStateGetters="navigationStateGetter"
+    />
   </div>
 </template>
 
@@ -107,7 +120,6 @@ export default {
   },
   data: () => ({
     drawer: false,
-
   }),
 };
 </script>
