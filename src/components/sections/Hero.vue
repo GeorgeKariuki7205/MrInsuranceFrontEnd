@@ -54,35 +54,7 @@ export default {
       return `calc(${height} - ${this.$vuetify.application.top}px)`;
     },
   },
-  data: () => ({
-    features: [
-      {
-        title: "Pixel Perfect Design",
-        icon: "fountain-pen-tip",
-      },
-      {
-        title: "Retina Ready",
-        icon: "cellphone",
-      },
-      {
-        color: "primary",
-        dark: true,
-        title: "Easily Customizable",
-        icon: "pencil-box-outline",
-      },
-      {
-        title: "Image Parallax",
-        icon: "mdi-image-size-select-actual",
-      },
-      {
-        title: "Seo Optimized",
-        icon: "mdi-ice-pop",
-      },
-      {
-        title: "24/7 Support",
-        icon: "mdi-help-circle-outline",
-      },
-    ],
+  data: () => ({    
   }),
 };
 </script>

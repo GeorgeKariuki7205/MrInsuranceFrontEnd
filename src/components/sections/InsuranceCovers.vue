@@ -1,26 +1,22 @@
 <template>
-  <base-section
-    id="features"
-    
-  >
-    <v-responsive
-      class="mx-auto"
-      max-width="1350"
-    >
+  <base-section id="features">
+    <v-responsive class="mx-auto" max-width="1350">
       <v-container fluid>
         <v-row>
           <v-col
-            v-for="card in cards"
-            :key="card.title"
+            v-for="covers in navigationStateGetter"
+            :key="covers"
             cols="12"
             sm="4"
-            md="3"
+            md="3"            
           >
+            <router-link class="text-decoration-none" to="/health">            
             <base-info-card
               align="center"
               dark              
-              v-bind="card"
+              :covers="covers"
             />
+            </router-link>
           </v-col>
         </v-row>
       </v-container>
@@ -29,33 +25,15 @@
 </template>
 
 <script>
-  export default {
-    name: 'SectionFeatures',
-
-    data: () => ({
-      cards: [
-        {
-          icon: 'directions_car',
-          title: 'Motor Insurance',
-          text: 'Efficiently unleash media information without cross-media value. Quickly maximize value timely deliverables schemas.',
-        },
-        {
-          icon: 'local_hospital',
-          title: 'Health Insurance.',
-          text: 'Efficiently unleash media information without cross-media value. Quickly maximize value timely deliverables schemas.',
-        },
-        {
-          icon: 'group',
-          title: 'Family Health',
-          text: 'Efficiently unleash media information without cross-media value. Quickly maximize value timely deliverables schemas.',
-        },
-        {
-          icon: 'local_florist',
-          title: 'Agricultural Insurance',
-          text: 'Efficiently unleash media information without cross-media value. Quickly maximize value timely deliverables schemas.',
-        },
-        
-      ],
-    }),
-  }
+import { mapGetters } from "vuex";
+import Heading from "@/mixins/heading";
+export default {
+  mixins: [Heading],
+  name: "SectionFeatures",
+  computed: {
+    ...mapGetters(["navigationStateGetter"]),
+  },
+  methods: {},
+  data: () => ({}),
+};
 </script>

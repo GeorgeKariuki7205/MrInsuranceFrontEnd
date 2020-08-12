@@ -5,29 +5,22 @@
         :justify="justify"
         no-gutters
       >
-        <v-col
-          v-if="icon"
+        <v-col          
           :class="`text-${align}`"
           cols="12"
           class="mb-4"
         >
           <base-icon :color="color">
-            {{ icon }}
+            local_hospital
           </base-icon>
         </v-col>
 
         <v-col
-          v-if="title || subtitle"
+          v-if="covers.cover"
           :cols="callout ? 9 : 12"
-        >
-          <base-subtitle
-            v-if="subtitle"
-            :title="subtitle"
-            space="1"
-          />
-
+        >          
           <base-title
-            :title="title"
+            :title="covers.cover"
             class="text-uppercase"
             space="1"
           />
@@ -35,8 +28,8 @@
           <base-divider :color="color" />
 
           <base-body
-            v-if="text || $slots.default"
-            :text="text"
+           
+            :text="covers.description"
             space="6"
           >
             <slot />
@@ -72,11 +65,11 @@
       color: {
         type: String,
         default: 'primary',
-      },
-      icon: String,
-      subtitle: String,
-      text: String,
-      title: String,
+      },      
+      covers: {
+      type: Array,
+      default: () => [],
+    },
     },
   }
 </script>
