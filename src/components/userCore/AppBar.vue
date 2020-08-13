@@ -8,8 +8,26 @@
       elevation="1"
       height="80"
     >
-      <v-app-bar-nav-icon class="hidden-md-and-up" @click="drawer = !drawer" />
-      <h1 style="font-family:'cursive';">Mr Insurance</h1>
+      <v-app-bar-nav-icon class="hidden-md-and-up" @click="drawer = !drawer" />      
+      <base-img
+        :src="require('@/assets/tie-svgrepo-com.svg')"
+        class="hidden-sm-and-up"
+        contain
+        max-width="52"
+        max-height="80"
+        height="100%"
+        width="100%"
+      />       
+      <base-img
+        :src="require('@/assets/tie-svgrepo-com.svg')"
+         class="hidden-sm-and-down"
+        contain
+        max-width="128"
+        max-height="80"
+        width="100%"
+        height="100%"
+      />              
+        <h1 style="font-family:'cursive';">Mr Insurance</h1>       
       <v-spacer />
 
       <div color="#29AB87">
