@@ -10,7 +10,7 @@
             sm="4"
             md="3"            
           >
-            <router-link class="text-decoration-none" to="/health">            
+            <router-link class="text-decoration-none" :to="covers.cover">   
             <base-insurance-info-card
               align="center"
               dark              
