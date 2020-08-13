@@ -4,8 +4,8 @@
       <v-container fluid>
         <v-row>
           <v-col
-            v-for="covers in navigationStateGetter"
-            :key="covers"
+            v-for="(covers,index) in navigationStateGetter"
+            :key="index"
             cols="12"
             sm="4"
             md="3"            

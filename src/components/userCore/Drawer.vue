@@ -39,11 +39,11 @@
                 <v-list-item-title>{{ item["cover"] }}</v-list-item-title>
               </template>
               <v-list-item
-                v-for="item in item['subCategories']"
-                :key="item"
+                v-for="(item,index) in item['subCategories']"
+                :key="index"
                 link
               >
-                <v-list-item-title v-text="item"></v-list-item-title>
+                <v-list-item-title v-text="item.name"></v-list-item-title>
               </v-list-item>
             </v-list-group>
 

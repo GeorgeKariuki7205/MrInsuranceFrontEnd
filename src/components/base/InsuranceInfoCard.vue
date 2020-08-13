@@ -66,8 +66,7 @@
         type: String,
         default: 'primary',
       },      
-      covers: {
-      type: Array,
+      covers: {      
       default: () => [],
     },
     },

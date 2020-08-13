@@ -38,8 +38,7 @@
         >
           <v-tabs-slider color="black"></v-tabs-slider>
           <v-tab
-            to="/"
-            ripple="false"
+            to="/"            
             active-class="text--primary"
             class="font-weight-bold"
             min-width="96"
@@ -49,8 +48,8 @@
             <v-spacer></v-spacer>
             Home
           </v-tab>
-          <template v-for="item in navigationStateGetter">
-            <v-menu v-if="item.subCategories" openOnHover offsetY :key="item">
+          <template v-for="(item,index) in navigationStateGetter">
+            <v-menu v-if="item.subCategories" openOnHover offsetY :key="index">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   text
@@ -68,20 +67,19 @@
               <v-list background-color="primary" dense class="grey lighten-3">
                 <v-subheader>{{ item["cover"] }}</v-subheader>
                 <v-list-item
-                  v-for="item in item['subCategories']"
-                  :key="item"
+                  v-for="(item,index) in item['subCategories']"
+                  :key="index"
                   @click="addItem(item)"
                 >
                   <v-list-item-content>
-                    <v-list-item-title v-text="item"></v-list-item-title>
+                    <v-list-item-title v-text="item.name"></v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
             </v-menu>
             <v-tab
-              :key="item"
-              v-else
-              ripple="false"
+              :key="index"
+              v-else              
               active-class="text--primary"
               class="font-weight-bold"
               min-width="96"
