@@ -9,14 +9,14 @@
             cols="12"
             sm="4"
             md="3"            
-          >
-            <router-link class="text-decoration-none" :to="covers.cover">   
-            <base-insurance-info-card
+          >            
+            <a @click="clicked(covers)" target="_blank" rel="noopener noreferrer">
+              <base-insurance-info-card
               align="center"
               dark              
-              :covers="covers"
+              :covers="covers"              
             />
-            </router-link>
+            </a>                        
           </v-col>
         </v-row>
       </v-container>
@@ -26,6 +26,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import router from '../../router'
 import Heading from "@/mixins/heading";
 export default {
   mixins: [Heading],
@@ -33,7 +34,15 @@ export default {
   computed: {
     ...mapGetters(["navigationStateGetter"]),
   },
-  methods: {},
+  methods: {
+    clicked(data){
+      var index = this.navigationStateGetter.indexOf(data);
+      console.log("I have Been Clicked."+index);
+      router.push({ name: data.cover})
+      this.$store.dispatch("updatingTheCoverIndex",index);
+
+    }
+  },
   data: () => ({}),
 };
 </script>
