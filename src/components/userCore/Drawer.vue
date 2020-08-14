@@ -30,7 +30,10 @@
           </v-list-item>
           <v-subheader>Insurance Covers.</v-subheader>
 
-          <div v-for="(item, index) in navigationStateGetters" :key="index">
+          <div
+            v-for="(item, coverIndex) in navigationStateGetters"
+            :key="coverIndex"
+          >
             <v-list-group
               v-if="item['subCategories']"
               prepend-icon="local_hospital"
@@ -39,9 +42,10 @@
                 <v-list-item-title>{{ item["cover"] }}</v-list-item-title>
               </template>
               <v-list-item
-                v-for="(item,index) in item['subCategories']"
+                v-for="(item, index) in item['subCategories']"
                 :key="index"
                 link
+                @click="clickedSubCategory(index, coverIndex)"
               >
                 <v-list-item-title v-text="item.name"></v-list-item-title>
               </v-list-item>
@@ -82,9 +86,27 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import router from "../../router";
 export default {
   name: "HomeDrawer",
+  computed: {
+    ...mapGetters(["navigationStateGetter", "navigationCoverGetter"]),
+  },
+  methods: {
+    clickedSubCategory(subCategoryId, coverIndex) {
+      console.log(subCategoryId + " This is the cover Id  " + coverIndex);
+      // ! this method is used to update the the cover and the subcategory ids.
 
+      this.$store.dispatch("updatingTheCoverIndex", coverIndex);
+      this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategoryId);
+
+      //! after update, redirect to the proper page.
+      router.push({
+        name: this.navigationStateGetter[this.navigationCoverGetter].cover,
+      });
+    },
+  },
   data: () => ({
     admins: [
       ["Management", "people_outline"],

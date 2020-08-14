@@ -4,7 +4,8 @@ import axios from "axios";
 const state= {
     navigationState:null,
     navigationView:false,
-    cover:0
+    cover:0,
+    subCategory:0
 }
 const mutations = {
     UPDATING_THE_STATE_TO_ADD_NAVIGATION_ITEMS(state,payload){
@@ -16,6 +17,10 @@ const mutations = {
     UPDATING_THE_COVER_INDEX(state,payload){
 
         state.cover = payload;
+    },
+    UPDATING_THE_SUB_COVER_INDEX(state,payload){
+
+        state.subCategory = payload;
     }
 }
 const actions = {
@@ -40,12 +45,19 @@ const actions = {
 
         commit("UPDATING_THE_COVER_INDEX",index);        
 
+    },
+
+    updatingTheSubCategoryCoverIndex({commit},index){
+
+        commit("UPDATING_THE_SUB_COVER_INDEX",index);        
+
     }
 }
 const getters = {
     navigationStateGetter: state => state.navigationState,
     navigationViewGetter: state => state.navigationView,
-    navigationCoverGetter: state =>state.cover,    
+    navigationCoverGetter: state =>state.cover, 
+    navigationSubCategory: state => state.subCategory, 
 }
 
 const NavigationModule = {state,mutations,actions,getters}

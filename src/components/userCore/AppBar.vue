@@ -8,7 +8,7 @@
       elevation="1"
       height="80"
     >
-      <v-app-bar-nav-icon class="hidden-md-and-up" @click="drawer = !drawer" />      
+      <v-app-bar-nav-icon class="hidden-md-and-up" @click="drawer = !drawer" />
       <base-img
         :src="require('@/assets/tie-svgrepo-com.svg')"
         class="hidden-sm-and-up"
@@ -17,17 +17,17 @@
         max-height="80"
         height="100%"
         width="100%"
-      />       
+      />
       <base-img
         :src="require('@/assets/tie-svgrepo-com.svg')"
-         class="hidden-sm-and-down"
+        class="hidden-sm-and-down"
         contain
         max-width="128"
         max-height="80"
         width="100%"
         height="100%"
-      />              
-        <h1 style="font-family:'cursive';">Mr Insurance</h1>       
+      />
+      <h1 style="font-family:'cursive';">Mr Insurance</h1>
       <v-spacer />
 
       <div color="#29AB87">
@@ -38,7 +38,7 @@
         >
           <v-tabs-slider color="black"></v-tabs-slider>
           <v-tab
-            to="/"            
+            to="/"
             active-class="text--primary"
             class="font-weight-bold"
             min-width="96"
@@ -48,8 +48,13 @@
             <v-spacer></v-spacer>
             Home
           </v-tab>
-          <template v-for="(item,index) in navigationStateGetter">
-            <v-menu v-if="item.subCategories" openOnHover offsetY :key="index">
+          <template v-for="(item, coverIndex) in navigationStateGetter">
+            <v-menu
+              v-if="item.subCategories"
+              openOnHover
+              offsetY
+              :key="coverIndex"
+            >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   text
@@ -67,9 +72,9 @@
               <v-list background-color="primary" dense class="grey lighten-3">
                 <v-subheader>{{ item["cover"] }}</v-subheader>
                 <v-list-item
-                  v-for="(item,index) in item['subCategories']"
+                  v-for="(item, index) in item['subCategories']"
                   :key="index"
-                  @click="addItem(item)"
+                  @click="clickedSubCategory(index, coverIndex)"
                 >
                   <v-list-item-content>
                     <v-list-item-title v-text="item.name"></v-list-item-title>
@@ -78,8 +83,8 @@
               </v-list>
             </v-menu>
             <v-tab
-              :key="index"
-              v-else              
+              :key="coverIndex"
+              v-else
               active-class="text--primary"
               class="font-weight-bold"
               min-width="96"
@@ -125,6 +130,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import router from "../../router";
 export default {
   name: "HomeAppBar",
 
@@ -132,7 +138,21 @@ export default {
     HomeDrawer: () => import("./Drawer"),
   },
   computed: {
-    ...mapGetters(["navigationStateGetter"]),
+    ...mapGetters(["navigationStateGetter", "navigationCoverGetter"]),
+  },
+  methods: {
+    clickedSubCategory(subCategoryId, coverIndex) {
+      console.log(subCategoryId + " This is the cover Id  " + coverIndex);
+      // ! this method is used to update the the cover and the subcategory ids.
+
+      this.$store.dispatch("updatingTheCoverIndex", coverIndex);
+      this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategoryId);
+
+      //! after update, redirect to the proper page.
+      router.push({
+        name: this.navigationStateGetter[this.navigationCoverGetter].cover,
+      });
+    },
   },
   data: () => ({
     drawer: false,

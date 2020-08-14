@@ -17,7 +17,10 @@
           <base-avatar-card> </base-avatar-card>
         </v-col>
       </v-row>
-       <base-section-heading title="Health Insurance"/>
+       <base-subhaeding title="Health Insurance"/>
+       <base-title class="text-center"
+            title="Health Insurance"            
+          />
             Compllete The Three Easy Steps Below To Get Your Estimates.
       <template>
          <v-stepper class="hidden-sm-and-down" v-model="e1">
@@ -41,6 +44,9 @@
 
         <v-stepper-items>
           <v-stepper-content step="1">
+
+
+
             <template v-for="(feature, i) in questions">
               <template v-if="questions[i].type == 'date'">
                 {{ questions[i].question }}
@@ -168,6 +174,7 @@ export default {
   data: () => ({
     cover: null,
     questions: 0,
+    subCategory: null,
     e1: 1,
     e6: 1,
   }),
