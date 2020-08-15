@@ -6,8 +6,8 @@
 
     <div v-else>
       <v-container class="fill-height" style="margin-top:10%">
-        <v-row  align="center" justify="center">
-         <h2 style="color:#29ab87;">Getting Mr Insurance Ready.</h2>
+        <v-row align="center" justify="center">
+          <h2 style="color:#29ab87;">Getting Mr Insurance Ready.</h2>
         </v-row>
 
         <v-row align="center" justify="center">
@@ -17,8 +17,14 @@
             :color="'#29ab87'"
           />
         </v-row>
-        <v-row  align="center" justify="center">
-         <h4 style="color:#29ab87;">Just A Second .....</h4>
+        <v-row align="center" justify="center">
+          <h4 style="color:#29ab87;">Just A Second</h4>
+          <hollow-dots-spinner
+            :animation-duration="1000"
+            :dot-size="10"
+            :dots-num="4"
+            color="#29ab87"
+          />
         </v-row>
       </v-container>
     </div>
@@ -27,12 +33,13 @@
 
 <script>
 import { AtomSpinner } from "epic-spinners";
+import { HollowDotsSpinner } from "epic-spinners";
 import { mapGetters } from "vuex";
 export default {
   name: "App",
 
   components: {
-    AtomSpinner,
+    AtomSpinner,HollowDotsSpinner
   },
   computed: {
     ...mapGetters(["navigationViewGetter"]),
