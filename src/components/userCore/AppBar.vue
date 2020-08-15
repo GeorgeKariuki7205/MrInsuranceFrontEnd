@@ -141,8 +141,7 @@ export default {
     ...mapGetters(["navigationStateGetter", "navigationCoverGetter"]),
   },
   methods: {
-    clickedSubCategory(subCategoryId, coverIndex) {
-      console.log(subCategoryId + " This is the cover Id  " + coverIndex);
+    clickedSubCategory(subCategoryId, coverIndex) {      
       // ! this method is used to update the the cover and the subcategory ids.
 
       this.$store.dispatch("updatingTheCoverIndex", coverIndex);

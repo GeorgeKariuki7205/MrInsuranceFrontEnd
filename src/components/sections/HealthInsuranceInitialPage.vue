@@ -9,18 +9,65 @@
     </base-section-heading>
 
     <v-container>
-      <v-row justify="center" align="center">
+      <v-row class="hidden-sm-and-down" justify="center" align="center">
         <v-col
           v-for="(feature, i) in cover.subCategories"
           :key="i"
           cols="12"
           md="3"
+          @click="activateTheSubCategory(i)"
         >
-          {{ feature.name }}
-          <base-avatar-card> </base-avatar-card>
+          <base-avatar-card-insurance-sub-category
+            v-if="navigationSubCategory === i"
+            style="cursor: pointer;"
+            :dark="true"
+            color="primary"
+            align="center"
+            :horizontal="true"
+            icon="email"
+            :title="feature.name"
+            :text="feature.name"
+          >
+          </base-avatar-card-insurance-sub-category>
+          <base-avatar-card-insurance-sub-category
+            v-else
+            style="cursor: pointer;"
+            align="center"
+            :horizontal="true"
+            icon="email"
+            :title="feature.name"
+            :text="feature.name"
+          >
+          </base-avatar-card-insurance-sub-category>
         </v-col>
       </v-row>
+      <div class="text-center hidden-sm-and-up">
+        <template v-for="(feature, i) in cover.subCategories">
+          <v-chip
+            v-if="navigationSubCategory === i"
+            :key="i"
+            color="primary"
+            @click="activateTheSubCategory(i)"
+            class="ma-2"
+          >
+            <v-icon left>email</v-icon>
+            {{ feature.name }}
+          </v-chip>
+          <v-chip
+            v-else
+            :key="i"
+            @click="activateTheSubCategory(i)"
+            class="ma-2"
+            color="primary"
+            outlined
+          >
+            <v-icon left>email</v-icon>
+            {{ feature.name }}
+          </v-chip>
+        </template>
+      </div>
       <base-title
+        @click="activateTheSubCategory()"
         class="text-center"
         :title="
           navigationStateGetter[navigationCoverGetter].subCategories[
@@ -53,21 +100,19 @@
 
           <v-stepper-items>
             <v-stepper-content step="1">
-              <v-container>
-                <h3 class="text-center">Insurance Cover Specific Details.</h3>
-                <template v-for="(feature, i) in questions">
-                  <template v-if="questions[i].type == 'date'">
-                    <v-row :key="i" cols="12">
-                      <v-col md-1 class="md-2">{{ i + 1 }}</v-col>
-                      <v-col md-2 class="md-4">{{
-                        questions[i].question
-                      }}</v-col>
-                      <v-col md-2 class="md-4">
+              <h3 class="text-center">Insurance Cover Specific Details.</h3>
+              <template v-for="(feature, i) in questions">
+                <template v-if="questions[i].type == 'date'">
+                  <h5 class="text-center" :key="i">
+                    {{ i + 1 + "." }} {{ questions[i].question }}
+                  </h5>
+                  <v-container :key="i">
+                    <v-row dense :key="i">
+                      <v-col md="4" offset-md="4">
                         <v-menu
                           ref="menu"
                           v-model="menu"
-                          :close-on-content-click="false"
-                          :return-value.sync="date"
+                          close-on-content-click="false"
                           transition="scale-transition"
                           offset-y
                           min-width="290px"
@@ -75,76 +120,127 @@
                           <template v-slot:activator="{ on, attrs }">
                             <v-text-field
                               v-model="date"
-                              label="Picker in menu"
+                              label="Date"
                               prepend-icon="event"
                               readonly
                               v-bind="attrs"
                               v-on="on"
+                              outlined
                             ></v-text-field>
                           </template>
+                          <v-date-picker
+                            ref="picker"
+                            v-model="date"
+                            :max="new Date().toISOString().substr(0, 10)"
+                            min="1900-01-01"
+                            @change="save"
+                          ></v-date-picker>
                         </v-menu>
                       </v-col>
                     </v-row>
-                  </template>
-                  <template v-else-if="questions[i].type === 'number'">
-                    <v-row :key="i" cols="12">
-                      <v-col md-1 class="md-2">{{ i + 1 }}</v-col>
-                      <v-col md-2 class="md-4">{{
-                        questions[i].question
-                      }}</v-col>
-                      <v-col md-2 class="md-4">
-                        <v-text-field dense type="number"></v-text-field
-                      ></v-col>
-                    </v-row>
-                  </template>
-                  <template v-else-if="questions[i].type == 'checkbox'">
-                    <v-row :key="i" cols="12">
-                      <v-col md-1 class="md-2">{{ i + 1 }}</v-col>
-                      <v-col md-2 class="md-4">{{
-                        questions[i].question
-                      }}</v-col>
-                      <v-col md-2 class="md-4">
-                     <v-checkbox v-model="checkbox1" ></v-checkbox></v-col>
-                    </v-row>
-                  </template>
+                  </v-container>
                 </template>
-              </v-container>
+                <template v-else-if="questions[i].type === 'number'">
+                  <h5 class="text-center" :key="i">
+                    {{ i + 1 + "." }} {{ questions[i].question }}
+                  </h5>
+                  <v-row dense :key="i">
+                    <v-col md="4" offset-md="4">
+                      <v-text-field
+                        type="number"
+                        prepend-icon="child_care"
+                        single-line
+                        outlined
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </template>
+                <template v-else-if="questions[i].type == 'checkbox'">
+                  <v-row :key="i" align="center" justify="center">
+                    <v-col md="4" offset-md="2">
+                      <h5 class="text-center" :key="i">
+                        {{ i + 1 + "." }} {{ questions[i].question }}
+                      </h5>
+                    </v-col>
+                    <v-col md="4">
+                      <v-checkbox></v-checkbox>
+                    </v-col>
+                  </v-row>
+                </template>
+              </template>
 
-              <div class="pull-right">
-                <v-btn color="primary" @click="e1 = 2">
-                  Continue
+              <div style="text-align:right">
+                <v-btn color="success" outlined @click="e1 = 2">
+                  Next <v-icon>navigate_next</v-icon>
+                  <v-icon>arrow_forward_ios</v-icon>
                 </v-btn>
-
-                <v-btn text>Cancel</v-btn>
               </div>
             </v-stepper-content>
 
             <v-stepper-content step="2">
-              <v-card
-                class="mb-12"
-                color="grey lighten-1"
-                height="200px"
-              ></v-card>
+              <h3 class="text-center">Personal Details.</h3>
+              <v-row dense>                  
+                  <v-col md="6" offset-md="3">
+                  <h5>1. Name: </h5>               
+                
+                  <v-text-field                    
+                    placeholder="Name"
+                    outlined
+                  ></v-text-field> 
+                  </v-col>                                                                                
+              </v-row>
+               <v-row dense>                  
+                  <v-col md="6" offset-md="3">
+                  <h5>2. Email Address: </h5>               
+                
+                  <v-text-field                    
+                    placeholder="Name"
+                    outlined
+                  ></v-text-field> 
+                  </v-col>                                                                   
+              </v-row>
 
-              <v-btn color="primary" @click="e1 = 3">
-                Continue
+               <v-row dense>                  
+                  <v-col md="6" offset-md="3">
+                  <h5>3. Phone Number: </h5>               
+                
+                  <v-text-field                    
+                    placeholder="Name"
+                    outlined
+                  ></v-text-field> 
+                  </v-col>                                                                   
+              </v-row>
+              <div>
+                <v-btn class="float-right" style="text-align:right" color="success" outlined="" @click="e1 = 3">
+                Generate Estimates. <v-icon>navigate_next</v-icon>
+                  <v-icon>arrow_forward_ios</v-icon>
               </v-btn>
 
-              <v-btn text>Cancel</v-btn>
+              <v-btn class="float-left" style="text-align:right" color="red" outlined="" @click="e1 = 3">
+               <v-icon>arrow_back_ios</v-icon>
+                  <v-icon>arrow_back_ios</v-icon>
+                  Go Back. 
+              </v-btn>
+              
+              </div>
             </v-stepper-content>
 
             <v-stepper-content step="3">
-              <v-card
-                class="mb-12"
-                color="grey lighten-1"
-                height="200px"
-              ></v-card>
+             
+             <trinity-rings-spinner
+              :animation-duration="1000"
+              :size="166"
+              color="#3AB290"
+            />
 
-              <v-btn color="primary" @click="e1 = 1">
-                Continue
+             <div class="text-center">                
+              <v-btn style="text-align:right" color="red" outlined="" @click="e1 = 3">
+               <v-icon>arrow_back_ios</v-icon>
+                  <v-icon>arrow_back_ios</v-icon>
+                  Go Back. 
               </v-btn>
-
-              <v-btn text>Cancel</v-btn>
+              
+              </div>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
@@ -158,13 +254,82 @@
           </v-stepper-step>
 
           <v-stepper-content step="1">
-            <v-card
-              color="grey lighten-1"
-              class="mb-12"
-              height="200px"
-            ></v-card>
-            <v-btn color="primary" @click="e6 = 2">Continue</v-btn>
-            <v-btn text>Cancel</v-btn>
+            
+                         <h3 class="text-center">Insurance Cover Specific Details.</h3>
+              <template v-for="(feature, i) in questions">
+                <template v-if="questions[i].type == 'date'">
+                  <h5 class="text-center" :key="i">
+                    {{ i + 1 + "." }} {{ questions[i].question }}
+                  </h5>
+                  <v-container :key="i">
+                    <v-row dense :key="i">
+                      <v-col md="4" offset-md="4">
+                        <v-menu
+                          ref="menu"
+                          v-model="menu"
+                          close-on-content-click="false"
+                          transition="scale-transition"
+                          offset-y
+                          min-width="290px"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              v-model="date"
+                              label="Date"
+                              prepend-icon="event"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                              outlined
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker
+                            ref="picker"
+                            v-model="date"
+                            :max="new Date().toISOString().substr(0, 10)"
+                            min="1900-01-01"
+                            @change="save"
+                          ></v-date-picker>
+                        </v-menu>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </template>
+                <template v-else-if="questions[i].type === 'number'">
+                  <h5 class="text-center" :key="i">
+                    {{ i + 1 + "." }} {{ questions[i].question }}
+                  </h5>
+                  <v-row dense :key="i">
+                    <v-col md="4" offset-md="4">
+                      <v-text-field
+                        type="number"
+                        prepend-icon="child_care"
+                        single-line
+                        outlined
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </template>
+                <template v-else-if="questions[i].type == 'checkbox'">
+                  <v-row :key="i" align="center" justify="center">
+                    <v-col md="4" offset-md="2">
+                      <h5 class="text-center" :key="i">
+                        {{ i + 1 + "." }} {{ questions[i].question }}
+                      </h5>
+                    </v-col>
+                    <v-col md="4">
+                      <v-checkbox></v-checkbox>
+                    </v-col>
+                  </v-row>
+                </template>
+              </template>
+
+              <div style="text-align:right">
+                <v-btn color="success" outlined @click="e6 = 2">
+                  Next <v-icon>navigate_next</v-icon>
+                  <v-icon>arrow_forward_ios</v-icon>
+                </v-btn>
+              </div>
           </v-stepper-content>
 
           <v-stepper-step editable :complete="e6 > 2" step="2"
@@ -172,13 +337,51 @@
           >
 
           <v-stepper-content step="2">
-            <v-card
-              color="grey lighten-1"
-              class="mb-12"
-              height="200px"
-            ></v-card>
-            <v-btn color="primary" @click="e6 = 3">Continue</v-btn>
-            <v-btn text>Cancel</v-btn>
+                          <h3 class="text-center">Personal Details.</h3>
+              <v-row dense>                  
+                  <v-col md="6" offset-md="3">
+                  <h5>1. Name: </h5>               
+                
+                  <v-text-field                    
+                    placeholder="Name"
+                    outlined
+                  ></v-text-field> 
+                  </v-col>                                                                                
+              </v-row>
+               <v-row dense>                  
+                  <v-col md="6" offset-md="3">
+                  <h5>2. Email Address: </h5>               
+                
+                  <v-text-field                    
+                    placeholder="Name"
+                    outlined
+                  ></v-text-field> 
+                  </v-col>                                                                   
+              </v-row>
+
+               <v-row dense>                  
+                  <v-col md="6" offset-md="3">
+                  <h5>3. Phone Number: </h5>               
+                
+                  <v-text-field                    
+                    placeholder="Name"
+                    outlined
+                  ></v-text-field> 
+                  </v-col>                                                                   
+              </v-row>
+              <div>
+                <v-btn class="float-right" style="text-align:right" color="success" outlined="" @click="e6 = 3">
+                Generate Estimates. <v-icon>navigate_next</v-icon>
+                  <v-icon>arrow_forward_ios</v-icon>
+              </v-btn>
+
+              <v-btn class="float-left" style="text-align:right" color="red" outlined="" @click="e1 = 3">
+               <v-icon>arrow_back_ios</v-icon>
+                  <v-icon>arrow_back_ios</v-icon>
+                  Go Back. 
+              </v-btn>
+              
+              </div>
           </v-stepper-content>
 
           <v-stepper-step editable :complete="e6 > 3" step="3"
@@ -186,13 +389,20 @@
           >
 
           <v-stepper-content step="3">
-            <v-card
-              color="grey lighten-1"
-              class="mb-12"
-              height="200px"
-            ></v-card>
-            <v-btn color="primary" @click="e6 = 4">Continue</v-btn>
-            <v-btn text>Cancel</v-btn>
+            <trinity-rings-spinner
+              :animation-duration="1000"
+              :size="166"
+              color="#3AB290"
+            />
+
+             <div class="text-center">                
+              <v-btn style="text-align:right" color="red" outlined="" @click="e6 = 3">
+               <v-icon>arrow_back_ios</v-icon>
+                  <v-icon>arrow_back_ios</v-icon>
+                  Go Back. 
+              </v-btn>
+              
+              </div>
           </v-stepper-content>
 
           <v-stepper-step editable step="4"
@@ -215,6 +425,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { TrinityRingsSpinner } from 'epic-spinners'
 export default {
   name: "SectionThemeFeatures",
   computed: {
@@ -224,15 +435,26 @@ export default {
       "navigationSubCategory",
     ]),
   },
+  components:{
+    TrinityRingsSpinner,
+  },
+  methods: {
+    activateTheSubCategory(subCategory) {
+      this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategory);
+    },
+    save(date) {
+      this.$refs.menu.save(date);
+    },
+  },
   data: () => ({
     cover: null,
     questions: null,
     subCategory: null,
     e1: 1,
     e6: 1,
-    date: new Date().toISOString().substr(0, 10),
-    menu: false,
-    modal: false,
+    date1: null,
+    date2: null,
+    menu1: false,
     menu2: false,
   }),
   created() {
@@ -255,18 +477,21 @@ export default {
       ].subCategories[this.navigationSubCategory].questions;
       this.subCategory = this.navigationSubCategory;
     },
+    menu(val) {
+      val && setTimeout(() => (this.$refs.picker.activePicker = "YEAR"));
+    },
   },
 };
 </script>
 <style>
-    input::-webkit-outer-spin-button,
+input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
--webkit-appearance: none;
-margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* Firefox */
-input[type=number] {
--moz-appearance: textfield;
+input[type="number"] {
+  -moz-appearance: textfield;
 }
-  </style>
+</style>
