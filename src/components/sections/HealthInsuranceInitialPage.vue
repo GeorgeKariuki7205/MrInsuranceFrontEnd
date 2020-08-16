@@ -249,7 +249,7 @@
           </v-stepper-items>
         </v-stepper>
       </template>
-
+</v-container>
       <template>
         <v-stepper class="hidden-sm-and-up" v-model="e6" vertical>
           <v-stepper-step editable :complete="e6 > 1" step="1">
@@ -262,9 +262,8 @@
               <template v-if="questions[i].type == 'date'">
                 <h5 class="text-center" :key="i">
                   {{ i + 1 + "." }} {{ questions[i].question }}
-                </h5>
-                <v-container :key="i">
-                  <v-row dense>
+                </h5>                
+                  <v-row dense :key="i">
                     <v-col>
                       <v-menu
                         ref="menu"
@@ -294,8 +293,7 @@
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
-                  </v-row>
-                </v-container>
+                  </v-row>                
               </template>
               <template v-else-if="questions[i].type === 'number'">
                 <h5 class="text-center" :key="i">
@@ -427,7 +425,7 @@
           </v-stepper-content>
         </v-stepper>
       </template>
-    </v-container>
+    
   </base-section>
 </template>
 
