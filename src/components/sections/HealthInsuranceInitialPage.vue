@@ -7,6 +7,9 @@
       Asperiores, impedit libero. Veniam rerum saepe unde nihil possimus
       quibusdam esse accusamus mollitia magni fuga.
     </base-section-heading>
+
+    <!-- THIS SECTIONS IS USED TO DISPLAY THE SUB CATEGORIES. -->
+
     <v-container>
       <v-row class="hidden-sm-and-down" justify="center" align="center">
         <v-col
@@ -77,168 +80,243 @@
       <h3 class="text-center">
         Complete The Three Easy Steps Below To Get Your Estimates.
       </h3>
+
+      <!-- THIS SECTION IS USED TO DEFINE THE QUESTIONS FOR THE LARGE SCREEN. -->
+
       <template>
         <v-stepper class="hidden-sm-and-down" v-model="e1">
           <v-stepper-header style="backgrouns-color:red;">
-            <v-stepper-step editable :complete="e1 > 1" step="1"
+            <v-stepper-step
+              :editable="personalDetailsStatusGetter"
+              :complete="e1 > 1"
+              step="1"
               >Add Cover Specific Details.</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step editable :complete="e1 > 2" step="2">
+            <v-stepper-step
+              :editable="personalDetailsStatusGetter"
+              :complete="e1 > 2"
+              step="2"
+            >
               Add Personal Details.
             </v-stepper-step>
 
             <v-divider></v-divider>
 
-            <v-stepper-step editable step="3"
-              >Insurance Estimates.</v-stepper-step
-            >
+            <v-stepper-step step="3">Insurance Estimates.</v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
             <v-stepper-content step="1">
               <h3 class="text-center">Insurance Cover Specific Details.</h3>
-              <template v-for="(feature, i) in questions">
-                <template v-if="questions[i].type == 'date'">
-                  <h5 class="text-center" :key="i">
-                    {{ i + 1 + "." }} {{ questions[i].question }}
-                  </h5>
-                  <v-container :key="i">
+              <br />
+              <h5 class="text-center">1. Cover Amount.</h5>
+              <v-form ref="form" v-model="valid">
+                <v-col class="d-flex" md="6" offset-md="3">
+                  <v-select
+                    :items="items"
+                    label="Cover Amount."
+                    outlined
+                    required
+                    prepend-icon="monetization_on"
+                    :rules="RequiredNumber"
+                    v-model="inputData['cover_amount']"
+                  ></v-select>
+                </v-col>
+                <template v-for="(feature, i) in questions">
+                  <template v-if="questions[i].type !== 'checkbox'">
+                    <h5 class="text-center" :key="i">
+                      {{ i + 2 + "." }} {{ questions[i].question }}
+                    </h5>
+                  </template>
+
+                  <template v-if="questions[i].type == 'date'">
+                    <v-container :key="i">
+                      <v-row dense :key="i">
+                        <v-col md="6" offset-md="3">
+                          <v-text-field
+                            v-if="questions[i].required == 1"
+                            type="date"
+                            prepend-icon="event"
+                            single-line
+                            outlined
+                            :rules="RequiredDateRules"
+                            validateOnBlur
+                            v-model="inputData[questions[i].name]"
+                          ></v-text-field>
+                          <v-text-field
+                            v-else
+                            type="date"
+                            prepend-icon="event"
+                            single-line
+                            outlined
+                            v-model="inputData[questions[i].name]"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </template>
+                  <template v-else-if="questions[i].type === 'number'">
                     <v-row dense :key="i">
                       <v-col md="6" offset-md="3">
-                        <v-menu
-                          ref="menu"
-                          v-model="menu"
-                          close-on-content-click="false"
-                          transition="scale-transition"
-                          offset-y
-                          min-width="290px"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                              v-model="date"
-                              label="Date"
-                              prepend-icon="event"
-                              readonly
-                              v-bind="attrs"
-                              v-on="on"
-                              outlined
-                            ></v-text-field>
-                          </template>
-                          <v-date-picker
-                            ref="picker"
-                            v-model="date"
-                            :max="new Date().toISOString().substr(0, 10)"
-                            min="1900-01-01"
-                            @change="save"
-                          ></v-date-picker>
-                        </v-menu>
+                        <v-text-field
+                          v-if="questions[i].required == 1"
+                          type="number"
+                          prepend-icon="child_care"
+                          single-line
+                          outlined
+                          :rules="RequiredNumber"
+                          v-model="inputData[questions[i].name]"
+                        ></v-text-field>
+                        <v-text-field
+                          v-else
+                          type="number"
+                          prepend-icon="child_care"
+                          single-line
+                          outlined
+                          v-model="inputData[questions[i].name]"
+                        ></v-text-field>
                       </v-col>
                     </v-row>
-                  </v-container>
+                  </template>
+                  <template v-else-if="questions[i].type === 'checkbox'">
+                    <v-row :key="i" align="center" justify="center">
+                      <v-col md="4" offset-md="2">
+                        <h5 class="text-center" :key="i">
+                          {{ i + 2 + "." }} {{ questions[i].question }}
+                        </h5>
+                      </v-col>
+                      <v-col md="4">
+                        <v-checkbox
+                          v-model="inputData[questions[i].name]"
+                        ></v-checkbox>
+                      </v-col>
+                    </v-row>
+                  </template>
                 </template>
-                <template v-else-if="questions[i].type === 'number'">
-                  <h5 class="text-center" :key="i">
-                    {{ i + 1 + "." }} {{ questions[i].question }}
-                  </h5>
-                  <v-row dense :key="i">
-                    <v-col md="6" offset-md="3">
-                      <v-text-field
-                        type="number"
-                        prepend-icon="child_care"
-                        single-line
-                        outlined
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </template>
-                <template v-else-if="questions[i].type == 'checkbox'">
-                  <v-row :key="i" align="center" justify="center">
-                    <v-col md="4" offset-md="2">
-                      <h5 class="text-center" :key="i">
-                        {{ i + 1 + "." }} {{ questions[i].question }}
-                      </h5>
-                    </v-col>
-                    <v-col md="4">
-                      <v-checkbox></v-checkbox>
-                    </v-col>
-                  </v-row>
-                </template>
-              </template>
 
-              <div style="text-align:right">
-                <v-btn color="success" outlined @click="e1 = 2">
-                  Next <v-icon>navigate_next</v-icon>
-                  <v-icon>arrow_forward_ios</v-icon>
-                </v-btn>
-              </div>
+                <div style="text-align:right">
+                  <v-btn color="success" outlined @click="step1GoToStep2()">
+                    Next <v-icon>navigate_next</v-icon>
+                    <v-icon>arrow_forward_ios</v-icon>
+                  </v-btn>
+                </div>
+              </v-form>
             </v-stepper-content>
 
             <v-stepper-content step="2">
               <h3 class="text-center">Personal Details.</h3>
-              <v-row dense>
-                <v-col md="6" offset-md="3">
-                  <h5>1. Name:</h5>
+              <!-- <v-form ref="form2" v-model="form2Validation"> -->
+                <v-form ref="form2" v-model="form2Validation">
+                <v-row dense>
+                  <v-col md="6" offset-md="3">
+                    <h5>1. Name:</h5>
+                    <br />
+                    <v-text-field
+                      :rules="nameRules"
+                      counter
+                      required
+                      v-model="personalData['name']"
+                      label="Name"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
 
-                  <v-text-field placeholder="Name" outlined></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row dense>
-                <v-col md="6" offset-md="3">
-                  <h5>2. Email Address:</h5>
+                <v-row dense>
+                  <v-col md="6" offset-md="3">
+                    <h5>2. Email Address:</h5>
+                    <br />
+                    <v-text-field
+                      :rules="emailRules"
+                      counter
+                      required
+                      v-model="personalData['email_address']"
+                      label="Email Address"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
 
-                  <v-text-field placeholder="Name" outlined></v-text-field>
-                </v-col>
-              </v-row>
+                <v-row dense>
+                  <v-col md="6" offset-md="3">
+                    <h5>3. Phone Number:</h5>
+                    <br />
+                    <v-text-field
+                      :rules="RequiredPhoneNumber"
+                      :counter="10"
+                      placeholder="07...."
+                      required
+                      v-model="personalData['phoneNumber']"
+                      label="Phone Number"
+                      maxlength="10"
+                      type="tel"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
 
-              <v-row dense>
-                <v-col md="6" offset-md="3">
-                  <h5>3. Phone Number:</h5>
+                <div>
+                  <v-btn
+                    class="float-right"
+                    style="text-align:right"
+                    color="success"
+                    outlined
+                    @click="movingFromStep2ToStep3()"
+                  >
+                    Generate Estimates. <v-icon>navigate_next</v-icon>
+                    <v-icon>arrow_forward_ios</v-icon>
+                  </v-btn>
 
-                  <v-text-field placeholder="Name" outlined></v-text-field>
-                </v-col>
-              </v-row>
-              <div>
-                <v-btn
-                  class="float-right"
-                  style="text-align:right"
-                  color="success"
-                  outlined=""
-                  @click="e1 = 3"
-                >
-                  Generate Estimates. <v-icon>navigate_next</v-icon>
-                  <v-icon>arrow_forward_ios</v-icon>
-                </v-btn>
-
-                <v-btn
-                  class="float-left"
-                  style="text-align:right"
-                  color="red"
-                  outlined=""
-                  @click="e1 = 3"
-                >
-                  <v-icon>arrow_back_ios</v-icon>
-                  <v-icon>arrow_back_ios</v-icon>
-                  Go Back.
-                </v-btn>
-              </div>
+                  <v-btn
+                    class="float-left"
+                    style="text-align:right"
+                    color="red"
+                    outlined=""
+                    @click="movingFromStep2ToStep1()"
+                  >
+                    <v-icon>arrow_back_ios</v-icon>
+                    <v-icon>arrow_back_ios</v-icon>
+                    Go Back.
+                  </v-btn>
+                </div>
+              </v-form>
             </v-stepper-content>
 
             <v-stepper-content step="3">
-              <trinity-rings-spinner
-                :animation-duration="1000"
-                :size="166"
-                color="#3AB290"
-              />
+              <v-container class="fill-height" style="margin-top:2%">
+                <v-row align="center" justify="center">
+                  <h2 style="color:#29ab87;">
+                    Mr Insurance Is Searching For The best policy For You
+                  </h2>
+                </v-row>
+
+                <v-row align="center" justify="center">
+                  <orbit-spinner
+                    :animation-duration="1200"
+                    :size="155"
+                    color="#29ab87"
+                  />
+                </v-row>
+                <v-row align="center" justify="center">
+                  <h4 style="color:#29ab87;">Just A Second</h4>
+                  <hollow-dots-spinner
+                    :animation-duration="1200"
+                    :dot-size="8"
+                    :dots-num="4"
+                    color="#29ab87"
+                  />
+                </v-row>
+              </v-container>
 
               <div class="text-center">
                 <v-btn
                   style="text-align:right"
                   color="red"
                   outlined=""
-                  @click="e1 = 3"
+                  @click="step3GoToStep2()"
                 >
                   <v-icon>arrow_back_ios</v-icon>
                   <v-icon>arrow_back_ios</v-icon>
@@ -249,189 +327,258 @@
           </v-stepper-items>
         </v-stepper>
       </template>
-</v-container>
-      <template>
-        <v-stepper class="hidden-sm-and-up" v-model="e6" vertical>
-          <v-stepper-step editable :complete="e6 > 1" step="1">
-            Add Insurance Specific Questions.            
-          </v-stepper-step>
+    </v-container>
 
-          <v-stepper-content step="1">
-            <h3 class="text-center">Insurance Cover Specific Details.</h3>
-            <template v-for="(feature, i) in questions">
-              <template v-if="questions[i].type == 'date'">
-                <h5 class="text-center" :key="i">
-                  {{ i + 1 + "." }} {{ questions[i].question }}
-                </h5>                
-                  <v-row dense :key="i">
-                    <v-col>
-                      <v-menu
-                        ref="menu"
-                        v-model="menu"
-                        close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
+    <!-- THIS SECTION IS USED TO DEFINE THE QUESTIONS FOR THE LARGE SCREEN. -->
+
+    <template>
+      <v-stepper class="hidden-sm-and-up" v-model="e6" vertical>
+        <v-stepper-step editable :complete="e6 > 1" step="1">
+          Add Insurance Specific Questions.
+        </v-stepper-step>
+
+        <v-stepper-content step="1">
+         <h3 class="text-center">Insurance Cover Specific Details.</h3>
+              <br />
+              <h5 class="text-center">1. Cover Amount.</h5>
+              <v-form ref="form" v-model="valid">
+                <v-col class="d-flex" md="6" offset-md="3">
+                  <v-select
+                    :items="items"
+                    label="Cover Amount."
+                    outlined
+                    required
+                    prepend-icon="monetization_on"
+                    :rules="RequiredNumber"
+                    v-model="inputData['cover_amount']"
+                  ></v-select>
+                </v-col>
+                <template v-for="(feature, i) in questions">
+                  <template v-if="questions[i].type !== 'checkbox'">
+                    <h5 class="text-center" :key="i">
+                      {{ i + 2 + "." }} {{ questions[i].question }}
+                    </h5>
+                  </template>
+
+                  <template v-if="questions[i].type == 'date'">
+                    <v-container :key="i">
+                      <v-row dense :key="i">
+                        <v-col md="6" offset-md="3">
                           <v-text-field
-                            v-model="date"
-                            label="Date"
-                            prepend-inner-icon="event"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
+                            v-if="questions[i].required == 1"
+                            type="date"
+                            prepend-icon="event"
+                            single-line
                             outlined
+                            :rules="RequiredDateRules"
+                            validateOnBlur
+                            v-model="inputData[questions[i].name]"
                           ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          ref="picker"
-                          v-model="date"
-                          :max="new Date().toISOString().substr(0, 10)"
-                          min="1900-01-01"
-                          @change="save"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                  </v-row>                
-              </template>
-              <template v-else-if="questions[i].type === 'number'">
-                <h5 class="text-center" :key="i">
-                  {{ i + 1 + "." }} {{ questions[i].question }}
-                </h5>
-                <v-row dense :key="i">
-                  <v-col>
+                          <v-text-field
+                            v-else
+                            type="date"
+                            prepend-icon="event"
+                            single-line
+                            outlined
+                            v-model="inputData[questions[i].name]"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </template>
+                  <template v-else-if="questions[i].type === 'number'">
+                    <v-row dense :key="i">
+                      <v-col md="6" offset-md="3">
+                        <v-text-field
+                          v-if="questions[i].required == 1"
+                          type="number"
+                          prepend-icon="child_care"
+                          single-line
+                          outlined
+                          :rules="RequiredNumber"
+                          v-model="inputData[questions[i].name]"
+                        ></v-text-field>
+                        <v-text-field
+                          v-else
+                          type="number"
+                          prepend-icon="child_care"
+                          single-line
+                          outlined
+                          v-model="inputData[questions[i].name]"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </template>
+                  <template v-else-if="questions[i].type === 'checkbox'">
+                    <v-row :key="i" align="center" justify="center">
+                      <v-col md="4" offset-md="2">
+                        <h5 class="text-center" :key="i">
+                          {{ i + 2 + "." }} {{ questions[i].question }}
+                        </h5>
+                      </v-col>
+                      <v-col md="4">
+                        <v-checkbox
+                          v-model="inputData[questions[i].name]"
+                        ></v-checkbox>
+                      </v-col>
+                    </v-row>
+                  </template>
+                </template>
+
+                <div style="text-align:right">
+                  <v-btn color="success" outlined @click="step1GoToStep2()">
+                    Next <v-icon>navigate_next</v-icon>
+                    <v-icon>arrow_forward_ios</v-icon>
+                  </v-btn>
+                </div>
+              </v-form>
+        </v-stepper-content>
+
+        <v-stepper-step editable :complete="e6 > 2" step="2"
+          >Add Personal Details.</v-stepper-step
+        >
+
+        <v-stepper-content step="2">
+         <h3 class="text-center">Personal Details.</h3>
+              <!-- <v-form ref="form2" v-model="form2Validation"> -->
+                <v-form ref="form2" v-model="form2Validation">
+                <v-row dense>
+                  <v-col md="6" offset-md="3">
+                    <h5>1. Name:</h5>
+                    <br />
                     <v-text-field
-                      type="number"
-                      prepend-inner-icon="child_care"
-                      single-line
+                      :rules="nameRules"
+                      counter
+                      required
+                      v-model="personalData['name']"
+                      label="Name"
                       outlined
                     ></v-text-field>
                   </v-col>
                 </v-row>
-              </template>
-              <template v-else-if="questions[i].type == 'checkbox'">
-                <v-row :key="i" align="center" justify="center">
-                  <v-col md="4" offset-md="2">
-                    <h5 class="text-center" :key="i">
-                      {{ i + 1 + "." }} {{ questions[i].question }}
-                    </h5>
-                  </v-col>
-                  <v-col md="4">
-                    <v-checkbox></v-checkbox>
+
+                <v-row dense>
+                  <v-col md="6" offset-md="3">
+                    <h5>2. Email Address:</h5>
+                    <br />
+                    <v-text-field
+                      :rules="emailRules"
+                      counter
+                      required
+                      v-model="personalData['email_address']"
+                      label="Email Address"
+                      outlined
+                    ></v-text-field>
                   </v-col>
                 </v-row>
-              </template>
-            </template>
 
-            <div style="text-align:right">
-              <v-btn color="success" outlined @click="e6 = 2">
-                Next <v-icon>navigate_next</v-icon>
-                <v-icon>arrow_forward_ios</v-icon>
-              </v-btn>
-            </div>
-          </v-stepper-content>
+                <v-row dense>
+                  <v-col md="6" offset-md="3">
+                    <h5>3. Phone Number:</h5>
+                    <br />
+                    <v-text-field
+                      :rules="RequiredPhoneNumber"
+                      :counter="10"
+                      placeholder="07...."
+                      required
+                      v-model="personalData['phoneNumber']"
+                      label="Phone Number"
+                      maxlength="10"
+                      type="tel"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
 
-          <v-stepper-step editable :complete="e6 > 2" step="2"
-            >Add Personal Details.</v-stepper-step
-          >
+                <div>
+                  <v-btn
+                    class="float-right"
+                    style="text-align:right"
+                    color="success"
+                    outlined
+                    @click="movingFromStep2ToStep3()"
+                  >
+                    Generate Estimates. <v-icon>navigate_next</v-icon>
+                    <v-icon>arrow_forward_ios</v-icon>
+                  </v-btn>
 
-          <v-stepper-content step="2">
-            <h3 class="text-center">Personal Details.</h3>
-            <v-row dense>
-              <v-col md="6" offset-md="3">
-                <h5>1. Name:</h5>
+                  <v-btn
+                    class="float-left"
+                    style="text-align:right"
+                    color="red"
+                    outlined=""
+                    @click="movingFromStep2ToStep1()"
+                  >
+                    <v-icon>arrow_back_ios</v-icon>
+                    <v-icon>arrow_back_ios</v-icon>
+                    Go Back.
+                  </v-btn>
+                </div>
+              </v-form>
+        </v-stepper-content>
 
-                <v-text-field placeholder="Name" outlined></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row dense>
-              <v-col md="6" offset-md="3">
-                <h5>2. Email Address:</h5>
+        <v-stepper-step editable :complete="e6 > 3" step="3"
+          >Insurance Cover Estimates.</v-stepper-step
+        >
 
-                <v-text-field placeholder="Name" outlined></v-text-field>
-              </v-col>
-            </v-row>
+        <v-stepper-content step="3">
+              <v-container class="fill-height" style="margin-top:2%">
+                <v-row align="center" justify="center">
+                  <h2 style="color:#29ab87;">
+                    Mr Insurance Is Searching For The best policy For You
+                  </h2>
+                </v-row>
 
-            <v-row dense>
-              <v-col md="6" offset-md="3">
-                <h5>3. Phone Number:</h5>
+                <v-row align="center" justify="center">
+                  <orbit-spinner
+                    :animation-duration="1200"
+                    :size="155"
+                    color="#29ab87"
+                  />
+                </v-row>
+                <v-row align="center" justify="center">
+                  <h4 style="color:#29ab87;">Just A Second</h4>
+                  <hollow-dots-spinner
+                    :animation-duration="1200"
+                    :dot-size="8"
+                    :dots-num="4"
+                    color="#29ab87"
+                  />
+                </v-row>
+              </v-container>
 
-                <v-text-field placeholder="Name" outlined></v-text-field>
-              </v-col>
-            </v-row>
-            <div>
-              <v-btn
-                class="float-right"
-                style="text-align:right"
-                color="success"
-                outlined=""
-                @click="e6 = 3"
-              >
-                Generate Estimates. <v-icon>navigate_next</v-icon>
-                <v-icon>arrow_forward_ios</v-icon>
-              </v-btn>
+              <div class="text-center">
+                <v-btn
+                  style="text-align:right"
+                  color="red"
+                  outlined=""
+                  @click="step3GoToStep2()"
+                >
+                  <v-icon>arrow_back_ios</v-icon>
+                  <v-icon>arrow_back_ios</v-icon>
+                  Go Back.
+                </v-btn>
+              </div>
+        </v-stepper-content>
 
-              <v-btn
-                class="float-left"
-                style="text-align:right"
-                color="red"
-                outlined=""
-                @click="e1 = 3"
-              >
-                <v-icon>arrow_back_ios</v-icon>
-                <v-icon>arrow_back_ios</v-icon>
-                Go Back.
-              </v-btn>
-            </div>
-          </v-stepper-content>
-
-          <v-stepper-step editable :complete="e6 > 3" step="3"
-            >Insurance Cover Estimates.</v-stepper-step
-          >
-
-          <v-stepper-content step="3">
-            <trinity-rings-spinner
-              :animation-duration="1000"
-              :size="166"
-              color="#3AB290"
-            />
-
-            <div class="text-center">
-              <v-btn
-                style="text-align:right"
-                color="red"
-                outlined=""
-                @click="e6 = 3"
-              >
-                <v-icon>arrow_back_ios</v-icon>
-                <v-icon>arrow_back_ios</v-icon>
-                Go Back.
-              </v-btn>
-            </div>
-          </v-stepper-content>
-
-          <v-stepper-step editable step="4"
-            >View setup instructions</v-stepper-step
-          >
-          <v-stepper-content step="4">
-            <v-card
-              color="grey lighten-1"
-              class="mb-12"
-              height="200px"
-            ></v-card>
-            <v-btn color="primary" @click="e6 = 1">Continue</v-btn>
-            <v-btn text>Cancel</v-btn>
-          </v-stepper-content>
-        </v-stepper>
-      </template>
-    
+        <v-stepper-step editable step="4"
+          >View setup instructions</v-stepper-step
+        >
+        <v-stepper-content step="4">
+          <v-card color="grey lighten-1" class="mb-12" height="200px"></v-card>
+          <v-btn color="primary" @click="e6 = 1">Continue</v-btn>
+          <v-btn text>Cancel</v-btn>
+        </v-stepper-content>
+      </v-stepper>
+    </template>
   </base-section>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import { TrinityRingsSpinner } from "epic-spinners";
+import { HollowDotsSpinner } from "epic-spinners";
+import { OrbitSpinner } from "epic-spinners";
 export default {
   name: "SectionThemeFeatures",
   computed: {
@@ -439,17 +586,48 @@ export default {
       "navigationCoverGetter",
       "navigationStateGetter",
       "navigationSubCategory",
+      "personalDetailsStatusGetter",
     ]),
   },
   components: {
     TrinityRingsSpinner,
+    HollowDotsSpinner,
+    OrbitSpinner,
   },
   methods: {
     activateTheSubCategory(subCategory) {
+      this.inputData = [];
       this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategory);
     },
-    save(date) {
-      this.$refs.menu.save(date);
+    step1GoToStep2() {
+      if (this.$refs.form.validate()) {
+        // ! after filling the table, store the data a state.
+
+        this.$store.dispatch(
+          "updatingTheInsuranceCoverDetails",
+          this.inputData
+        );
+
+        // ! navigate to the next stepper page.
+        console.log(this.inputData);
+        this.e1 = 2;
+        this.e6 = 2;
+      }
+    },
+    movingFromStep2ToStep1() {
+      this.e1 = 1;
+      this.e6 = 1;
+    },
+    step3GoToStep2() {
+      this.e1 = 2;
+      this.e6 = 2;
+    },
+    movingFromStep2ToStep3() {
+      if (this.$refs.form2.validate()) {
+        this.$store.dispatch("updatingPersonalDetails", this.personalData);
+        this.e1 = 3;
+        this.e6 = 3;
+      }
     },
   },
   data: () => ({
@@ -458,10 +636,33 @@ export default {
     subCategory: null,
     e1: 1,
     e6: 1,
-    date1: null,
-    date2: null,
-    menu1: false,
-    menu2: false,
+    valid: false,
+    items: [100000, 250000, 500000, 1000000],
+    inputData: [],
+    personalData: [],
+    form2Validation: false,
+
+    // ! the name rules.
+    RequiredDateRules: [(v) => !!v || "Date is required"],
+    RequiredNumber: [
+      (v) => !!v || "Number is required",
+      (v) => /^\d+$/.test(v) || "Number must be valid",
+    ],
+    RequiredPhoneNumber: [
+      (v) => !!v || "Phone Number is required",
+      (v) => v.length <= 10 || "Phone Number must have 10 characters",
+      (v) =>
+        /^0(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$/.test(v) ||
+        "Phone Number must be valid",
+    ],
+    emailRules: [
+      (v) => !!v || "E-mail is required",
+      (v) => /.+@.+/.test(v) || "E-mail must be valid",
+    ],
+    nameRules: [
+      (v) => !!v || "Name is required",
+      (v) => v.length >= 3 || "Name Must Be More Than 3 characters",
+    ],
   }),
   created() {
     this.cover = this.navigationStateGetter[this.navigationCoverGetter];
@@ -482,9 +683,6 @@ export default {
         this.navigationCoverGetter
       ].subCategories[this.navigationSubCategory].questions;
       this.subCategory = this.navigationSubCategory;
-    },
-    menu(val) {
-      val && setTimeout(() => (this.$refs.picker.activePicker = "YEAR"));
     },
   },
 };

@@ -5,7 +5,10 @@ const state= {
     navigationState:null,
     navigationView:false,
     cover:0,
-    subCategory:0
+    subCategory:0,
+    insuranceCoverDetails: null,
+    personalDetails: null,
+    personalDetailStatus: false
 }
 const mutations = {
     UPDATING_THE_STATE_TO_ADD_NAVIGATION_ITEMS(state,payload){
@@ -21,7 +24,16 @@ const mutations = {
     UPDATING_THE_SUB_COVER_INDEX(state,payload){
 
         state.subCategory = payload;
-    }
+    },
+    UPDATING_THE_INSURANCE_COVER_DETAILS(state,payload){
+            state.insuranceCoverDetails = payload;
+    },
+    UPDATING_PERSONAL_DETAILS(state,payload){
+            state.personalDetails = payload;
+    },
+    UPDATING_PERSONAL_DETAILS_STATUS(state,payload){
+        state.personalDetailStatus = payload;
+}
 }
 const actions = {
     getAllNavigationComponents({commit}){
@@ -51,13 +63,29 @@ const actions = {
 
         commit("UPDATING_THE_SUB_COVER_INDEX",index);        
 
+    },
+    updatingTheInsuranceCoverDetails({commit},data){
+
+        commit("UPDATING_THE_INSURANCE_COVER_DETAILS",data);
+
+    },
+    updatingPersonalDetails({commit},data){
+
+        commit("UPDATING_PERSONAL_DETAILS",data);
+        commit("UPDATING_PERSONAL_DETAILS_STATUS",true);
+        
+
     }
+    
 }
 const getters = {
     navigationStateGetter: state => state.navigationState,
     navigationViewGetter: state => state.navigationView,
     navigationCoverGetter: state =>state.cover, 
     navigationSubCategory: state => state.subCategory, 
+    insuranceCoverDetailsGetter: state => state.insuranceCoverDetails,
+    personalDetailsGetter: state => state.personalDetails,
+    personalDetailsStatusGetter: state => state.personalDetailStatus,
 }
 
 const NavigationModule = {state,mutations,actions,getters}
