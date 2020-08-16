@@ -178,67 +178,72 @@
 
             <v-stepper-content step="2">
               <h3 class="text-center">Personal Details.</h3>
-              <v-row dense>                  
-                  <v-col md="6" offset-md="3">
-                  <h5>1. Name: </h5>               
-                
-                  <v-text-field                    
-                    placeholder="Name"
-                    outlined
-                  ></v-text-field> 
-                  </v-col>                                                                                
+              <v-row dense>
+                <v-col md="6" offset-md="3">
+                  <h5>1. Name:</h5>
+
+                  <v-text-field placeholder="Name" outlined></v-text-field>
+                </v-col>
               </v-row>
-               <v-row dense>                  
-                  <v-col md="6" offset-md="3">
-                  <h5>2. Email Address: </h5>               
-                
-                  <v-text-field                    
-                    placeholder="Name"
-                    outlined
-                  ></v-text-field> 
-                  </v-col>                                                                   
+              <v-row dense>
+                <v-col md="6" offset-md="3">
+                  <h5>2. Email Address:</h5>
+
+                  <v-text-field placeholder="Name" outlined></v-text-field>
+                </v-col>
               </v-row>
 
-               <v-row dense>                  
-                  <v-col md="6" offset-md="3">
-                  <h5>3. Phone Number: </h5>               
-                
-                  <v-text-field                    
-                    placeholder="Name"
-                    outlined
-                  ></v-text-field> 
-                  </v-col>                                                                   
+              <v-row dense>
+                <v-col md="6" offset-md="3">
+                  <h5>3. Phone Number:</h5>
+
+                  <v-text-field placeholder="Name" outlined></v-text-field>
+                </v-col>
               </v-row>
               <div>
-                <v-btn class="float-right" style="text-align:right" color="success" outlined="" @click="e1 = 3">
-                Generate Estimates. <v-icon>navigate_next</v-icon>
+                <v-btn
+                  class="float-right"
+                  style="text-align:right"
+                  color="success"
+                  outlined=""
+                  @click="e1 = 3"
+                >
+                  Generate Estimates. <v-icon>navigate_next</v-icon>
                   <v-icon>arrow_forward_ios</v-icon>
-              </v-btn>
+                </v-btn>
 
-              <v-btn class="float-left" style="text-align:right" color="red" outlined="" @click="e1 = 3">
-               <v-icon>arrow_back_ios</v-icon>
+                <v-btn
+                  class="float-left"
+                  style="text-align:right"
+                  color="red"
+                  outlined=""
+                  @click="e1 = 3"
+                >
                   <v-icon>arrow_back_ios</v-icon>
-                  Go Back. 
-              </v-btn>
-              
+                  <v-icon>arrow_back_ios</v-icon>
+                  Go Back.
+                </v-btn>
               </div>
             </v-stepper-content>
 
             <v-stepper-content step="3">
-             
-             <trinity-rings-spinner
-              :animation-duration="1000"
-              :size="166"
-              color="#3AB290"
-            />
+              <trinity-rings-spinner
+                :animation-duration="1000"
+                :size="166"
+                color="#3AB290"
+              />
 
-             <div class="text-center">                
-              <v-btn style="text-align:right" color="red" outlined="" @click="e1 = 3">
-               <v-icon>arrow_back_ios</v-icon>
+              <div class="text-center">
+                <v-btn
+                  style="text-align:right"
+                  color="red"
+                  outlined=""
+                  @click="e1 = 3"
+                >
                   <v-icon>arrow_back_ios</v-icon>
-                  Go Back. 
-              </v-btn>
-              
+                  <v-icon>arrow_back_ios</v-icon>
+                  Go Back.
+                </v-btn>
               </div>
             </v-stepper-content>
           </v-stepper-items>
@@ -248,143 +253,143 @@
       <template>
         <v-stepper class="hidden-sm-and-up" v-model="e6" vertical>
           <v-stepper-step editable :complete="e6 > 1" step="1">
-            Select an app
-            <small>Summarize if needed</small>
+            Add Insurance Specific Questions.            
           </v-stepper-step>
 
           <v-stepper-content step="1">
-            
-                         <h3 class="text-center">Insurance Cover Specific Details.</h3>
-              <template v-for="(feature, i) in questions">
-                <template v-if="questions[i].type == 'date'">
-                  <h5 class="text-center" :key="i">
-                    {{ i + 1 + "." }} {{ questions[i].question }}
-                  </h5>
-                  <v-container :key="i">
-                    <v-row dense >
-                      <v-col>
-                        <v-menu
-                          ref="menu"
-                          v-model="menu"
-                          close-on-content-click="false"
-                          transition="scale-transition"
-                          offset-y
-                          min-width="290px"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                              v-model="date"
-                              label="Date"
-                              prepend-inner-icon="event"
-                              readonly
-                              v-bind="attrs"
-                              v-on="on"
-                              outlined
-                            ></v-text-field>
-                          </template>
-                          <v-date-picker
-                            ref="picker"
-                            v-model="date"
-                            :max="new Date().toISOString().substr(0, 10)"
-                            min="1900-01-01"
-                            @change="save"
-                          ></v-date-picker>
-                        </v-menu>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </template>
-                <template v-else-if="questions[i].type === 'number'">
-                  <h5 class="text-center" :key="i">
-                    {{ i + 1 + "." }} {{ questions[i].question }}
-                  </h5>
-                  <v-row dense :key="i">
+            <h3 class="text-center">Insurance Cover Specific Details.</h3>
+            <template v-for="(feature, i) in questions">
+              <template v-if="questions[i].type == 'date'">
+                <h5 class="text-center" :key="i">
+                  {{ i + 1 + "." }} {{ questions[i].question }}
+                </h5>
+                <v-container :key="i">
+                  <v-row dense>
                     <v-col>
-                      <v-text-field
-                        type="number"
-                        prepend-inner-icon="child_care"
-                        single-line
-                        outlined
-                      ></v-text-field>
+                      <v-menu
+                        ref="menu"
+                        v-model="menu"
+                        close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="date"
+                            label="Date"
+                            prepend-inner-icon="event"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                            outlined
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          ref="picker"
+                          v-model="date"
+                          :max="new Date().toISOString().substr(0, 10)"
+                          min="1900-01-01"
+                          @change="save"
+                        ></v-date-picker>
+                      </v-menu>
                     </v-col>
                   </v-row>
-                </template>
-                <template v-else-if="questions[i].type == 'checkbox'">
-                  <v-row :key="i" align="center" justify="center">
-                    <v-col md="4" offset-md="2">
-                      <h5 class="text-center" :key="i">
-                        {{ i + 1 + "." }} {{ questions[i].question }}
-                      </h5>
-                    </v-col>
-                    <v-col md="4">
-                      <v-checkbox></v-checkbox>
-                    </v-col>
-                  </v-row>
-                </template>
+                </v-container>
               </template>
+              <template v-else-if="questions[i].type === 'number'">
+                <h5 class="text-center" :key="i">
+                  {{ i + 1 + "." }} {{ questions[i].question }}
+                </h5>
+                <v-row dense :key="i">
+                  <v-col>
+                    <v-text-field
+                      type="number"
+                      prepend-inner-icon="child_care"
+                      single-line
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </template>
+              <template v-else-if="questions[i].type == 'checkbox'">
+                <v-row :key="i" align="center" justify="center">
+                  <v-col md="4" offset-md="2">
+                    <h5 class="text-center" :key="i">
+                      {{ i + 1 + "." }} {{ questions[i].question }}
+                    </h5>
+                  </v-col>
+                  <v-col md="4">
+                    <v-checkbox></v-checkbox>
+                  </v-col>
+                </v-row>
+              </template>
+            </template>
 
-              <div style="text-align:right">
-                <v-btn color="success" outlined @click="e6 = 2">
-                  Next <v-icon>navigate_next</v-icon>
-                  <v-icon>arrow_forward_ios</v-icon>
-                </v-btn>
-              </div>
+            <div style="text-align:right">
+              <v-btn color="success" outlined @click="e6 = 2">
+                Next <v-icon>navigate_next</v-icon>
+                <v-icon>arrow_forward_ios</v-icon>
+              </v-btn>
+            </div>
           </v-stepper-content>
 
           <v-stepper-step editable :complete="e6 > 2" step="2"
-            >Configure analytics for this app</v-stepper-step
+            >Add Personal Details.</v-stepper-step
           >
 
           <v-stepper-content step="2">
-                          <h3 class="text-center">Personal Details.</h3>
-              <v-row dense>                  
-                  <v-col md="6" offset-md="3">
-                  <h5>1. Name: </h5>               
-                
-                  <v-text-field                    
-                    placeholder="Name"
-                    outlined
-                  ></v-text-field> 
-                  </v-col>                                                                                
-              </v-row>
-               <v-row dense>                  
-                  <v-col md="6" offset-md="3">
-                  <h5>2. Email Address: </h5>               
-                
-                  <v-text-field                    
-                    placeholder="Name"
-                    outlined
-                  ></v-text-field> 
-                  </v-col>                                                                   
-              </v-row>
+            <h3 class="text-center">Personal Details.</h3>
+            <v-row dense>
+              <v-col md="6" offset-md="3">
+                <h5>1. Name:</h5>
 
-               <v-row dense>                  
-                  <v-col md="6" offset-md="3">
-                  <h5>3. Phone Number: </h5>               
-                
-                  <v-text-field                    
-                    placeholder="Name"
-                    outlined
-                  ></v-text-field> 
-                  </v-col>                                                                   
-              </v-row>
-              <div>
-                <v-btn class="float-right" style="text-align:right" color="success" outlined="" @click="e6 = 3">
+                <v-text-field placeholder="Name" outlined></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row dense>
+              <v-col md="6" offset-md="3">
+                <h5>2. Email Address:</h5>
+
+                <v-text-field placeholder="Name" outlined></v-text-field>
+              </v-col>
+            </v-row>
+
+            <v-row dense>
+              <v-col md="6" offset-md="3">
+                <h5>3. Phone Number:</h5>
+
+                <v-text-field placeholder="Name" outlined></v-text-field>
+              </v-col>
+            </v-row>
+            <div>
+              <v-btn
+                class="float-right"
+                style="text-align:right"
+                color="success"
+                outlined=""
+                @click="e6 = 3"
+              >
                 Generate Estimates. <v-icon>navigate_next</v-icon>
-                  <v-icon>arrow_forward_ios</v-icon>
+                <v-icon>arrow_forward_ios</v-icon>
               </v-btn>
 
-              <v-btn class="float-left" style="text-align:right" color="red" outlined="" @click="e1 = 3">
-               <v-icon>arrow_back_ios</v-icon>
-                  <v-icon>arrow_back_ios</v-icon>
-                  Go Back. 
+              <v-btn
+                class="float-left"
+                style="text-align:right"
+                color="red"
+                outlined=""
+                @click="e1 = 3"
+              >
+                <v-icon>arrow_back_ios</v-icon>
+                <v-icon>arrow_back_ios</v-icon>
+                Go Back.
               </v-btn>
-              
-              </div>
+            </div>
           </v-stepper-content>
 
           <v-stepper-step editable :complete="e6 > 3" step="3"
-            >Select an ad format and name ad unit</v-stepper-step
+            >Insurance Cover Estimates.</v-stepper-step
           >
 
           <v-stepper-content step="3">
@@ -394,14 +399,18 @@
               color="#3AB290"
             />
 
-             <div class="text-center">                
-              <v-btn style="text-align:right" color="red" outlined="" @click="e6 = 3">
-               <v-icon>arrow_back_ios</v-icon>
-                  <v-icon>arrow_back_ios</v-icon>
-                  Go Back. 
+            <div class="text-center">
+              <v-btn
+                style="text-align:right"
+                color="red"
+                outlined=""
+                @click="e6 = 3"
+              >
+                <v-icon>arrow_back_ios</v-icon>
+                <v-icon>arrow_back_ios</v-icon>
+                Go Back.
               </v-btn>
-              
-              </div>
+            </div>
           </v-stepper-content>
 
           <v-stepper-step editable step="4"
@@ -424,7 +433,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { TrinityRingsSpinner } from 'epic-spinners'
+import { TrinityRingsSpinner } from "epic-spinners";
 export default {
   name: "SectionThemeFeatures",
   computed: {
@@ -434,7 +443,7 @@ export default {
       "navigationSubCategory",
     ]),
   },
-  components:{
+  components: {
     TrinityRingsSpinner,
   },
   methods: {

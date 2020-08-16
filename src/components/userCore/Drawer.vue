@@ -36,7 +36,7 @@
           >
             <v-list-group
               v-if="item['subCategories']"
-              prepend-icon="local_hospital"
+              :prepend-icon="item.icon"
             >
               <template v-slot:activator>
                 <v-list-item-title>{{ item["cover"] }}</v-list-item-title>
@@ -48,12 +48,13 @@
                 @click="clickedSubCategory(index, coverIndex)"
               >
                 <v-list-item-title v-text="item.name"></v-list-item-title>
+                <v-icon>{{item.icon}}</v-icon>
               </v-list-item>
             </v-list-group>
 
             <v-list-item v-else color="primary">
               <v-list-item-icon>
-                <v-icon>email</v-icon>
+                <v-icon>{{item.icon}}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title> {{ item["cover"] }} </v-list-item-title>
@@ -103,7 +104,7 @@ export default {
 
       //! after update, redirect to the proper page.
       router.push({
-        name: this.navigationStateGetter[this.navigationCoverGetter].cover,
+        name: this.navigationStateGetter[this.navigationCoverGetter].route_name,
       });
     },
   },
