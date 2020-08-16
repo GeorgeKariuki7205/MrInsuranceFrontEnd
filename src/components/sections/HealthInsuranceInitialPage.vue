@@ -7,7 +7,6 @@
       Asperiores, impedit libero. Veniam rerum saepe unde nihil possimus
       quibusdam esse accusamus mollitia magni fuga.
     </base-section-heading>
-
     <v-container>
       <v-row class="hidden-sm-and-down" justify="center" align="center">
         <v-col
@@ -24,9 +23,9 @@
             color="primary"
             align="center"
             :horizontal="true"
-            icon="email"
+            :icon="feature.icon"
             :title="feature.name"
-            :text="feature.name"
+            :text="feature.description"
           >
           </base-avatar-card-insurance-sub-category>
           <base-avatar-card-insurance-sub-category
@@ -34,9 +33,9 @@
             style="cursor: pointer;"
             align="center"
             :horizontal="true"
-            icon="email"
+            :icon="feature.icon"
             :title="feature.name"
-            :text="feature.name"
+            :text="feature.description"
           >
           </base-avatar-card-insurance-sub-category>
         </v-col>
@@ -50,7 +49,7 @@
             @click="activateTheSubCategory(i)"
             class="ma-2"
           >
-            <v-icon left>email</v-icon>
+            <v-icon left>{{ feature.icon }}</v-icon>
             {{ feature.name }}
           </v-chip>
           <v-chip
@@ -61,7 +60,7 @@
             color="primary"
             outlined
           >
-            <v-icon left>email</v-icon>
+            <v-icon left>{{ feature.icon }}</v-icon>
             {{ feature.name }}
           </v-chip>
         </template>
@@ -108,7 +107,7 @@
                   </h5>
                   <v-container :key="i">
                     <v-row dense :key="i">
-                      <v-col md="4" offset-md="4">
+                      <v-col md="6" offset-md="3">
                         <v-menu
                           ref="menu"
                           v-model="menu"
@@ -145,7 +144,7 @@
                     {{ i + 1 + "." }} {{ questions[i].question }}
                   </h5>
                   <v-row dense :key="i">
-                    <v-col md="4" offset-md="4">
+                    <v-col md="6" offset-md="3">
                       <v-text-field
                         type="number"
                         prepend-icon="child_care"
@@ -262,8 +261,8 @@
                     {{ i + 1 + "." }} {{ questions[i].question }}
                   </h5>
                   <v-container :key="i">
-                    <v-row dense :key="i">
-                      <v-col md="4" offset-md="4">
+                    <v-row dense >
+                      <v-col>
                         <v-menu
                           ref="menu"
                           v-model="menu"
@@ -276,7 +275,7 @@
                             <v-text-field
                               v-model="date"
                               label="Date"
-                              prepend-icon="event"
+                              prepend-inner-icon="event"
                               readonly
                               v-bind="attrs"
                               v-on="on"
@@ -300,10 +299,10 @@
                     {{ i + 1 + "." }} {{ questions[i].question }}
                   </h5>
                   <v-row dense :key="i">
-                    <v-col md="4" offset-md="4">
+                    <v-col>
                       <v-text-field
                         type="number"
-                        prepend-icon="child_care"
+                        prepend-inner-icon="child_care"
                         single-line
                         outlined
                       ></v-text-field>

@@ -62,9 +62,8 @@
                   v-bind="attrs"
                   v-on="on"
                 >
-                  <v-icon left>local_hospital</v-icon>
-                  {{ item["cover"] }}
-                  <!-- <span> </span> -->
+                  <v-icon left> {{ item["icon"] }}</v-icon>
+                  {{ item["cover"] }}                  
                   <v-icon right>mdi-menu-down</v-icon>
                 </v-btn>
               </template>
@@ -90,7 +89,7 @@
               min-width="96"
               text
             >
-              <v-icon>home</v-icon>
+              <v-icon left=""> {{ item["icon"] }}</v-icon>
               <v-spacer></v-spacer>
               {{ item["cover"] }}
             </v-tab>
@@ -149,7 +148,7 @@ export default {
 
       //! after update, redirect to the proper page.
       router.push({
-        name: this.navigationStateGetter[this.navigationCoverGetter].cover,
+        name: this.navigationStateGetter[this.navigationCoverGetter].route_name,
       });
     },
   },

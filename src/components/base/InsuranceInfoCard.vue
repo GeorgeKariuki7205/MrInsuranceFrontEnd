@@ -11,7 +11,7 @@
           class="mb-4"
         >
           <base-icon :color="color">
-            local_hospital
+            {{covers.icon}}
           </base-icon>
         </v-col>
 
