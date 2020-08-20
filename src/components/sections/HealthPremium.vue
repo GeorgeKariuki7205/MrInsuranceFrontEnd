@@ -25,7 +25,7 @@
         {{
           premium.payableCash.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         }}
-        /=
+        Ksh
       </v-btn>
       <v-btn color="primary" dark medium>
         <v-icon>add_shopping_cart</v-icon>Get Cover.</v-btn
@@ -69,12 +69,11 @@
                     @click="morebenefits = !morebenefits"
                     style="text-decoration:null;text-align:center;color:orange"
                   >
-                  <span v-if="morebenefits">Click To View More.</span>
+                    <span v-if="morebenefits">Click To View More.</span>
                     <span v-else>Click To View Less.</span>
-                    </a
-                  >
+                  </a>
                 </template>
-              </ol>            
+              </ol>
             </template>
           </v-col>
           <v-col md="4" class="text-center">
@@ -83,10 +82,10 @@
             <!-- THIS IS THE SECTION THAT IS USED TO IMPLEMENT THE COST BREAKDOWN OF THE INSURANCE COVER. -->
             <div style="text-align:center;">
               <v-data-table
-    :headers="headers"
-    :items="data"    
-    hide-default-footer  
-  ></v-data-table>
+                :headers="headers"
+                :items="data"
+                hide-default-footer
+              ></v-data-table>
             </div>
           </v-col>
         </v-row>
@@ -124,23 +123,77 @@
             <v-container>
               <v-card flat>
                 <v-card-text>
-                  <p>
-                    Sed aliquam ultrices mauris. Donec posuere vulputate arcu.
-                    Morbi ac felis. Etiam feugiat lorem non metus. Sed a libero.
-                  </p>
+                  <!-- Additional Covers Implementations. -->
+                  <h3 style="color:black" class="text-center">
+                    Aditional Covers Related To The Insurance Premium.
+                  </h3>
+                  <template v-if="premium.additionalCovers.length < 1">
+                    <h2 ma-4 class="text-center" style="color:black;">
+                      There are No Additional Coverr Related To This Premium.
+                    </h2>
+                  </template>
+                  <template v-else>
+                    <v-container>
+                      <template
+                        v-for="(additional, index) in premium.additionalCovers"
+                      >
+                        <h2 :key="index" style="color:black;text-align:center;">
+                          {{ additional.name }}
+                        </h2>
 
-                  <p>
-                    Nam ipsum risus, rutrum vitae, vestibulum eu, molestie vel,
-                    lacus. Aenean tellus metus, bibendum sed, posuere ac, mattis
-                    non, nunc. Aliquam lobortis. Aliquam lobortis. Suspendisse
-                    non nisl sit amet velit hendrerit rutrum.
-                  </p>
-
-                  <p class="mb-0">
-                    Phasellus dolor. Fusce neque. Fusce fermentum odio nec arcu.
-                    Pellentesque libero tortor, tincidunt et, tincidunt eget,
-                    semper nec, quam. Phasellus blandit leo ut odio.
-                  </p>
+                        <h3 :key="index" style="color:black;text-align:center;">
+                          Premuims For The {{ additional.name.toLowerCase() }}
+                        </h3>
+                        <v-row
+                          :key="index"
+                          align="center"
+                          justify="center"
+                          class="my-5"
+                          my-4
+                        >
+                          <table :key="index">
+                            <tr>
+                              <th>ID</th>
+                              <th>Cover Limit</th>
+                              <th>Cost</th>
+                              <th>Purchase</th>
+                            </tr>
+                            <template
+                              v-for="(premium,
+                              index) in additional.additional_premia"
+                            >
+                              <tr :key="index">
+                                <td>{{ index + 1 }}</td>
+                                <td>
+                                  {{
+                                    premium.limit
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                      " Ksh"
+                                  }}
+                                </td>
+                                <td>
+                                  {{
+                                    premium.cost
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                      " Ksh"
+                                  }}
+                                  <span>Per Individual</span>
+                                </td>
+                                <td>
+                                  <v-btn small color="success" dark
+                                    >Add To Cover.
+                                    <v-icon>add_shopping_cart</v-icon></v-btn
+                                  >
+                                </td>
+                              </tr>
+                            </template>
+                          </table>
+                        </v-row>
+                      </template>
+                    </v-container>
+                  </template>
                 </v-card-text>
               </v-card>
             </v-container>
@@ -148,63 +201,147 @@
           <v-tab-item>
             <v-card flat>
               <v-card-text>
-                <p>
-                  Morbi nec metus. Suspendisse faucibus, nunc et pellentesque
-                  egestas, lacus ante convallis tellus, vitae iaculis lacus elit
-                  id tortor. Sed mollis, eros et ultrices tempus, mauris ipsum
-                  aliquam libero, non adipiscing dolor urna a orci. Curabitur
-                  ligula sapien, tincidunt non, euismod vitae, posuere
-                  imperdiet, leo. Nunc sed turpis.
-                </p>
-
-                <p>
-                  Suspendisse feugiat. Suspendisse faucibus, nunc et
-                  pellentesque egestas, lacus ante convallis tellus, vitae
-                  iaculis lacus elit id tortor. Proin viverra, ligula sit amet
-                  ultrices semper, ligula arcu tristique sapien, a accumsan nisi
-                  mauris ac eros. In hac habitasse platea dictumst. Fusce ac
-                  felis sit amet ligula pharetra condimentum.
-                </p>
-
-                <p>
-                  Sed consequat, leo eget bibendum sodales, augue velit cursus
-                  nunc, quis gravida magna mi a libero. Nam commodo suscipit
-                  quam. In consectetuer turpis ut velit. Sed cursus turpis vitae
-                  tortor. Aliquam eu nunc.
-                </p>
-
-                <p>
-                  Etiam ut purus mattis mauris sodales aliquam. Ut varius
-                  tincidunt libero. Aenean viverra rhoncus pede. Duis leo. Fusce
-                  fermentum odio nec arcu.
-                </p>
-
-                <p class="mb-0">
-                  Donec venenatis vulputate lorem. Aenean viverra rhoncus pede.
-                  In dui magna, posuere eget, vestibulum et, tempor auctor,
-                  justo. Fusce commodo aliquam arcu. Suspendisse enim turpis,
-                  dictum sed, iaculis a, condimentum nec, nisi.
-                </p>
+                <v-container ma-4>
+                  <h3 style="color:black" class="text-center">
+                    Insurance Cover Benefits
+                  </h3>
+                  <v-row
+                    :key="index"
+                    align="center"
+                    justify="center"
+                    class="my-5"
+                    my-4
+                  >
+                    <table :key="index">
+                      <tr>
+                        <th>ID</th>
+                        <th>Benefit</th>
+                        <th>Limit</th>
+                      </tr>
+                      <template
+                        v-for="(coverBenefit, index) in premium.coverBenefits"
+                      >
+                        <tr :key="index">
+                          <td>{{ index + 1 }}</td>
+                          <td>
+                            {{ coverBenefit.name }}
+                          </td>
+                          <td v-if="coverBenefit.type_of_benefit == 1">
+                            {{
+                              coverBenefit.amount
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Ksh"
+                            }}
+                          </td>
+                        </tr>
+                      </template>
+                    </table>
+                  </v-row>
+                </v-container>
               </v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
               <v-card-text>
-                <p>
-                  Fusce a quam. Phasellus nec sem in justo pellentesque
-                  facilisis. Nam eget dui. Proin viverra, ligula sit amet
-                  ultrices semper, ligula arcu tristique sapien, a accumsan nisi
-                  mauris ac eros. In dui magna, posuere eget, vestibulum et,
-                  tempor auctor, justo.
-                </p>
-
-                <p class="mb-0">
-                  Cras sagittis. Phasellus nec sem in justo pellentesque
-                  facilisis. Proin sapien ipsum, porta a, auctor quis, euismod
-                  ut, mi. Donec quam felis, ultricies nec, pellentesque eu,
-                  pretium quis, sem. Nam at tortor in tellus interdum sagittis.
-                </p>
+                <v-container ma-4>
+                  <h3 style="color:black" class="text-center">
+                    Conditions Not Covered.
+                  </h3>
+                  <v-row
+                    :key="index"
+                    align="center"
+                    justify="center"
+                    class="my-5"
+                    my-4
+                  >
+                    <table :key="index">
+                      <thead>
+                         <tr>
+                        <th>ID</th>
+                        <th>Benefit</th>                        
+                      </tr>
+                      </thead>
+                     
+                      <template
+                        v-for="(notCovered, index) in premium.notCovered"
+                      >
+                        <tr :key="index">
+                          <td>{{ index + 1 }}</td>
+                          <td>
+                            {{ notCovered.name }}
+                          </td>                         
+                        </tr>
+                      </template>
+                       <tfoot>
+                         <tr>
+                        <th>ID</th>
+                        <th>Benefit</th>                        
+                      </tr>
+                      </tfoot>
+                    </table>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <v-container ma-4>
+                  <h4 style="color:black" class="text-center">
+                    Insurance Cover Waiting Periods.
+                  </h4>
+                  <template v-if="premium.waitingPeriod.length < 1">
+                    <h4 style="color:black" class="text-center">
+                      No Waiting Periods.
+                    </h4>
+                  </template>
+                  <template v-else>
+                    <!-- <ol type="number" :key="index">
+                      <template
+                        v-for="(coverBenefit, index) in premium.waitingPeriod"
+                      >
+                        <template>
+                          <li :key="index">
+                            {{ coverBenefit.situation }}
+                          </li>
+                        </template>
+                      </template>
+                    </ol> -->
+                    <v-row
+                    :key="index"
+                    align="center"
+                    justify="center"
+                    class="my-5"
+                    my-4
+                  >
+                    <table :key="index">
+                      <thead>
+                         <tr>
+                        <th>ID</th>
+                        <th>Condition</th>   
+                        <th>Waiting Period</th>                        
+                      </tr>
+                      </thead>
+                     
+                      <template
+                        v-for="(waitingPeriod, index) in premium.waitingPeriod"
+                      >
+                        <tr :key="index">
+                          <td>{{ index + 1 }}</td>
+                          <td>
+                            {{ waitingPeriod.situation}}
+                          </td>  
+                          <td>
+                            {{waitingPeriod.period_amount + waitingPeriod.period_time}}
+                          </td>                       
+                        </tr>
+                      </template>                      
+                    </table>
+                  </v-row>
+                  </template>
+                </v-container>
               </v-card-text>
             </v-card>
           </v-tab-item>
@@ -220,36 +357,88 @@ export default {
     show: false,
     morebenefits: true,
     headers: [
-          {
-            text: 'Individual',
-            align: 'start',
-            sortable: false,
-            value: 'name',
-          },
-          { text: 'Amount', value: 'value' },
-          { text: 'Description', value: 'description' },                        
-        ],
-        data:[
-          {
-              name: 'Geothe',
-              value:12,
-              description:'description',
-          }
-          
-        ]
+      {
+        text: "Individual",
+        align: "start",
+        value: "name",
+      },
+      { text: "Description", value: "description" },
+      { text: "Amount", value: "value" },
+    ],
+    data: null,
 
     // ! health benefits table definition.
   }),
   props: ["premium"],
+  created() {
+    // ! after the creation of the component, create the array that will hold the
+    // ! data to be looped as the financial breakdown.
+    var financialBreakDownArray = [];
+
+    var principal_memberDetails = {};
+    principal_memberDetails["name"] = "Principal Member";
+    principal_memberDetails["description"] = " ' ' ";
+    principal_memberDetails["value"] =
+      this.premium.financialBreakDown.principal_member
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+
+    if (this.premium.financialBreakDown.spouse) {
+      var spouse_details = {};
+      spouse_details["name"] = "Spouse";
+      spouse_details["value"] =
+        this.premium.financialBreakDown.spouse
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+      spouse_details["description"] = " ' ' ";
+      financialBreakDownArray[1] = spouse_details;
+    }
+
+    if (this.premium.financialBreakDown.dependents) {
+      var dependents_details = {};
+      dependents_details["name"] = "Children";
+      dependents_details["value"] =
+        (
+          this.premium.financialBreakDown.dependents.dependant *
+          parseInt(
+            this.premium.financialBreakDown.dependents.number_of_dependents
+          )
+        )
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+      dependents_details["description"] =
+        this.premium.financialBreakDown.dependents.number_of_dependents +
+        " Dependants Each  " +
+        this.premium.financialBreakDown.dependents.dependant
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+        "Ksh";
+      financialBreakDownArray[2] = dependents_details;
+    }
+
+    financialBreakDownArray[0] = principal_memberDetails;
+    this.data = financialBreakDownArray;
+    console.log("This is the data that is being passed to the Data array.");
+    console.log(this.data);
+  },
 };
 </script>
 
 <style>
-/* Helper classes */
-.basil {
-  background-color: #fffbe6 !important;
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 80%;
 }
-.basil--text {
-  color: #356859 !important;
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
 }
 </style>
