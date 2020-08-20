@@ -1,6 +1,6 @@
 <template style="margin-bottom:2%">
-  <v-card  class="mx-auto">
-    <v-list-item background-color="gray">
+  <v-card class="mx-auto">
+    <v-list-item style="background-color:#F0F0F0;">
       <v-list-item-content>
         <v-list-item-title>
           <h3>
@@ -20,7 +20,7 @@
         >
       </v-list-item-content>
       <v-spacer></v-spacer>
-      <v-btn text color="success">
+      <v-btn text color="success darken-4">
         Payable:
         {{
           premium.payableCash.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -34,30 +34,66 @@
     <v-divider></v-divider>
     <v-card-text>
       <v-container>
-        <v-row no-gutters="">
-          <v-col md="4">
+        <v-row no-gutters>
+          <v-col md="4" class="text-center">
+            <h4 style="color:black" class="text-center">Company :</h4>
             <v-img
               src="https://picsum.photos/510/300?random"
               aspect-ratio="1.7"
               max-height="100px"
               max-width="100px"
+              class="text-center;"
             ></v-img>
             <h3 style="color:black">
-              Company :
               <span style="color:green"> {{ premium.company.name }} </span>
             </h3>
           </v-col>
           <v-col md="4">
             <h4 style="color:black" class="text-center">Benefits</h4>
+            <template v-if="premium.coverBenefits.length > 0">
+              <ol type="number">
+                <template
+                  v-for="(coverBenefit, index) in premium.coverBenefits"
+                >
+                  <li v-if="index <= 4 && morebenefits" :key="index">
+                    {{ coverBenefit.name }}
+                  </li>
+                  <template v-if="!morebenefits">
+                    <li :key="index">
+                      {{ coverBenefit.name }}
+                    </li>
+                  </template>
+                </template>
+                <template class="text-center;">
+                  <a
+                    @click="morebenefits = !morebenefits"
+                    style="text-decoration:null;text-align:center;color:orange"
+                  >
+                  <span v-if="morebenefits">Click To View More.</span>
+                    <span v-else>Click To View Less.</span>
+                    </a
+                  >
+                </template>
+              </ol>            
+            </template>
           </v-col>
-          <v-col md="4">
+          <v-col md="4" class="text-center">
             <h4 style="color:black" class="text-center">Cost Break Down.</h4>
+
+            <!-- THIS IS THE SECTION THAT IS USED TO IMPLEMENT THE COST BREAKDOWN OF THE INSURANCE COVER. -->
+            <div style="text-align:center;">
+              <v-data-table
+    :headers="headers"
+    :items="data"    
+    hide-default-footer  
+  ></v-data-table>
+            </div>
           </v-col>
         </v-row>
       </v-container>
     </v-card-text>
     <v-divider></v-divider>
-    <v-card-actions>
+    <v-card-actions style="background-color:#F0F0F0;">
       <v-spacer></v-spacer>
       <v-btn color="primary" text @click="show = !show">
         {{ show ? "Show Less" : "Show More" }}
@@ -66,52 +102,48 @@
     <v-expand-transition>
       <div class="basil" v-show="show">
         <v-divider></v-divider>
-        <v-tabs  centered icons-and-text>
-             <v-tab>
-            
+        <v-tabs centered icons-and-text>
+          <v-tab>
             Additonal Covers.
             <v-icon left>add_circle</v-icon>
           </v-tab>
           <v-tab active-class>
-              Benefits
+            Benefits
             <v-icon left>beach_access</v-icon>
-            
           </v-tab>
           <v-tab>
-              What's Not Covered.
+            What's Not Covered.
             <v-icon left>error_outline</v-icon>
-            
           </v-tab>
           <v-tab>
-              Waiting Periods.
-            <v-icon left>alarm</v-icon>            
+            Waiting Periods.
+            <v-icon left>alarm</v-icon>
           </v-tab>
 
           <v-tab-item>
-              <v-container>
-            <v-card flat>
-              <v-card-text>
-                <p>
-                  Sed aliquam ultrices mauris. Donec posuere vulputate arcu.
-                  Morbi ac felis. Etiam feugiat lorem non metus. Sed a libero.
-                </p>
+            <v-container>
+              <v-card flat>
+                <v-card-text>
+                  <p>
+                    Sed aliquam ultrices mauris. Donec posuere vulputate arcu.
+                    Morbi ac felis. Etiam feugiat lorem non metus. Sed a libero.
+                  </p>
 
-                <p>
-                  Nam ipsum risus, rutrum vitae, vestibulum eu, molestie vel,
-                  lacus. Aenean tellus metus, bibendum sed, posuere ac, mattis
-                  non, nunc. Aliquam lobortis. Aliquam lobortis. Suspendisse non
-                  nisl sit amet velit hendrerit rutrum.
-                </p>
+                  <p>
+                    Nam ipsum risus, rutrum vitae, vestibulum eu, molestie vel,
+                    lacus. Aenean tellus metus, bibendum sed, posuere ac, mattis
+                    non, nunc. Aliquam lobortis. Aliquam lobortis. Suspendisse
+                    non nisl sit amet velit hendrerit rutrum.
+                  </p>
 
-                <p class="mb-0">
-                  Phasellus dolor. Fusce neque. Fusce fermentum odio nec arcu.
-                  Pellentesque libero tortor, tincidunt et, tincidunt eget,
-                  semper nec, quam. Phasellus blandit leo ut odio.
-                </p>
-              </v-card-text>
-            </v-card>
-              </v-container>
-            
+                  <p class="mb-0">
+                    Phasellus dolor. Fusce neque. Fusce fermentum odio nec arcu.
+                    Pellentesque libero tortor, tincidunt et, tincidunt eget,
+                    semper nec, quam. Phasellus blandit leo ut odio.
+                  </p>
+                </v-card-text>
+              </v-card>
+            </v-container>
           </v-tab-item>
           <v-tab-item>
             <v-card flat>
@@ -186,10 +218,27 @@
 export default {
   data: () => ({
     show: false,
-    tab: null,
-    items: ["Appetizers", "Entrees", "Deserts", "Cocktails"],
-    text:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    morebenefits: true,
+    headers: [
+          {
+            text: 'Individual',
+            align: 'start',
+            sortable: false,
+            value: 'name',
+          },
+          { text: 'Amount', value: 'value' },
+          { text: 'Description', value: 'description' },                        
+        ],
+        data:[
+          {
+              name: 'Geothe',
+              value:12,
+              description:'description',
+          }
+          
+        ]
+
+    // ! health benefits table definition.
   }),
   props: ["premium"],
 };
