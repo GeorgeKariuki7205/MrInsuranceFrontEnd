@@ -29,25 +29,92 @@
             :key="index"
           >
             <v-list-item>
-              <!-- <v-list-item-avatar color="grey"></v-list-item-avatar> -->
               <v-list-item-avatar color="orange" size="50">
                 <span class="white--text headline">CM</span>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title class="headline"
-                  >Our Changing Planet</v-list-item-title
+                <v-list-item-title class="headline">{{
+                  premium["company"]["name"]
+                }}</v-list-item-title>
+                <v-list-item-subtitle
+                  >Coverage Amount: Cover Limit:
+                  {{
+                    premium.coveredAmount
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }}</v-list-item-subtitle
                 >
-                <v-list-item-subtitle>by Kurt Wagner</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
+            <v-divider></v-divider>
             <v-card-text>
-              Visit ten places on our planet that are undergoing the biggest
-              changes today.
+              <!-- THIS SECTION IS USED TO DISPLAY THE AMOUNT THAT IS PAYABLE. -->
+              <div>
+                <v-row>
+                  <v-col>
+                    <h4 class="float-left" style="color:green">
+                      Payable:
+                      {{
+                        premium.payableCash
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }}
+                      Ksh
+                    </h4>
+                  </v-col>
+                  <v-col>
+                    <v-btn
+                      outlined
+                      color="primary"
+                      class="float-right"
+                      dark
+                      medium
+                    >
+                      <v-icon>add_shopping_cart</v-icon>Get Cover.</v-btn
+                    >
+                  </v-col>
+                </v-row>
+              </div>
+              <div class="float-none">
+                <h3 class="text-center ma-4 " style="color:black">
+                  Premium Benefits.
+                </h3>
+              </div>
+
+              <template v-if="premium.coverBenefits.length > 0">
+                <ol type="number">
+                  <template
+                    v-for="(coverBenefit, index) in premium.coverBenefits"
+                  >
+                    <li v-if="index <= 3 && morebenefits" :key="index">
+                      {{ coverBenefit.name }}
+                    </li>
+                    <template v-if="!morebenefits">
+                      <li :key="index">
+                        {{ coverBenefit.name }}
+                      </li>
+                    </template>
+                  </template>
+                  <template class="text-center;">
+                    <a
+                      @click="morebenefits = !morebenefits"
+                      style="text-decoration:null;text-align:center;color:orange"
+                    >
+                      <span v-if="morebenefits">Click To View More.</span>
+                      <span v-else>Click To View Less.</span>
+                    </a>
+                  </template>
+                </ol>
+              </template>
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn text color="deep-purple accent-4">
-                Cost BreakDown
+              <v-btn
+                @click="showCostBreakDown()"
+                text
+                color="deep-purple accent-4"
+              >
+                Cost Details
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn color="primary" text @click="show = !show">
@@ -75,8 +142,7 @@
                     <v-icon left>alarm</v-icon>
                   </v-tab>
 
-                  <v-tab-item>
-                    <!-- <v-container> -->
+                  <v-tab-item>                    
                     <v-card flat>
                       <v-card-text>
                         <!-- Additional Covers Implementations. -->
@@ -89,8 +155,7 @@
                             Premium.
                           </h2>
                         </template>
-                        <template v-else>
-                          <v-container>
+                        <template v-else>                          
                             <template
                               v-for="(additional,
                               index) in premium.additionalCovers"
@@ -112,9 +177,7 @@
                               <v-row
                                 :key="index"
                                 align="center"
-                                justify="center"
-                                class="my-5"
-                                my-4
+                                justify="center"                                                                
                               >
                                 <table :key="index">
                                   <tr>
@@ -162,52 +225,46 @@
                                   </template>
                                 </table>
                               </v-row>
-                            </template>
-                          </v-container>
+                            </template>                          
                         </template>
                       </v-card-text>
-                    </v-card>
-                    <!-- </v-container> -->
+                    </v-card>                    
                   </v-tab-item>
                   <v-tab-item>
                     <v-card flat>
                       <v-card-text>
                         <!-- <v-container> -->
-                          <h3 style="color:black" class="text-center">
-                            Insurance Cover Benefits
-                          </h3>
-                          <v-row
-                            :key="index"
-                            align="center"
-                            justify="center"                            
-                          >
-                            <table :key="index">
-                              <tr>
-                                <th>ID</th>
-                                <th>Benefit</th>
-                                <th>Limit</th>
+                        <h3 style="color:black" class="text-center">
+                          Insurance Cover Benefits
+                        </h3>
+                        <v-row :key="index" align="center" justify="center">
+                          <table :key="index">
+                            <tr>
+                              <th>ID</th>
+                              <th>Benefit</th>
+                              <th>Limit</th>
+                            </tr>
+                            <template
+                              v-for="(coverBenefit,
+                              index) in premium.coverBenefits"
+                            >
+                              <tr :key="index">
+                                <td>{{ index + 1 }}</td>
+                                <td>
+                                  {{ coverBenefit.name }}
+                                </td>
+                                <td v-if="coverBenefit.type_of_benefit == 1">
+                                  {{
+                                    coverBenefit.amount
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                      " Ksh"
+                                  }}
+                                </td>
                               </tr>
-                              <template
-                                v-for="(coverBenefit,
-                                index) in premium.coverBenefits"
-                              >
-                                <tr :key="index">
-                                  <td>{{ index + 1 }}</td>
-                                  <td>
-                                    {{ coverBenefit.name }}
-                                  </td>
-                                  <td v-if="coverBenefit.type_of_benefit == 1">
-                                    {{
-                                      coverBenefit.amount
-                                        .toString()
-                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                                        " Ksh"
-                                    }}
-                                  </td>
-                                </tr>
-                              </template>
-                            </table>
-                          </v-row>
+                            </template>
+                          </table>
+                        </v-row>
                         <!-- </v-container> -->
                       </v-card-text>
                     </v-card>
@@ -216,41 +273,36 @@
                     <v-card flat>
                       <v-card-text>
                         <!-- <v-container ma-4> -->
-                          <h3 style="color:black" class="text-center">
-                            Conditions Not Covered.
-                          </h3>
-                          <v-row
-                            :key="index"
-                            align="center"
-                            justify="center"                                                        
-                          >
-                            <table :key="index">
-                              <thead>
-                                <tr>
-                                  <th>ID</th>
-                                  <th>Benefit</th>
-                                </tr>
-                              </thead>
+                        <h3 style="color:black" class="text-center">
+                          Conditions Not Covered.
+                        </h3>
+                        <v-row :key="index" align="center" justify="center">
+                          <table :key="index">
+                            <thead>
+                              <tr>
+                                <th>ID</th>
+                                <th>Benefit</th>
+                              </tr>
+                            </thead>
 
-                              <template
-                                v-for="(notCovered,
-                                index) in premium.notCovered"
-                              >
-                                <tr :key="index">
-                                  <td>{{ index + 1 }}</td>
-                                  <td>
-                                    {{ notCovered.name }}
-                                  </td>
-                                </tr>
-                              </template>
-                              <tfoot>
-                                <tr>
-                                  <th>ID</th>
-                                  <th>Benefit</th>
-                                </tr>
-                              </tfoot>
-                            </table>
-                          </v-row>
+                            <template
+                              v-for="(notCovered, index) in premium.notCovered"
+                            >
+                              <tr :key="index">
+                                <td>{{ index + 1 }}</td>
+                                <td>
+                                  {{ notCovered.name }}
+                                </td>
+                              </tr>
+                            </template>
+                            <tfoot>
+                              <tr>
+                                <th>ID</th>
+                                <th>Benefit</th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </v-row>
                         <!-- </v-container> -->
                       </v-card-text>
                     </v-card>
@@ -259,54 +311,55 @@
                     <v-card flat>
                       <v-card-text>
                         <!-- <v-container> -->
+                        <h4 style="color:black" class="text-center">
+                          Insurance Cover Waiting Periods.
+                        </h4>
+                        <template v-if="premium.waitingPeriod.length < 1">
                           <h4 style="color:black" class="text-center">
-                            Insurance Cover Waiting Periods.
+                            No Waiting Periods.
                           </h4>
-                          <template v-if="premium.waitingPeriod.length < 1">
-                            <h4 style="color:black" class="text-center">
-                              No Waiting Periods.
-                            </h4>
-                          </template>
-                          <template v-else>
-                            <v-row
-                              :key="index"
-                              align="center"
-                              justify="center"                              
-                            >
-                              <table :key="index">
-                                <thead>
-                                  <tr>
-                                    <th>ID</th>
-                                    <th>Condition</th>
-                                    <th>Waiting Period</th>
-                                  </tr>
-                                </thead>
+                        </template>
+                        <template v-else>
+                          <v-row :key="index" align="center" justify="center">
+                            <table :key="index">
+                              <thead>
+                                <tr>
+                                  <th>ID</th>
+                                  <th>Condition</th>
+                                  <th>Waiting Period</th>
+                                </tr>
+                              </thead>
 
-                                <template
-                                  v-for="(waitingPeriod,
-                                  index) in premium.waitingPeriod"
-                                >
-                                  <tr :key="index">
-                                    <td>{{ index + 1 }}</td>
-                                    <td>
-                                      {{ waitingPeriod.situation }}
-                                    </td>
-                                    <td>
-                                      {{
-                                        waitingPeriod.period_amount +
-                                          waitingPeriod.period_time
-                                      }}
-                                    </td>
-                                  </tr>
-                                </template>
-                              </table>
-                            </v-row>
-                          </template>
+                              <template
+                                v-for="(waitingPeriod,
+                                index) in premium.waitingPeriod"
+                              >
+                                <tr :key="index">
+                                  <td>{{ index + 1 }}</td>
+                                  <td>
+                                    {{ waitingPeriod.situation }}
+                                  </td>
+                                  <td>
+                                    {{
+                                      waitingPeriod.period_amount +
+                                        waitingPeriod.period_time
+                                    }}
+                                  </td>
+                                </tr>
+                              </template>
+                            </table>
+                          </v-row>
+                        </template>
                         <!-- </v-container> -->
                       </v-card-text>
                     </v-card>
                   </v-tab-item>
                 </v-tabs>
+              </div>
+            </v-expand-transition>
+            <v-expand-transition>
+              <div v-show="costBreakDown">
+                <h2>This is the cost BreakDown.</h2>
               </div>
             </v-expand-transition>
           </v-card>
@@ -331,6 +384,9 @@ export default {
     goback() {
       router.go(-1);
     },
+    showCostBreakDown() {
+      this.costBreakDown = !this.costBreakDown;
+    },
   },
   computed: {
     ...mapGetters([
@@ -344,6 +400,8 @@ export default {
   },
   data: () => ({
     show: false,
+    costBreakDown: false,
+    morebenefits: true,
   }),
 };
 </script>
