@@ -179,8 +179,7 @@
                           <v-row
                             :key="index"
                             align="center"
-                            justify="center"
-                            class="my-5"
+                            justify="center"                            
                           >
                             <table :key="index">
                               <tr>
@@ -223,9 +222,7 @@
                           <v-row
                             :key="index"
                             align="center"
-                            justify="center"
-                            class="my-5"
-                            my-4
+                            justify="center"                                                        
                           >
                             <table :key="index">
                               <thead>
@@ -274,8 +271,7 @@
                             <v-row
                               :key="index"
                               align="center"
-                              justify="center"
-                              class="my-5"
+                              justify="center"                              
                             >
                               <table :key="index">
                                 <thead>
