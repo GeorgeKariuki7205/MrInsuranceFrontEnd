@@ -4,6 +4,7 @@ import Home from '../views/UserPages/Landing'
 import About from '../views/UserPages/about'
 import Contact from '../views/UserPages/contactUs'
 import Health from '../views/Health/HealthLanding'
+import HealthSmallScreen from '../views/Health/HealthSmallScreenPremium.vue'
 Vue.use(VueRouter)
 
   const routes = [
@@ -27,7 +28,11 @@ Vue.use(VueRouter)
     name: 'Health',
     component: Health
   },
-
+  {
+    path: '/healthPremiumsMobileView',
+    name: 'HealthSmallScreen',
+    component: HealthSmallScreen
+  },
 ]
 
 const router = new VueRouter({

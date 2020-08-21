@@ -355,10 +355,10 @@
       </template>
     </v-container>
 
-    <!-- THIS SECTION IS USED TO DEFINE THE QUESTIONS FOR THE LARGE SCREEN. -->
+    <!-- THIS SECTION IS USED TO DEFINE THE QUESTIONS FOR THE SMALL SCREEN. -->
 
     <template>
-      <v-stepper class="hidden-sm-and-up" v-model="e6" vertical>
+      <v-stepper class="hidden-md-and-up" v-model="e6" vertical>
         <v-stepper-step editable :complete="e6 > 1" step="1">
           Add Insurance Specific Questions.
         </v-stepper-step>
@@ -547,31 +547,49 @@
           >Insurance Cover Estimates.</v-stepper-step
         >
 
-        <v-stepper-content step="3">
-          <v-container class="fill-height" style="margin-top:2%">
-            <v-row align="center" justify="center">
-              <h2 style="color:#29ab87;" class="text-center">
-                Mr Insurance Is Searching For The best policy For You
-              </h2>
-            </v-row>
+        <v-stepper-content step="3">         
+          <v-container
+                v-if="!premiumsDataStatusGetter"
+                class="fill-height"
+                style="margin-top:2%">
+                <v-row align="center" justify="center">
+                  <h2 style="color:#29ab87;" class="text-center">
+                    Mr Insurance Is Searching For The best policy For You
+                  </h2>
+                </v-row>
 
-            <v-row align="center" justify="center">
-              <orbit-spinner
-                :animation-duration="1200"
-                :size="155"
-                color="#29ab87"
-              />
-            </v-row>
-            <v-row align="center" justify="center">
-              <h4 style="color:#29ab87;">Just A Second</h4>
-              <hollow-dots-spinner
-                :animation-duration="1200"
-                :dot-size="8"
-                :dots-num="4"
-                color="#29ab87"
-              />
-            </v-row>
-          </v-container>
+                <v-row align="center" justify="center">
+                  <orbit-spinner
+                    :animation-duration="1200"
+                    :size="155"
+                    color="#29ab87"
+                  />
+                </v-row>
+                <v-row align="center" justify="center">
+                  <h4 style="color:#29ab87;">Just A Second</h4>
+                  <hollow-dots-spinner
+                    :animation-duration="1200"
+                    :dot-size="8"
+                    :dots-num="4"
+                    color="#29ab87"
+                  />
+                </v-row>
+              </v-container>
+              <v-container v-else>
+                <template v-if="premiumsDataGetter.length > 0">
+                    <h2 class="text-center" style="color:black;" > {{ premiumsDataGetter.length }} Premiums Found. </h2>
+
+                    <v-row align="center" justify="center">
+                        <v-btn @click="redirectToSmallScreen()" outlined  medium color="success" dark> Redirect To Better View. <v-icon>redo</v-icon> </v-btn>
+                    </v-row>
+                </template>
+                <template v-else>
+                    <h2 class="text-center" style="color:red;" > {{ premiumsDataGetter.length }} Premiums Found. </h2>
+                    <h3 style="color:black;" class="text-center"> Try Another Search...</h3>
+                </template>
+               
+                
+              </v-container>              
 
           <div class="text-center">
             <v-btn
@@ -595,6 +613,7 @@
 import { mapGetters } from "vuex";
 import { HollowDotsSpinner } from "epic-spinners";
 import { OrbitSpinner } from "epic-spinners";
+import router from '../../router'
 export default {
   name: "SectionThemeFeatures",
   computed: {
@@ -646,6 +665,9 @@ export default {
         this.e1 = 3;
         this.e6 = 3;
       }
+    },
+    redirectToSmallScreen(){
+        router.push('healthPremiumsMobileView');
     },
   },
   data: () => ({

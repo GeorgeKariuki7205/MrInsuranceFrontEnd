@@ -98,8 +98,8 @@
         {{ show ? "Show Less" : "Show More" }}
       </v-btn>
     </v-card-actions>
-    <v-expand-transition>
-      <div class="basil" v-show="show">
+    <v-expand-transition style="background-color:red;">
+      <div class="basil" style="background-color:red;" v-show="show">
         <v-divider></v-divider>
         <v-tabs centered icons-and-text>
           <v-tab>
@@ -257,12 +257,12 @@
                   >
                     <table :key="index">
                       <thead>
-                         <tr>
-                        <th>ID</th>
-                        <th>Benefit</th>                        
-                      </tr>
+                        <tr>
+                          <th>ID</th>
+                          <th>Benefit</th>
+                        </tr>
                       </thead>
-                     
+
                       <template
                         v-for="(notCovered, index) in premium.notCovered"
                       >
@@ -270,14 +270,14 @@
                           <td>{{ index + 1 }}</td>
                           <td>
                             {{ notCovered.name }}
-                          </td>                         
+                          </td>
                         </tr>
                       </template>
-                       <tfoot>
-                         <tr>
-                        <th>ID</th>
-                        <th>Benefit</th>                        
-                      </tr>
+                      <tfoot>
+                        <tr>
+                          <th>ID</th>
+                          <th>Benefit</th>
+                        </tr>
                       </tfoot>
                     </table>
                   </v-row>
@@ -298,48 +298,41 @@
                     </h4>
                   </template>
                   <template v-else>
-                    <!-- <ol type="number" :key="index">
-                      <template
-                        v-for="(coverBenefit, index) in premium.waitingPeriod"
-                      >
-                        <template>
-                          <li :key="index">
-                            {{ coverBenefit.situation }}
-                          </li>
-                        </template>
-                      </template>
-                    </ol> -->
                     <v-row
-                    :key="index"
-                    align="center"
-                    justify="center"
-                    class="my-5"
-                    my-4
-                  >
-                    <table :key="index">
-                      <thead>
-                         <tr>
-                        <th>ID</th>
-                        <th>Condition</th>   
-                        <th>Waiting Period</th>                        
-                      </tr>
-                      </thead>
-                     
-                      <template
-                        v-for="(waitingPeriod, index) in premium.waitingPeriod"
-                      >
-                        <tr :key="index">
-                          <td>{{ index + 1 }}</td>
-                          <td>
-                            {{ waitingPeriod.situation}}
-                          </td>  
-                          <td>
-                            {{waitingPeriod.period_amount + waitingPeriod.period_time}}
-                          </td>                       
-                        </tr>
-                      </template>                      
-                    </table>
-                  </v-row>
+                      :key="index"
+                      align="center"
+                      justify="center"
+                      class="my-5"
+                      my-4
+                    >
+                      <table :key="index">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Condition</th>
+                            <th>Waiting Period</th>
+                          </tr>
+                        </thead>
+
+                        <template
+                          v-for="(waitingPeriod,
+                          index) in premium.waitingPeriod"
+                        >
+                          <tr :key="index">
+                            <td>{{ index + 1 }}</td>
+                            <td>
+                              {{ waitingPeriod.situation }}
+                            </td>
+                            <td>
+                              {{
+                                waitingPeriod.period_amount +
+                                  waitingPeriod.period_time
+                              }}
+                            </td>
+                          </tr>
+                        </template>
+                      </table>
+                    </v-row>
                   </template>
                 </v-container>
               </v-card-text>
