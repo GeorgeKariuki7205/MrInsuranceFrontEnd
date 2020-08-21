@@ -374,7 +374,7 @@
                 label="Cover Amount."
                 outlined
                 required
-                prepend-icon="monetization_on"
+                prepend-inner-icon="monetization_on"
                 :rules="RequiredNumber"
                 v-model="inputData['cover_amount']"
               ></v-select>
@@ -393,7 +393,7 @@
                       <v-text-field
                         v-if="questions[i].required == 1"
                         type="date"
-                        prepend-icon="event"
+                        prepend-inner-icon="event"
                         single-line
                         outlined
                         :rules="RequiredDateRules"
@@ -403,7 +403,7 @@
                       <v-text-field
                         v-else
                         type="date"
-                        prepend-icon="event"
+                        prepend-inner-icon="event"
                         single-line
                         outlined
                         v-model="inputData[questions[i].name]"
@@ -418,7 +418,7 @@
                     <v-text-field
                       v-if="questions[i].required == 1"
                       type="number"
-                      prepend-icon="child_care"
+                      prepend-inner-icon="child_care"
                       single-line
                       outlined
                       :rules="RequiredNumber"
@@ -427,7 +427,7 @@
                     <v-text-field
                       v-else
                       type="number"
-                      prepend-icon="child_care"
+                      prepend-inner-icon="child_care"
                       single-line
                       outlined
                       v-model="inputData[questions[i].name]"

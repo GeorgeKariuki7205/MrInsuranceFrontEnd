@@ -7,7 +7,7 @@
           <v-icon>arrow_back</v-icon> Go Back.
         </v-btn>
 
-        <h3 style="text-decoration:underline;" class="text-center">
+        <h2 style="text-decoration:underline;" class="text-center">
           <span v-if="premiumsDataGetter[0].subCategory">{{
             premiumsDataGetter[0].subCategory
           }}</span>
@@ -17,7 +17,7 @@
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }}</span>
-        </h3>
+        </h2>
         <h4 class="text-center">
           {{ premiumsDataGetter.length }} Premiums Found.
         </h4>
@@ -47,14 +47,11 @@
             <v-divider></v-divider>
             <v-card-actions>
               <v-btn text color="deep-purple accent-4">
-                All Benefits
-              </v-btn>
-              <v-btn text color="deep-purple accent-4">
                 Cost BreakDown
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn color="primary" text @click="show = !show">
-                {{ show ? "Show Less" : "Show More" }}
+                {{ show ? "Hide Premium Details" : "Show Premium Details" }}
               </v-btn>
             </v-card-actions>
             <v-expand-transition>
@@ -175,7 +172,7 @@
                   <v-tab-item>
                     <v-card flat>
                       <v-card-text>
-                        <v-container>
+                        <!-- <v-container> -->
                           <h3 style="color:black" class="text-center">
                             Insurance Cover Benefits
                           </h3>
@@ -212,14 +209,14 @@
                               </template>
                             </table>
                           </v-row>
-                        </v-container>
+                        <!-- </v-container> -->
                       </v-card-text>
                     </v-card>
                   </v-tab-item>
                   <v-tab-item>
                     <v-card flat>
                       <v-card-text>
-                        <v-container ma-4>
+                        <!-- <v-container ma-4> -->
                           <h3 style="color:black" class="text-center">
                             Conditions Not Covered.
                           </h3>
@@ -257,14 +254,14 @@
                               </tfoot>
                             </table>
                           </v-row>
-                        </v-container>
+                        <!-- </v-container> -->
                       </v-card-text>
                     </v-card>
                   </v-tab-item>
                   <v-tab-item>
                     <v-card flat>
                       <v-card-text>
-                        <v-container>
+                        <!-- <v-container> -->
                           <h4 style="color:black" class="text-center">
                             Insurance Cover Waiting Periods.
                           </h4>
@@ -309,7 +306,7 @@
                               </table>
                             </v-row>
                           </template>
-                        </v-container>
+                        <!-- </v-container> -->
                       </v-card-text>
                     </v-card>
                   </v-tab-item>
