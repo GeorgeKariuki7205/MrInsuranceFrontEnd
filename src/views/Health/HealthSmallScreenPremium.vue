@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <ucore-app-bar />
+    <!-- <ucore-app-bar /> -->
     <v-main>
       <v-container>
         <v-btn @click="goback" text color="primary">
@@ -37,12 +37,13 @@
                   premium["company"]["name"]
                 }}</v-list-item-title>
                 <v-list-item-subtitle
-                  >Coverage Amount: Cover Limit:
+                  >Cover Limit:
                   {{
                     premium.coveredAmount
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }}</v-list-item-subtitle
+                  }}
+                  {{ "Ksh" }}</v-list-item-subtitle
                 >
               </v-list-item-content>
             </v-list-item>
@@ -55,7 +56,7 @@
                     <h4 class="float-left" style="color:green">
                       Payable:
                       {{
-                        premium.payableCash
+                        payableAmountStateGetter[premium.uuid]
                           .toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                       }}
@@ -142,7 +143,7 @@
                     <v-icon left>alarm</v-icon>
                   </v-tab>
 
-                  <v-tab-item>                    
+                  <v-tab-item>
                     <v-card flat>
                       <v-card-text>
                         <!-- Additional Covers Implementations. -->
@@ -155,80 +156,76 @@
                             Premium.
                           </h2>
                         </template>
-                        <template v-else>                          
-                            <template
-                              v-for="(additional,
-                              index) in premium.additionalCovers"
+                        <template v-else>
+                          <template
+                            v-for="(additional,
+                            index) in premium.additionalCovers"
+                          >
+                            <h2
+                              :key="index"
+                              style="color:black;text-align:center;"
                             >
-                              <h2
-                                :key="index"
-                                style="color:black;text-align:center;"
-                              >
-                                {{ additional.name }}
-                              </h2>
+                              {{ additional.name }}
+                            </h2>
 
-                              <h3
-                                :key="index"
-                                style="color:black;text-align:center;"
-                              >
-                                Premuims For The
-                                {{ additional.name.toLowerCase() }}
-                              </h3>
-                              <v-row
-                                :key="index"
-                                align="center"
-                                justify="center"                                                                
-                              >
-                                <table :key="index">
-                                  <tr>
-                                    <th>ID</th>
-                                    <th>Cover Limit</th>
-                                    <th>Cost</th>
-                                    <th>Purchase</th>
+                            <h3
+                              :key="index"
+                              style="color:black;text-align:center;"
+                            >
+                              Premuims For The
+                              {{ additional.name.toLowerCase() }}
+                            </h3>
+                            <v-row :key="index" align="center" justify="center">
+                              <table :key="index">
+                                <tr>
+                                  <th>ID</th>
+                                  <th>Cover Limit</th>
+                                  <th>Cost</th>
+                                  <th>Purchase</th>
+                                </tr>
+                                <template
+                                  v-for="(premium,
+                                  index) in additional.additional_premia"
+                                >
+                                  <tr :key="index">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>
+                                      {{
+                                        premium.limit
+                                          .toString()
+                                          .replace(
+                                            /\B(?=(\d{3})+(?!\d))/g,
+                                            ","
+                                          ) + " Ksh"
+                                      }}
+                                    </td>
+                                    <td>
+                                      {{
+                                        premium.cost
+                                          .toString()
+                                          .replace(
+                                            /\B(?=(\d{3})+(?!\d))/g,
+                                            ","
+                                          ) + " Ksh"
+                                      }}
+                                      <span>Per Individual</span>
+                                    </td>
+                                    <td>
+                                      <v-btn small color="success" dark
+                                        >Add To Cover.
+                                        <v-icon
+                                          >add_shopping_cart</v-icon
+                                        ></v-btn
+                                      >
+                                    </td>
                                   </tr>
-                                  <template
-                                    v-for="(premium,
-                                    index) in additional.additional_premia"
-                                  >
-                                    <tr :key="index">
-                                      <td>{{ index + 1 }}</td>
-                                      <td>
-                                        {{
-                                          premium.limit
-                                            .toString()
-                                            .replace(
-                                              /\B(?=(\d{3})+(?!\d))/g,
-                                              ","
-                                            ) + " Ksh"
-                                        }}
-                                      </td>
-                                      <td>
-                                        {{
-                                          premium.cost
-                                            .toString()
-                                            .replace(
-                                              /\B(?=(\d{3})+(?!\d))/g,
-                                              ","
-                                            ) + " Ksh"
-                                        }}
-                                        <span>Per Individual</span>
-                                      </td>
-                                      <td>
-                                        <v-btn small color="success" dark
-                                          >Add To Cover.
-                                          <v-icon
-                                            >add_shopping_cart</v-icon
-                                          ></v-btn
-                                        >
-                                      </td>
-                                    </tr>
-                                  </template>
-                                </table>
-                              </v-row>
-                            </template>                          
+                                </template>
+                              </table>
+                            </v-row>
+                          </template>
                         </template>
                       </v-card-text>
-                    </v-card>                    
+                    </v-card>
                   </v-tab-item>
                   <v-tab-item>
                     <v-card flat>
@@ -359,7 +356,33 @@
             </v-expand-transition>
             <v-expand-transition>
               <div v-show="costBreakDown">
-                <h2>This is the cost BreakDown.</h2>
+                <h4 class="text-center">Financial BreakDown.</h4>
+                <!-- {{financialBreakdownStateGetter[premium.uuid].spouse.value}} This is the name of principal Member. -->
+                <v-row align="center" justify="center">
+                  <table>
+                    <tr>
+                      <th>Member</th>
+                      <th>Decsription</th>
+                      <th>Cost</th>
+                    </tr>
+                    <template
+                      v-for="(financial,
+                      index) in financialBreakdownStateGetter[premium.uuid]"
+                    >
+                      <tr :key="index">
+                        <td>
+                          {{ financial.name }}
+                        </td>
+                        <td>
+                          {{ financial.description }}
+                        </td>
+                        <td>
+                          {{ financial.value }}
+                        </td>
+                      </tr>
+                    </template>
+                  </table>
+                </v-row>
               </div>
             </v-expand-transition>
           </v-card>
@@ -396,6 +419,8 @@ export default {
       "personalDetailsStatusGetter",
       "premiumsDataGetter",
       "premiumsDataStatusGetter",
+      "financialBreakdownStateGetter",
+      "payableAmountStateGetter",
     ]),
   },
   data: () => ({

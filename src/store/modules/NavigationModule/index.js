@@ -11,6 +11,10 @@ const state = {
     insuranceCoverData: null,
     premiumsData: null,
     premiumsDataStatus: false,
+
+    // ! details related to the insurance covers that have been returned. 
+    payableAmountState: null,
+    financialBreakdownState: null,
 }
 const mutations = {
     UPDATING_THE_STATE_TO_ADD_NAVIGATION_ITEMS(state, payload) {
@@ -41,6 +45,12 @@ const mutations = {
     },
     UPDATING_PREMIUM_DETAILS_STATUS(state, payload) {
         state.premiumsDataStatus = payload;
+    },
+    UPDATING_THE_PAYABLE_AMOUNT(state, payload) {
+        state.payableAmountState = payload;
+    },
+    UPDATING_THE_FINANCIAL_BREAKDOWN(state, payload) {
+        state.financialBreakdownState = payload;
     }
 
 }
@@ -109,8 +119,80 @@ const actions = {
                 if (response.status === 200) {
                     // ! updating the premium data. 
                     commit("UPDATING_PREMIUM_DETAILS", response.data);
-                    commit("UPDATING_PREMIUM_DETAILS_STATUS", true);
+
+                    // ! creating the cost and the cost breakdown details and mutating them.
                     console.log(response.data);
+                    var payableAmounts = {};
+                    var combinedHealthFinancialBreakDown = [];
+                    response.data.forEach(element => {
+                        switch (element.cover.route_name) {
+                        case 'Health':
+                            // ! creating an array that will hold the financial breakdown and the amounts payable.
+
+                            // ! implementing the PayaBle Amounts. 
+                            payableAmounts[element.uuid] = element.payableCash;
+
+                            // ! implementing the Financial Breakdown.                           
+                            
+                            // ! getting the principal member financial
+                            var healthFinancialBreakDown = {};
+                            var principal_memberDetails = [];
+                            principal_memberDetails["name"] = "Principal Member";
+                            principal_memberDetails["description"] = " ' ' ";
+                            principal_memberDetails["value"] =
+                            element.financialBreakDown.principal_member
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+
+                                healthFinancialBreakDown['principal_member'] = principal_memberDetails;
+
+                                if (element.financialBreakDown.spouse) {
+                                    var spouse_details = [];
+                                    spouse_details["name"] = "Spouse";
+                                    spouse_details["value"] =
+                                      element.financialBreakDown.spouse
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                                    spouse_details["description"] = " ' ' ";
+                                    healthFinancialBreakDown['spouse'] = spouse_details;
+                                  }
+                              
+                                  if (element.financialBreakDown.dependents) {
+                                    var dependents_details = [];
+                                    dependents_details["name"] = "Children";
+                                    dependents_details["value"] =
+                                      (
+                                        element.financialBreakDown.dependents.dependant *
+                                        parseInt(
+                                          element.financialBreakDown.dependents.number_of_dependents
+                                        )
+                                      )
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                                    dependents_details["description"] =
+                                      element.financialBreakDown.dependents.number_of_dependents +
+                                      " Dependents Each  " +
+                                      element.financialBreakDown.dependents.dependant
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                      "Ksh";
+                                      healthFinancialBreakDown['dependents'] = dependents_details;
+                                  }
+                                  combinedHealthFinancialBreakDown[element.uuid] = healthFinancialBreakDown;
+                            break;
+                            case 'Motor':
+                            console.log("This is Motor.");
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                    });                    
+                    commit("UPDATING_THE_PAYABLE_AMOUNT",payableAmounts);
+                    commit("UPDATING_THE_FINANCIAL_BREAKDOWN",combinedHealthFinancialBreakDown);  
+                    console.log(combinedHealthFinancialBreakDown);                  
+                    console.log("Combined Financial BreakDown.");
+                    commit("UPDATING_PREMIUM_DETAILS_STATUS", true);                    
                 }
             }
         ).catch(
@@ -133,7 +215,8 @@ const getters = {
     personalDetailsStatusGetter: state => state.personalDetailStatus,
     premiumsDataGetter: state => state.premiumsData,
     premiumsDataStatusGetter: state => state.premiumsDataStatus,
-    
+    payableAmountStateGetter: state => state.payableAmountState,
+    financialBreakdownStateGetter: state =>state.financialBreakdownState,
     
 
 }
