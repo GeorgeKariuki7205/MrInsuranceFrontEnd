@@ -6,7 +6,6 @@
         <v-btn @click="goback" text color="primary">
           <v-icon>arrow_back</v-icon> Go Back.
         </v-btn>
-
         <h2 style="text-decoration:underline;" class="text-center">
           <span v-if="premiumsDataGetter[0].subCategory">{{
             premiumsDataGetter[0].subCategory
@@ -118,7 +117,7 @@
                 Cost Details
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="show = !show">
+              <v-btn color="primary" text @click="showMoreDetails()">
                 {{ show ? "Hide Premium Details" : "Show Premium Details" }}
               </v-btn>
             </v-card-actions>
@@ -184,14 +183,14 @@
                                   <th>Purchase</th>
                                 </tr>
                                 <template
-                                  v-for="(premium,
+                                  v-for="(additionalPremium,
                                   index) in additional.additional_premia"
                                 >
                                   <tr :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>
                                       {{
-                                        premium.limit
+                                        additionalPremium.limit
                                           .toString()
                                           .replace(
                                             /\B(?=(\d{3})+(?!\d))/g,
@@ -201,7 +200,7 @@
                                     </td>
                                     <td>
                                       {{
-                                        premium.cost
+                                        additionalPremium.cost
                                           .toString()
                                           .replace(
                                             /\B(?=(\d{3})+(?!\d))/g,
@@ -211,7 +210,7 @@
                                       <span>Per Individual</span>
                                     </td>
                                     <td>
-                                      <v-btn small color="success" dark
+                                      <v-btn small outlined color="primary" dark @click="addAdditionCover(premium.uuid,additional.id,additionalPremium.id)"
                                         >Add To Cover.
                                         <v-icon
                                           >add_shopping_cart</v-icon
@@ -354,12 +353,15 @@
                 </v-tabs>
               </div>
             </v-expand-transition>
-            <v-expand-transition>
-              <div v-show="costBreakDown">
-                <h4 class="text-center">Financial BreakDown.</h4>
-                <!-- {{financialBreakdownStateGetter[premium.uuid].spouse.value}} This is the name of principal Member. -->
+            <v-expand-transition class="my-4 mb-4">
+              <div
+                v-show="costBreakDown"
+                class="mb-4"
+                style="margin-bottom:2%;"
+              >
+                <h4 class="text-center mb-2">Financial BreakDown.</h4>
                 <v-row align="center" justify="center">
-                  <table>
+                  <table style="margin-bottom:2%;">
                     <tr>
                       <th>Member</th>
                       <th>Decsription</th>
@@ -408,8 +410,18 @@ export default {
       router.go(-1);
     },
     showCostBreakDown() {
+      this.show = false;
       this.costBreakDown = !this.costBreakDown;
     },
+    showMoreDetails() {
+      this.show = !this.show;
+      this.costBreakDown = false;
+    },
+    addAdditionCover(){
+
+// premiumUUID,additionalID,additionalPremiumID
+      
+    }
   },
   computed: {
     ...mapGetters([
