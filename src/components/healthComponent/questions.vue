@@ -128,21 +128,34 @@ export default {
 
         var hasError = false;
 
+         var dob_entry;
+          var split_dob ;
+          var month;
+          var day;
+          var year;
+          var ageValue;
+          var condition1;
+          var today_date;
+          var today_year;
+          var today_day;
+          var today_month;
+          var condition2;
+
         // ! validating the dates that have been provided by the users.
         if (this.inputData["principal_member_age"]) {
-          var dob_entry = this.inputData["principal_member_age"];
-          var split_dob = dob_entry.split("-");
-          var month = split_dob[1];
-          var day = split_dob[2];
-          var year = split_dob[0];
-          var ageValue = 0;
-          var condition1 = parseInt(month + day);
+          dob_entry = this.inputData["principal_member_age"];
+          split_dob = dob_entry.split("-");
+          month = split_dob[1];
+          day = split_dob[2];
+          year = split_dob[0];
+          ageValue = 0;
+          condition1 = parseInt(month + day);
 
-          var today_date = new Date();
-          var today_year = today_date.getFullYear().toString();
-          var today_day = today_date.getDate().toString();
-          var today_month = (today_date.getMonth() + 1).toString();
-          var condition2 = parseInt(today_month + today_day);
+          today_date = new Date();
+          today_year = today_date.getFullYear().toString();
+          today_day = today_date.getDate().toString();
+          today_month = (today_date.getMonth() + 1).toString();
+          condition2 = parseInt(today_month + today_day);
 
           if (condition2 >= condition1) {
             ageValue = parseInt(today_year - parseInt(year));
@@ -160,19 +173,19 @@ export default {
         }
 
         if (this.inputData["spouse_age"]) {
-          var dob_entry = this.inputData["spouse_age"];
-          var split_dob = dob_entry.split("-");
-          var month = split_dob[1];
-          var day = split_dob[2];
-          var year = split_dob[0];
-          var ageValue = 0;
-          var condition1 = parseInt(month + day);
+          dob_entry = this.inputData["spouse_age"];
+          split_dob = dob_entry.split("-");
+          month = split_dob[1];
+          day = split_dob[2];
+          year = split_dob[0];
+          ageValue = 0;
+          condition1 = parseInt(month + day);
 
-          var today_date = new Date();
-          var today_year = today_date.getFullYear().toString();
-          var today_day = today_date.getDate().toString();
-          var today_month = (today_date.getMonth() + 1).toString();
-          var condition2 = parseInt(today_month + today_day);
+          today_date = new Date();
+          today_year = today_date.getFullYear().toString();
+          today_day = today_date.getDate().toString();
+          today_month = (today_date.getMonth() + 1).toString();
+          condition2 = parseInt(today_month + today_day);
 
           if (condition2 >= condition1) {
             ageValue = parseInt(today_year - parseInt(year));

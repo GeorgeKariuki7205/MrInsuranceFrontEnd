@@ -323,7 +323,13 @@ export default {
   methods: {
     activateTheSubCategory(subCategory) {
       this.inputData = []
+      this.$store.dispatch("nextStepInStepper",1);
       this.$store.dispatch('updatingTheSubCategoryCoverIndex', subCategory)
+      this.$store.dispatch('updatingPremiumDataStatus', false)
+      this.$store.dispatch('updatingPersonalDetails', null)
+      this.$store.commit("UPDATING_PERSONAL_DETAILS_STATUS",false);
+      
+      
     },
 
     
