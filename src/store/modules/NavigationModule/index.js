@@ -1,5 +1,7 @@
 import axios from "axios";
-import { v4 as uuidv4 } from 'uuid';
+import {
+    v4 as uuidv4
+} from 'uuid';
 const state = {
     navigationState: null,
     navigationView: false,
@@ -18,6 +20,9 @@ const state = {
 
     // ! activating Additional Premiums. 
     additionalCoversPremiumState: null,
+
+    // ! creating the status to update and moveto the next step in filling the form.
+    nextStepInStepper: 1,
 }
 const mutations = {
     UPDATING_THE_STATE_TO_ADD_NAVIGATION_ITEMS(state, payload) {
@@ -55,13 +60,18 @@ const mutations = {
     UPDATING_THE_FINANCIAL_BREAKDOWN(state, payload) {
         state.financialBreakdownState = payload;
     },
-    UPDATING_THE_ADDITIONAL_PREMIUM(state,payload){
-            state.additionalCoversPremiumState = payload;
+    UPDATING_THE_ADDITIONAL_PREMIUM(state, payload) {
+        state.additionalCoversPremiumState = payload;
+    },
+    UPDATING_THE_NEXT_STEP_IN_STEPPER(state, payload) {
+        state.nextStepInStepper = payload;
     }
 
 }
 const actions = {
-    getAllNavigationComponents({ commit }) {
+    getAllNavigationComponents({
+        commit
+    }) {
 
         axios.get('https://mrinsuranceapi.georgekprojects.tk/api/navigationContent').then(
             response => {
@@ -78,29 +88,39 @@ const actions = {
         );
 
     },
-    updatingTheCoverIndex({ commit }, index) {
+    updatingTheCoverIndex({
+        commit
+    }, index) {
 
         commit("UPDATING_THE_COVER_INDEX", index);
 
     },
 
-    updatingTheSubCategoryCoverIndex({ commit }, index) {
+    updatingTheSubCategoryCoverIndex({
+        commit
+    }, index) {
 
         commit("UPDATING_THE_SUB_COVER_INDEX", index);
 
     },
-    updatingTheInsuranceCoverDetails({ commit }, data) {
+    updatingTheInsuranceCoverDetails({
+        commit
+    }, data) {
 
         commit("UPDATING_THE_INSURANCE_COVER_DETAILS", data);
 
     },
-    updatingPersonalDetails({ commit }, data) {
+    updatingPersonalDetails({
+        commit
+    }, data) {
 
         commit("UPDATING_PERSONAL_DETAILS", data);
         commit("UPDATING_PERSONAL_DETAILS_STATUS", true);
 
     },
-    postingTheDataForCoverSearch({ commit }) {
+    postingTheDataForCoverSearch({
+        commit
+    }) {
 
         // ! creating an object to hold the posted data.
         var coverDetails = {};
@@ -147,8 +167,8 @@ const actions = {
                                 principal_memberDetails["description"] = " ' ' ";
                                 principal_memberDetails["value"] =
                                     element.financialBreakDown.principal_member
-                                        .toString()
-                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
 
                                 healthFinancialBreakDown['principal_member'] = principal_memberDetails;
 
@@ -157,8 +177,8 @@ const actions = {
                                     spouse_details["name"] = "Spouse";
                                     spouse_details["value"] =
                                         element.financialBreakDown.spouse
-                                            .toString()
-                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
                                     spouse_details["description"] = " ' ' ";
                                     healthFinancialBreakDown['spouse'] = spouse_details;
                                 }
@@ -173,14 +193,14 @@ const actions = {
                                                 element.financialBreakDown.dependents.number_of_dependents
                                             )
                                         )
-                                            .toString()
-                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
                                     dependents_details["description"] =
                                         element.financialBreakDown.dependents.number_of_dependents +
                                         " Dependents Each  " +
                                         element.financialBreakDown.dependents.dependant
-                                            .toString()
-                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
                                         "Ksh";
                                     healthFinancialBreakDown['dependents'] = dependents_details;
                                 }
@@ -195,7 +215,7 @@ const actions = {
                         }
                     });
                     commit("UPDATING_THE_PAYABLE_AMOUNT", payableAmounts);
-                    commit("UPDATING_THE_FINANCIAL_BREAKDOWN", combinedHealthFinancialBreakDown);                                        
+                    commit("UPDATING_THE_FINANCIAL_BREAKDOWN", combinedHealthFinancialBreakDown);
                     commit("UPDATING_PREMIUM_DETAILS_STATUS", true);
                 }
             }
@@ -205,44 +225,54 @@ const actions = {
             }
         );
     },
-    updatingPremiumDataStatus({ commit }, data) {
+    updatingPremiumDataStatus({
+        commit
+    }, data) {
         commit("UPDATING_PREMIUM_DETAILS_STATUS", data);
     },
 
     // ! function to implement the functionality to add covers and disable the premiums that have been activated. 
-    activatingAdditionalCovers({ commit }, data) {
-        
+    activatingAdditionalCovers({
+        commit
+    }, data) {
+
         //! creating the additional cover Details state. 
         var allAdditionalCovers = {};
-        var additionalCover = [];  
+        var additionalCover = [];
         if (state.additionalCoversPremiumState === null) {
             console.log("The additionalCoversPremiumState is null.");
-                     
-            additionalCover['additionalId'] = data.additionalId;
-            additionalCover['premiumUUID'] = data.premiumUUID;
-            additionalCover['additionalPremiumID'] = data.additionalPremiumID;
-            allAdditionalCovers[uuidv4()] = additionalCover;            
-            commit("UPDATING_THE_ADDITIONAL_PREMIUM",allAdditionalCovers);            
-        }
-        else{
-            
-            
-            for (var oldState in state.additionalCoversPremiumState) {
-                allAdditionalCovers[uuidv4()] = state.additionalCoversPremiumState[oldState];
-                console.log(oldState);
-                console.log("This is the Old State.");
-                
-            }
-            
 
             additionalCover['additionalId'] = data.additionalId;
             additionalCover['premiumUUID'] = data.premiumUUID;
             additionalCover['additionalPremiumID'] = data.additionalPremiumID;
-            allAdditionalCovers[uuidv4()] = additionalCover;            
-            commit("UPDATING_THE_ADDITIONAL_PREMIUM",allAdditionalCovers);
+            allAdditionalCovers[uuidv4()] = additionalCover;
+            commit("UPDATING_THE_ADDITIONAL_PREMIUM", allAdditionalCovers);
+        } else {
+
+
+            for (var oldState in state.additionalCoversPremiumState) {
+                allAdditionalCovers[uuidv4()] = state.additionalCoversPremiumState[oldState];
+                console.log(oldState);
+                console.log("This is the Old State.");
+
+            }
+
+
+            additionalCover['additionalId'] = data.additionalId;
+            additionalCover['premiumUUID'] = data.premiumUUID;
+            additionalCover['additionalPremiumID'] = data.additionalPremiumID;
+            allAdditionalCovers[uuidv4()] = additionalCover;
+            commit("UPDATING_THE_ADDITIONAL_PREMIUM", allAdditionalCovers);
             console.log("This is all the additional Covers.");
             console.log(allAdditionalCovers);
-        }        
+        }
+    },
+
+    // ! this is a function that is used to move to the next step in the stepper. 
+    nextStepInStepper({ commit }, data) {
+
+        commit("UPDATING_THE_NEXT_STEP_IN_STEPPER", data);
+
     }
 }
 const getters = {
@@ -258,11 +288,15 @@ const getters = {
     payableAmountStateGetter: state => state.payableAmountState,
     financialBreakdownStateGetter: state => state.financialBreakdownState,
     additionalCoversPremiumStateGetter: state => state.additionalCoversPremiumState,
-
+    nextStepInStepperStateGetter: state => state.nextStepInStepper,
 
 }
 
-const NavigationModule = { state, mutations, actions, getters }
+const NavigationModule = {
+    state,
+    mutations,
+    actions,
+    getters
+}
 
 export default NavigationModule
-

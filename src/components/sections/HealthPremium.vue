@@ -55,11 +55,11 @@
                 <template
                   v-for="(coverBenefit, index) in premium.coverBenefits"
                 >
-                  <li v-if="index <= 4 && morebenefits" :key="index">
+                  <li v-if="index <= 4 && morebenefits" :key="index+'coverBenefit'">
                     {{ coverBenefit.name }}
                   </li>
                   <template v-if="!morebenefits">
-                    <li :key="index">
+                    <li :key="index+'coverBenefitsList'">
                       {{ coverBenefit.name }}
                     </li>
                   </template>
@@ -137,21 +137,21 @@
                       <template
                         v-for="(additional, index) in premium.additionalCovers"
                       >
-                        <h2 :key="index" style="color:black;text-align:center;">
+                        <h2 :key="index+'additionalCovers'" style="color:black;text-align:center;">
                           {{ additional.name }}
                         </h2>
 
-                        <h3 :key="index" style="color:black;text-align:center;">
+                        <h3 :key="index+'additionalCoversName'" style="color:black;text-align:center;">
                           Premuims For The {{ additional.name.toLowerCase() }}
                         </h3>
                         <v-row
-                          :key="index"
+                          :key="index+'additionalCoversRow'"
                           align="center"
                           justify="center"
                           class="my-5"
                           my-4
                         >
-                          <table :key="index">
+                          <table :key="index+'additionalCoversTable'">
                             <tr>
                               <th>ID</th>
                               <th>Cover Limit</th>
@@ -162,7 +162,7 @@
                               v-for="(premium,
                               index) in additional.additional_premia"
                             >
-                              <tr :key="index">
+                              <tr :key="index+'additionalPremium'">
                                 <td>{{ index + 1 }}</td>
                                 <td>
                                   {{
@@ -205,14 +205,13 @@
                   <h3 style="color:black" class="text-center">
                     Insurance Cover Benefits
                   </h3>
-                  <v-row
-                    :key="index"
+                  <v-row                    
                     align="center"
                     justify="center"
                     class="my-5"
                     my-4
                   >
-                    <table :key="index">
+                    <table>
                       <tr>
                         <th>ID</th>
                         <th>Benefit</th>
@@ -221,7 +220,7 @@
                       <template
                         v-for="(coverBenefit, index) in premium.coverBenefits"
                       >
-                        <tr :key="index">
+                        <tr :key="index+'coverBenefitsTr'">
                           <td>{{ index + 1 }}</td>
                           <td>
                             {{ coverBenefit.name }}
@@ -248,14 +247,13 @@
                   <h3 style="color:black" class="text-center">
                     Conditions Not Covered.
                   </h3>
-                  <v-row
-                    :key="index"
+                  <v-row                    
                     align="center"
                     justify="center"
                     class="my-5"
                     my-4
                   >
-                    <table :key="index">
+                    <table >
                       <thead>
                         <tr>
                           <th>ID</th>
@@ -266,7 +264,7 @@
                       <template
                         v-for="(notCovered, index) in premium.notCovered"
                       >
-                        <tr :key="index">
+                        <tr :key="index+'notCoveredTr'">
                           <td>{{ index + 1 }}</td>
                           <td>
                             {{ notCovered.name }}
@@ -298,14 +296,13 @@
                     </h4>
                   </template>
                   <template v-else>
-                    <v-row
-                      :key="index"
+                    <v-row                      
                       align="center"
                       justify="center"
                       class="my-5"
                       my-4
                     >
-                      <table :key="index">
+                      <table>
                         <thead>
                           <tr>
                             <th>ID</th>
@@ -318,7 +315,7 @@
                           v-for="(waitingPeriod,
                           index) in premium.waitingPeriod"
                         >
-                          <tr :key="index">
+                          <tr :key="index+'waitingPeriod'">
                             <td>{{ index + 1 }}</td>
                             <td>
                               {{ waitingPeriod.situation }}
