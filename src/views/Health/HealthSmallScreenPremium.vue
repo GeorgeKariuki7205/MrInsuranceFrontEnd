@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <v-app-bar color="primary accent-4" dark app>
-      <v-btn @click="goback" text color="white">
+    <v-app-bar color="white" dark app>
+      <v-btn @click="goback" text color="primary">
         <v-icon>arrow_back</v-icon>
         Go Back.
       </v-btn>
