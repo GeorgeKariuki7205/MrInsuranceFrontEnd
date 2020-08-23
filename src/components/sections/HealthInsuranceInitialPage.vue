@@ -14,7 +14,7 @@
       <v-row class="hidden-sm-and-down" justify="center" align="center">
         <v-col
           v-for="(feature, i) in cover.subCategories"
-          :key="i+20"
+          :key="i+'subCategories'"
           cols="12"
           md="3"
           @click="activateTheSubCategory(i)"
@@ -47,7 +47,7 @@
         <template v-for="(feature, i) in cover.subCategories">
           <v-chip
             v-if="navigationSubCategory === i"
-            :key="i+200"
+            :key="i+'subCtaegoriesSmallcreen'"
             color="primary"
             @click="activateTheSubCategory(i)"
             class="ma-2"
@@ -57,7 +57,7 @@
           </v-chip>
           <v-chip
             v-else
-            :key="i+200"
+            :key="i+'subCtaegoriesSmallcreenChip'"
             @click="activateTheSubCategory(i)"
             class="ma-2"
             color="primary"
@@ -128,14 +128,14 @@
                 </v-col>
                 <template v-for="(feature, i) in questions">
                   <template v-if="questions[i].type !== 'checkbox'">
-                    <h5 class="text-center" :key="i+300">
+                    <h5 class="text-center" :key="i+'checkBoxQusetionLargeScreen'">
                       {{ i + 2 + "." }} {{ questions[i].question }}
                     </h5>
                   </template>
 
                   <template v-if="questions[i].type == 'date'">
-                    <v-container :key="i+300">
-                      <v-row dense :key="i+30">
+                    <v-container :key="i+'dateQusetionLargeScreen'">
+                      <v-row dense :key="i+'dateQuestionRow'">
                         <v-col md="6" offset-md="3">
                           <v-text-field
                             v-if="questions[i].required == 1"
@@ -160,7 +160,7 @@
                     </v-container>
                   </template>
                   <template v-else-if="questions[i].type === 'number'">
-                    <v-row dense :key="i+300">
+                    <v-row dense :key="i+'numberQuestionRow'">
                       <v-col md="6" offset-md="3">
                         <v-text-field
                           v-if="questions[i].required == 1"
@@ -183,9 +183,9 @@
                     </v-row>
                   </template>
                   <template v-else-if="questions[i].type === 'checkbox'">
-                    <v-row :key="i+300" align="center" justify="center">
+                    <v-row :key="i+'checkBoxQuestionRow'" align="center" justify="center">
                       <v-col md="4" offset-md="2">
-                        <h5 class="text-center" :key="i+300">
+                        <h5 class="text-center">
                           {{ i + 2 + "." }} {{ questions[i].question }}
                         </h5>
                       </v-col>
@@ -327,11 +327,11 @@
                   <template v-for="(premiumsData, index) in premiumsDataGetter">
                   <section-health-premium
                     :premium="premiumsData"
-                    :key="index+300"
+                    :key="index+'premiumsDataGetter'"
                   />
                   <div
                     style="margin-top:2%;margin-bottom:4%;"
-                    :key="index+300"
+                    :key="index+'premiumsDataGetterSpacer'"
                   ></div>
                 </template>
                 </v-container>
@@ -381,14 +381,14 @@
             </v-col>
             <template v-for="(feature, i) in questions">
               <template v-if="questions[i].type !== 'checkbox'">
-                <h5 class="text-center" :key="i+400">
+                <h5 class="text-center" :key="i+'notCheckBoxQusetion'">
                   {{ i + 2 + "." }} {{ questions[i].question }}
                 </h5>
               </template>
 
               <template v-if="questions[i].type == 'date'">
-                <v-container :key="i+400">
-                  <v-row dense :key="i+400">
+                <v-container :key="i+'dateQuestionSmallScreen'">
+                  <v-row dense :key="i+'dateQuestionSmallScreenRow'">
                     <v-col md="6" offset-md="3">
                       <v-text-field
                         v-if="questions[i].required == 1"
@@ -413,7 +413,7 @@
                 </v-container>
               </template>
               <template v-else-if="questions[i].type === 'number'">
-                <v-row dense :key="i+400">
+                <v-row dense :key="i+'numberQuestionSmallScreenRow'">
                   <v-col md="6" offset-md="3">
                     <v-text-field
                       v-if="questions[i].required == 1"
@@ -436,9 +436,9 @@
                 </v-row>
               </template>
               <template v-else-if="questions[i].type === 'checkbox'">
-                <v-row :key="i+400" align="center" justify="center">
+                <v-row :key="i+'checkBoxQuestionSmallScreenRow'" align="center" justify="center">
                   <v-col md="4" offset-md="2">
-                    <h5 class="text-center" :key="i+400">
+                    <h5 class="text-center">
                       {{ i + 2 + "." }} {{ questions[i].question }}
                     </h5>
                   </v-col>

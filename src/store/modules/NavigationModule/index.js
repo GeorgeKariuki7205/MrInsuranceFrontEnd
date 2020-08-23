@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { v4 as uuidv4 } from 'uuid';
 const state = {
     navigationState: null,
     navigationView: false,
@@ -15,6 +15,9 @@ const state = {
     // ! details related to the insurance covers that have been returned. 
     payableAmountState: null,
     financialBreakdownState: null,
+
+    // ! activating Additional Premiums. 
+    additionalCoversPremiumState: null,
 }
 const mutations = {
     UPDATING_THE_STATE_TO_ADD_NAVIGATION_ITEMS(state, payload) {
@@ -51,6 +54,9 @@ const mutations = {
     },
     UPDATING_THE_FINANCIAL_BREAKDOWN(state, payload) {
         state.financialBreakdownState = payload;
+    },
+    UPDATING_THE_ADDITIONAL_PREMIUM(state,payload){
+            state.additionalCoversPremiumState = payload;
     }
 
 }
@@ -111,7 +117,7 @@ const actions = {
         obj['insuranceCoverDetails'] = coverDetails;
         obj['personalDetails'] = personalDetails;
         obj['coverId'] = state.navigationState[state.cover].id;
-        obj['subCategoryId'] = state.navigationState[state.cover].subCategories[state.subCategory].id;        
+        obj['subCategoryId'] = state.navigationState[state.cover].subCategories[state.subCategory].id;
         // ! posting the data to the API endpoint. 
 
         axios.post("https://mrinsuranceapi.georgekprojects.tk/api/insuranceCovers", obj).then(
@@ -126,23 +132,23 @@ const actions = {
                     var combinedHealthFinancialBreakDown = [];
                     response.data.forEach(element => {
                         switch (element.cover.route_name) {
-                        case 'Health':
-                            // ! creating an array that will hold the financial breakdown and the amounts payable.
+                            case 'Health':
+                                // ! creating an array that will hold the financial breakdown and the amounts payable.
 
-                            // ! implementing the PayaBle Amounts. 
-                            payableAmounts[element.uuid] = element.payableCash;
+                                // ! implementing the PayaBle Amounts. 
+                                payableAmounts[element.uuid] = element.payableCash;
 
-                            // ! implementing the Financial Breakdown.                           
-                            
-                            // ! getting the principal member financial
-                            var healthFinancialBreakDown = {};
-                            var principal_memberDetails = [];
-                            principal_memberDetails["name"] = "Principal Member";
-                            principal_memberDetails["description"] = " ' ' ";
-                            principal_memberDetails["value"] =
-                            element.financialBreakDown.principal_member
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                                // ! implementing the Financial Breakdown.                           
+
+                                // ! getting the principal member financial
+                                var healthFinancialBreakDown = {};
+                                var principal_memberDetails = [];
+                                principal_memberDetails["name"] = "Principal Member";
+                                principal_memberDetails["description"] = " ' ' ";
+                                principal_memberDetails["value"] =
+                                    element.financialBreakDown.principal_member
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
 
                                 healthFinancialBreakDown['principal_member'] = principal_memberDetails;
 
@@ -150,49 +156,47 @@ const actions = {
                                     var spouse_details = [];
                                     spouse_details["name"] = "Spouse";
                                     spouse_details["value"] =
-                                      element.financialBreakDown.spouse
-                                        .toString()
-                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                                        element.financialBreakDown.spouse
+                                            .toString()
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
                                     spouse_details["description"] = " ' ' ";
                                     healthFinancialBreakDown['spouse'] = spouse_details;
-                                  }
-                              
-                                  if (element.financialBreakDown.dependents) {
+                                }
+
+                                if (element.financialBreakDown.dependents) {
                                     var dependents_details = [];
                                     dependents_details["name"] = "Children";
                                     dependents_details["value"] =
-                                      (
-                                        element.financialBreakDown.dependents.dependant *
-                                        parseInt(
-                                          element.financialBreakDown.dependents.number_of_dependents
+                                        (
+                                            element.financialBreakDown.dependents.dependant *
+                                            parseInt(
+                                                element.financialBreakDown.dependents.number_of_dependents
+                                            )
                                         )
-                                      )
-                                        .toString()
-                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                                            .toString()
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
                                     dependents_details["description"] =
-                                      element.financialBreakDown.dependents.number_of_dependents +
-                                      " Dependents Each  " +
-                                      element.financialBreakDown.dependents.dependant
-                                        .toString()
-                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                                      "Ksh";
-                                      healthFinancialBreakDown['dependents'] = dependents_details;
-                                  }
-                                  combinedHealthFinancialBreakDown[element.uuid] = healthFinancialBreakDown;
-                            break;
+                                        element.financialBreakDown.dependents.number_of_dependents +
+                                        " Dependents Each  " +
+                                        element.financialBreakDown.dependents.dependant
+                                            .toString()
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                        "Ksh";
+                                    healthFinancialBreakDown['dependents'] = dependents_details;
+                                }
+                                combinedHealthFinancialBreakDown[element.uuid] = healthFinancialBreakDown;
+                                break;
                             case 'Motor':
-                            console.log("This is Motor.");
-                            break;
-                    
-                        default:
-                            break;
-                    }
-                    });                    
-                    commit("UPDATING_THE_PAYABLE_AMOUNT",payableAmounts);
-                    commit("UPDATING_THE_FINANCIAL_BREAKDOWN",combinedHealthFinancialBreakDown);  
-                    console.log(combinedHealthFinancialBreakDown);                  
-                    console.log("Combined Financial BreakDown.");
-                    commit("UPDATING_PREMIUM_DETAILS_STATUS", true);                    
+                                console.log("This is Motor.");
+                                break;
+
+                            default:
+                                break;
+                        }
+                    });
+                    commit("UPDATING_THE_PAYABLE_AMOUNT", payableAmounts);
+                    commit("UPDATING_THE_FINANCIAL_BREAKDOWN", combinedHealthFinancialBreakDown);                                        
+                    commit("UPDATING_PREMIUM_DETAILS_STATUS", true);
                 }
             }
         ).catch(
@@ -203,6 +207,42 @@ const actions = {
     },
     updatingPremiumDataStatus({ commit }, data) {
         commit("UPDATING_PREMIUM_DETAILS_STATUS", data);
+    },
+
+    // ! function to implement the functionality to add covers and disable the premiums that have been activated. 
+    activatingAdditionalCovers({ commit }, data) {
+        
+        //! creating the additional cover Details state. 
+        var allAdditionalCovers = {};
+        var additionalCover = [];  
+        if (state.additionalCoversPremiumState === null) {
+            console.log("The additionalCoversPremiumState is null.");
+                     
+            additionalCover['additionalId'] = data.additionalId;
+            additionalCover['premiumUUID'] = data.premiumUUID;
+            additionalCover['additionalPremiumID'] = data.additionalPremiumID;
+            allAdditionalCovers[uuidv4()] = additionalCover;            
+            commit("UPDATING_THE_ADDITIONAL_PREMIUM",allAdditionalCovers);            
+        }
+        else{
+            
+            
+            for (var oldState in state.additionalCoversPremiumState) {
+                allAdditionalCovers[uuidv4()] = state.additionalCoversPremiumState[oldState];
+                console.log(oldState);
+                console.log("This is the Old State.");
+                
+            }
+            
+
+            additionalCover['additionalId'] = data.additionalId;
+            additionalCover['premiumUUID'] = data.premiumUUID;
+            additionalCover['additionalPremiumID'] = data.additionalPremiumID;
+            allAdditionalCovers[uuidv4()] = additionalCover;            
+            commit("UPDATING_THE_ADDITIONAL_PREMIUM",allAdditionalCovers);
+            console.log("This is all the additional Covers.");
+            console.log(allAdditionalCovers);
+        }        
     }
 }
 const getters = {
@@ -216,8 +256,9 @@ const getters = {
     premiumsDataGetter: state => state.premiumsData,
     premiumsDataStatusGetter: state => state.premiumsDataStatus,
     payableAmountStateGetter: state => state.payableAmountState,
-    financialBreakdownStateGetter: state =>state.financialBreakdownState,
-    
+    financialBreakdownStateGetter: state => state.financialBreakdownState,
+    additionalCoversPremiumStateGetter: state => state.additionalCoversPremiumState,
+
 
 }
 

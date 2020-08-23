@@ -8,6 +8,7 @@ import  './plugins/base'
 import  './plugins/section'
 import  './plugins/userCore'
 import  './plugins/adminCore'
+import  './plugins/health'
 Vue.config.productionTip = false
 
 new Vue({
