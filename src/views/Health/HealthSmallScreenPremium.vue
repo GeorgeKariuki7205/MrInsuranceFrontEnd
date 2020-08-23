@@ -1,12 +1,13 @@
 <template>
   <v-app>
-    <!-- <ucore-app-bar /> -->
+    <v-app-bar color="primary accent-4" dense dark app>
+      <v-btn @click="goback" text color="white">
+        <v-icon>arrow_back</v-icon>
+        Go Back.
+      </v-btn>
+    </v-app-bar>
     <v-main>
       <v-container>
-        <v-btn @click="goback" text color="primary">
-          <v-icon>arrow_back</v-icon>
-          Go Back.
-        </v-btn>
         <h2 style="text-decoration: underline;" class="text-center">
           <span v-if="premiumsDataGetter[0].subCategory">
             {{ premiumsDataGetter[0].subCategory }}
@@ -171,7 +172,10 @@
                             v-if="additionalCoversPremiumStateGetter === null"
                           >
                             <v-row align="center" justify="center">
-                              <template v-for="(additional,index) in premium.additionalCovers">
+                              <template
+                                v-for="(additional,
+                                index) in premium.additionalCovers"
+                              >
                                 <div :key="index + generateUUID()" class="ma-4">
                                   <h2
                                     :key="index + generateUUID()"
@@ -189,7 +193,10 @@
                                   </h3>
                                 </div>
 
-                                <template v-for="(additional,index) in premium.additionalCovers">
+                                <template
+                                  v-for="(additional,
+                                  index) in premium.additionalCovers"
+                                >
                                   <table :key="index + generateUUID">
                                     <tr>
                                       <th>ID</th>
@@ -257,7 +264,9 @@
                             </v-row>
                           </template>
                           <template v-else>
-                              <p>additionalCoversPremiumStateGetter id not null.</p>
+                            <p>
+                              additionalCoversPremiumStateGetter id not null.
+                            </p>
                           </template>
                         </template>
                       </v-card-text>
