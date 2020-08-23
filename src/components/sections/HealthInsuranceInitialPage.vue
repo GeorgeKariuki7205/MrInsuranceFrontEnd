@@ -356,8 +356,7 @@
     </v-container>
 
     <!-- THIS SECTION IS USED TO DEFINE THE QUESTIONS FOR THE SMALL SCREEN. -->
-
-    <template>
+     <template>
       <v-stepper class="hidden-md-and-up" v-model="e6" vertical>
         <v-stepper-step editable :complete="e6 > 1" step="1">
           Add Insurance Specific Questions.
@@ -691,18 +690,22 @@ export default {
     ],
     RequiredPhoneNumber: [
       (v) => !!v || "Phone Number is required",
-      (v) => v.length <= 10 || "Phone Number must have 10 characters",
+      // (v) => v.length >= 10 || "Min 8 characters",
+       v => (v && v.length <= 10) || 'Phone Number must be less than 10 characters',
+      
       (v) =>
         /^0(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$/.test(v) ||
         "Phone Number must be valid",
     ],
     emailRules: [
       (v) => !!v || "E-mail is required",
-      (v) => /.+@.+/.test(v) || "E-mail must be valid",
+      // (v) => /.+@.+/.test(v) || "E-mail must be valid",
+       v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
     ],
     nameRules: [
       (v) => !!v || "Name is required",
-      (v) => v.length >= 3 || "Name Must Be More Than 3 characters",
+      // (v) => v.length >= 10 || "Min 8 characters",
+      v => (v && v.length >= 3) || 'Name must be less than 3 characters',
     ],
   }),
   created() {
