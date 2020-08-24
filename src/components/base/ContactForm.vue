@@ -19,10 +19,8 @@
     />
 
     <base-btn
-      :color="!theme.isDark ? 'accent' : 'white'"
-      href="mailto:shop@vuetifyjs.com?subject=Zero%20Theme%20Question"
-      outlined
-      target="_blank"
+      :color="!theme.isDark ? 'accent' : 'white'"      
+      outlined      
     >
       Send message
     </base-btn>

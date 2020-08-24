@@ -152,6 +152,10 @@
               </v-container>
 
               <v-container v-else>
+                <template v-if="premiumsDataGetter.length === 0">
+                  <h2 class="text-center">The Insurance Coer Selected is not availbale, kindly try 'Family Health'.</h2>
+                </template>
+                <template v-else>                
                 <h3 style="text-decoration: underline;" class="text-center">
                   <span v-if="premiumsDataGetter[0].subCategory">
                     {{ premiumsDataGetter[0].subCategory }}
@@ -180,6 +184,7 @@
                     ></div>
                   </template>
                 </v-container>
+                </template>
               </v-container>
               <div class="text-center">
                 <v-btn
