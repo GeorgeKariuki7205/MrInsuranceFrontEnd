@@ -281,7 +281,13 @@ const actions = {
 
         for (const payableAmount in state.payableAmountState) {
             if (payableAmount === data.premiumUUId) {
-                newPayableAmount[payableAmount] = state.payableAmountState[payableAmount]+data.cost;
+
+                if (data.functionality === 'subtract') {
+                    newPayableAmount[payableAmount] = state.payableAmountState[payableAmount]-data.cost;
+                } else {
+                    newPayableAmount[payableAmount] = state.payableAmountState[payableAmount]+data.cost;
+                }
+                
             } else {
                 newPayableAmount[payableAmount] = state.payableAmountState[payableAmount];
             }
@@ -289,6 +295,41 @@ const actions = {
         commit("UPDATING_THE_PAYABLE_AMOUNT",newPayableAmount);
 
         
+    },
+
+    updateTheAdditionalCover({commit,dispatch},obj){
+
+        var premium = obj.premium;
+        var newAdditionalCoverPremiumState;
+        for (const element in state.additionalCoversPremiumState) {
+            console.log(element);
+            if (state.additionalCoversPremiumState[element].premiumUUID === premium) {
+                newAdditionalCoverPremiumState =  delete state.additionalCoversPremiumState[element]                
+            }
+        }
+        
+        // ! checking to see if the state count is 0
+        var count = 0;
+        for (const prop in  state.additionalCoversPremiumState) {            
+           ++count;
+           prop+0;
+        } 
+
+        if (count == 0) {
+            commit("UPDATING_THE_ADDITIONAL_PREMIUM",null);
+        }
+        else{
+            commit("UPDATING_THE_ADDITIONAL_PREMIUM",newAdditionalCoverPremiumState);
+        }
+        
+        //!  dispatch the method to update the payable amount.
+
+        var object = {};
+        object['premiumUUId'] = premium;
+        object['cost'] = obj.cost;
+        object['functionality'] = 'subtract';
+        dispatch("updatePayableAmount",object);
+
     }
 }
 const getters = {

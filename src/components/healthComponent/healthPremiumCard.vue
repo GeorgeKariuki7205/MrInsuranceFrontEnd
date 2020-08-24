@@ -36,10 +36,30 @@
             </h4>
           </v-col>
           <v-col>
-            <v-btn outlined color="primary" class="float-right" dark medium>
+            <v-btn @click="snackbar = true" outlined color="primary" class="float-right" dark medium>
               <v-icon>add_shopping_cart</v-icon>
               Get Cover.
             </v-btn>
+             <v-snackbar
+                v-model="snackbar"
+                app
+                color="primary"
+                top
+                right
+              >
+                {{ text }}
+
+                <template v-slot:action="{ attrs }">
+                  <v-btn
+                    color="pink"
+                    text
+                    v-bind="attrs"
+                    @click="snackbar = false"
+                  >
+                    Close
+                  </v-btn>
+                </template>
+              </v-snackbar>
           </v-col>
         </v-row>
       </div>
@@ -157,7 +177,7 @@
                                     </td>
                                     <template v-if="additionalPremium.id === additionalCoversInObject.additionalPremiumID">
                                       <td class="text-center">
-                                        <v-btn small outlined color="red" dark> Remove <v-icon>remove_circle</v-icon></v-btn>
+                                        <v-btn @click="removingAdditionalCover(premium.uuid,additionalPremium.cost)" small outlined color="red" dark> Remove <v-icon>remove_circle</v-icon></v-btn>
                                       </td>
                                     </template>
                                     <template v-else>
@@ -376,6 +396,12 @@ export default {
     generateUUID() {
       return uuidv4();
     },
+    removingAdditionalCover(premiumUUID,cost){
+        var obj = {};
+        obj['premium'] = premiumUUID;
+        obj['cost'] = cost;
+        this.$store.dispatch("updateTheAdditionalCover",obj)
+    },
    addAdditionCover(additionalPremiumID,additionalId,premiumUUID,cost) {
       // ! creating the object to hold the additional Cover details.
       var obj = {};
@@ -422,6 +448,8 @@ export default {
     costBreakDown: false,
     morebenefits: true,
     otherAdditionalCovers: null,
+    snackbar: false,
+    text: 'You Want To Purchase The Cover.',
   }),
   watch: {
     additionalCoversPremiumStateGetter: function() {      
@@ -431,10 +459,12 @@ export default {
       var count2 = 0;
         
         for (const prop in  this.premium.additionalCovers) {
+            console.log(prop);
            ++count;
         }  
 
         for (const prop in  this.additionalCoversPremiumStateGetter) {
+          console.log(prop);
            ++count2;
         }
       
