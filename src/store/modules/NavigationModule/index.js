@@ -252,9 +252,7 @@ const actions = {
 
             for (var oldState in state.additionalCoversPremiumState) {
                 allAdditionalCovers[uuidv4()] = state.additionalCoversPremiumState[oldState];
-                console.log(oldState);
-                console.log("This is the Old State.");
-
+                console.log(oldState);                
             }
 
 
@@ -273,6 +271,24 @@ const actions = {
 
         commit("UPDATING_THE_NEXT_STEP_IN_STEPPER", data);
 
+    },
+
+    // ! function to update the amounts payable.
+
+    updatePayableAmount({commit},data){
+
+        var newPayableAmount = {};
+
+        for (const payableAmount in state.payableAmountState) {
+            if (payableAmount === data.premiumUUId) {
+                newPayableAmount[payableAmount] = state.payableAmountState[payableAmount]+data.cost;
+            } else {
+                newPayableAmount[payableAmount] = state.payableAmountState[payableAmount];
+            }
+        }
+        commit("UPDATING_THE_PAYABLE_AMOUNT",newPayableAmount);
+
+        
     }
 }
 const getters = {
