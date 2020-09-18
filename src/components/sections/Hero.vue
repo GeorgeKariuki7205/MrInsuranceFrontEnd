@@ -2,9 +2,9 @@
   <section id="hero">
     <v-img
       :min-height="minHeight"
-      :src="require('@/assets/home-hero.jpg')"
+      :src="require('@/assets/a5c4040fb3f93c0a1b049a7cca479d96copy.jpg')"
       class="white--text"
-      gradient="to right, rgba(5, 11, 31, .8), rgba(5, 11, 31, .8)"
+      gradient="to right, rgba(5, 11, 31,.8), rgba(5, 11, 31,.8)"
     >
       <v-container class=" px-4 py-12">
         <v-responsive

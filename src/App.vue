@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <v-fade-transition v-if="navigationViewGetter" mode="out-in">
+    <v-slide-x-transition :duration="{enter: 0, leave: 4}" class="slide-fade-enter-active" v-if="navigationViewGetter" >
       <router-view></router-view>
-    </v-fade-transition>
+    </v-slide-x-transition>
 
     <div v-else>
       <v-container class="fill-height" style="margin-top:10%">
@@ -53,3 +53,9 @@ export default {
   }),
 };
 </script>
+
+<style>
+.slide-fade-enter-active {
+  transition: all 5s ease;
+}
+</style>

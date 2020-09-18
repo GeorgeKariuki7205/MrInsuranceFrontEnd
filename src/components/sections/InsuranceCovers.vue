@@ -2,7 +2,7 @@
   <base-section id="features">
     <v-responsive class="mx-auto" max-width="1350">
       <v-container fluid>
-        <v-row>
+        <v-row justify="center" align="center">
           <v-col
             v-for="(covers,index) in navigationStateGetter"
             :key="index"
