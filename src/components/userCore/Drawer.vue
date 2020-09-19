@@ -22,7 +22,7 @@
         <v-list color="white" shaped>
           <v-list-item to="/" color="primary">
             <v-list-item-icon>
-              <v-icon>home</v-icon>
+              <v-icon>fa-home</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Home </v-list-item-title>
@@ -57,14 +57,32 @@
                 <v-icon>{{item.icon}}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title> {{ item["cover"] }} </v-list-item-title>
+                <v-list-item-title> {{item["cover"]}} </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </div>
 
+        <v-list-item to="#" color="primary">
+            <v-list-item-icon>
+              <v-icon>fa-gavel</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Make A Claim </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item to="#" color="primary">
+            <v-list-item-icon>
+              <v-icon>fa-phone-volume</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Request For A Call.</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
           <v-list-item to="/about" color="primary">
             <v-list-item-icon>
-              <v-icon>group</v-icon>
+              <v-icon>fa-users</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> About Us </v-list-item-title>
@@ -73,7 +91,7 @@
 
           <v-list-item to="/contact-us" color="primary">
             <v-list-item-icon>
-              <v-icon>call</v-icon>
+              <v-icon>fa-phone</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Contact Us </v-list-item-title>

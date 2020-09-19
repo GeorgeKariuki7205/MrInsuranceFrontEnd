@@ -6,9 +6,10 @@
       <section-about-our-product />
       <section-all-covers/>
       <section-partners/>
-      <section-newsletter />
+      <!-- <section-newsletter /> -->
       <!-- <section-pro-features/> -->
       <section-info />
+      <ucore-settings/>
     </v-main>
     <ucore-footer />
   </v-app>

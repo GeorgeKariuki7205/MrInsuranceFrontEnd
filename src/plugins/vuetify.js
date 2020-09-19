@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import 'font-awesome/css/font-awesome.min.css'
+import '@fortawesome/fontawesome-free/css/all.css' // Ensure you are using css-loader
 
 Vue.use(Vuetify);
 
@@ -20,7 +22,7 @@ export default new Vuetify({
     },
   },
   icons: {
-    iconfont: 'md', // default - only for display purposes
+    iconfont: 'fa', // default - only for display purposes
   },
 });
 

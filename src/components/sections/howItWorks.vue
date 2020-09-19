@@ -44,22 +44,22 @@
     data: () => ({
       cards: [
         {
-          icon: 'mdi-keyboard-outline',
+          icon: 'fa-keyboard',
           title: 'Visit Our Site',
           text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, in! Asperiores, impedit libero. Veniam rerum saepe unde nihil possimus quibusdam esse accusamus mollitia magni fuga.'
         },
         {
-          icon: 'check',
+          icon: 'fa-check',
           title: 'Select Insurance Cover',
           text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, in! Asperiores, impedit libero. Veniam rerum saepe unde nihil possimus quibusdam esse accusamus mollitia magni fuga.'
         },
         {
-          icon: 'shopping_cart',
+          icon: 'fa-cart-plus',
           title: 'Select Prefferred Premium',
           text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, in! Asperiores, impedit libero. Veniam rerum saepe unde nihil possimus quibusdam esse accusamus mollitia magni fuga.'
         },
         {
-          icon: 'payment',
+          icon: 'fa-money-check-alt',
           title: 'pay',
           text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, in! Asperiores, impedit libero. Veniam rerum saepe unde nihil possimus quibusdam esse accusamus mollitia magni fuga.'
         },

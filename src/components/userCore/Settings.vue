@@ -15,7 +15,7 @@
       <v-card
         id="settings"
         class="py-2 px-4"
-        color="#0000004D"
+        color="primary"
         dark
         flat
         style="position: fixed; top: 164px; right: -35px;"
@@ -24,103 +24,53 @@
         v-on="on"
       >
         <v-icon large>
-          mdi-cog
+          fa-phone
         </v-icon>
       </v-card>
     </template>
 
     <v-card class="py-2">
-      <base-title
-        align="center"
-        title="Theme Colors"
-        space="0"
-      />
+      <base-title align="center" title="Get A Call From Us Now ..." space="0" />
 
       <v-card-text>
-        <v-item-group
-          v-model="$vuetify.theme.themes.light.primary"
-          class="d-flex justify-center"
-        >
-          <v-item
-            v-for="color in colors"
-            :key="color"
-            :value="color"
-          >
-            <template v-slot="{ active, toggle }">
-              <base-avatar
-                :color="color"
-                :outlined="active"
-                class="ma-2"
-                size="48"
-                style="cursor: pointer;"
-                @click.stop="toggle"
-              />
-            </template>
-          </v-item>
-        </v-item-group>
+        <v-container class="text-center">
+          <p>Your Name:</p>
+          <v-text-field placeholder="Your Name" outlined></v-text-field>
+          <p>Your Email Address:</p>
+          <v-text-field
+            placeholder="Your Email Address:"
+            outlined
+          ></v-text-field>
+          <p>Your Phone Number:</p>
+          <v-text-field
+            placeholder="Your Phone Number:"
+            outlined
+          ></v-text-field>
 
-        <v-divider class="my-6" />
+          <p>Insurance Cover Interested In:</p>
+          <v-select            
+            label="Insurance Cover Interested In:"
+            outlined
+          ></v-select>
 
-        <base-btn
-          block
-          href="https://store.vuetifyjs.com/product/zero-theme-free/?ref=vtyd-settings"
-          class="mb-6"
-          color="accent"
-          target="_blank"
-        >
-          Free Download
-        </base-btn>
-
-        <base-btn
-          :to="{ name: 'Sink' }"
-          block
-          color="grey darken-1"
-          dark
-          @click="menu = false"
-        >
-          View All Components
-        </base-btn>
-
-        <v-divider class="my-6" />
-
-        <base-img
-          class="mx-auto mb-6"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-light.png"
-          width="88"
-        />
-
-        <div class="text-center">
-          <base-btn
-            :tile="false"
-            :to="{ name: 'Pro' }"
-            rounded
-            @click="menu = false"
-          >
-            Go Pro
-
-            <v-icon right>
-              mdi-rocket
-            </v-icon>
-          </base-btn>
-        </div>
+          <v-btn rounded color="primary" large class="text-center" dark>
+            <span> <v-icon>fa-phone-volume</v-icon> Request For Call.</span>
+          </v-btn>
+        </v-container>
       </v-card-text>
     </v-card>
   </v-menu>
 </template>
 
 <script>
-  export default {
-    name: 'HomeSettings',
+export default {
+  name: "HomeSettings",
 
-    data () {
-      return {
-        colors: [
-          this.$vuetify.theme.themes.light.primary,
-          '#9368e9',
-          '#F4511E',
-        ],
-        menu: false,
-      }
-    },
-  }
+  data() {
+    return {
+      colors: [this.$vuetify.theme.themes.light.primary, "#9368e9", "#F4511E"],
+      menu: false,
+    };
+  },
+};
 </script>

@@ -33,27 +33,27 @@
       features: [
         {
           title: 'Health Insurance',
-          icon: 'local_hospital',
+          icon: 'fa-hospital',
         },
         {
           title: 'Device Insurance',
-          icon: 'mdi-cellphone',
+          icon: 'fa-mobile-alt',
         },
         {          
           title: 'Motor Insurance',
-          icon: 'directions_car',
+          icon: 'fa-car',
         },
         {
           title: 'Golf Insurance',
-          icon: 'golf_course',
+          icon: 'fa-golf-ball',
         },
         {
           title: 'Family Health',
-          icon: 'group',
+          icon: 'fa-users',
         },
         {
           title: 'Agricultural Insurance',
-          icon: 'local_florist',
+          icon: 'fa-seedling',
         },
       ],
     }),

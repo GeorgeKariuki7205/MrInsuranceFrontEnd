@@ -5,7 +5,8 @@
     <v-main>         
         <section-hero-alt :name="pageName"/>
         <section-keep-in-touch/>        
-        <section-newsletter/>        
+        <section-newsletter/>   
+        <ucore-settings/>     
     </v-main>
     <ucore-footer/>
   </v-app>

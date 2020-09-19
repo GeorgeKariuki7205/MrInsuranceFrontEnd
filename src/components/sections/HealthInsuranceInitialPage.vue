@@ -193,8 +193,8 @@
                   outlined=""
                   @click="step3GoToStep2()"
                 >
-                  <v-icon>arrow_back_ios</v-icon>
-                  <v-icon>arrow_back_ios</v-icon>
+                  <v-icon>mdi-arrow_back_ios</v-icon>
+                  <v-icon>mdi-arrow_back_ios</v-icon>
                   Go Back.
                 </v-btn>
               </div>
@@ -271,7 +271,7 @@
                   dark
                 >
                   Redirect To Better View.
-                  <v-icon>redo</v-icon>
+                  <v-icon>mdi-redo</v-icon>
                 </v-btn>
               </v-row>
             </template>
@@ -292,8 +292,8 @@
               outlined=""
               @click="step3GoToStep2()"
             >
-              <v-icon>arrow_back_ios</v-icon>
-              <v-icon>arrow_back_ios</v-icon>
+              <v-icon>mdi-arrow_back_ios</v-icon>
+              <v-icon>mdi-arrow_back_ios</v-icon>
               Go Back.
             </v-btn>
           </div>

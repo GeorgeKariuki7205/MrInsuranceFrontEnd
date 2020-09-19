@@ -8,9 +8,10 @@
         <section-all-covers/>
         <section-how-it-works/>
         <section-contact-us/>                
-        <section-keep-in-touch/>
-        <section-newsletter/>
+        <!-- <section-keep-in-touch/> -->
+        <!-- <section-newsletter/> -->
         <!-- <section-pro-features/> -->
+        <ucore-settings/>
         <section-info/>
     </v-main>
     <ucore-footer/>
