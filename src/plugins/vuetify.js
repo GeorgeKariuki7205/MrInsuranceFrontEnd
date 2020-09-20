@@ -4,7 +4,7 @@ import 'vuetify/dist/vuetify.min.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'font-awesome/css/font-awesome.min.css'
 import '@fortawesome/fontawesome-free/css/all.css' // Ensure you are using css-loader
-
+import 'animate.css/animate.min.css'
 Vue.use(Vuetify);
 
 export default new Vuetify({

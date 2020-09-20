@@ -37,6 +37,7 @@
       <section-how-it-works />
       <section-keep-in-touch />
       <section-newsletter />
+      <ucore-settings/>
       <section-info />
     </v-main>
     <ucore-footer />

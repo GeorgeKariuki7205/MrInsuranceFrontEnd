@@ -47,7 +47,7 @@
             min-width="96"
             text
           >
-            <v-icon>fa-home</v-icon>
+            <v-icon>mdi-home</v-icon>
             <v-spacer></v-spacer>
             Home
           </v-tab>
@@ -88,9 +88,7 @@
                           <v-list-item-content>
                             <v-list-item-title>
                               <span>
-                                <v-icon left="">
-                                  {{item["icon"]}}</v-icon
-                                >
+                                <v-icon left=""> {{ item["icon"] }}</v-icon>
                                 {{ item["name"] }}
                               </span>
                             </v-list-item-title>
@@ -106,9 +104,7 @@
                         <v-list-item @click="clickedSubCategory(0, 0)">
                           <v-list-item-title>
                             <span>
-                              <v-icon left="">
-                                {{item["icon"] }}</v-icon
-                              >
+                              <v-icon left=""> {{ item["icon"] }}</v-icon>
                               {{ item["cover"] }}
                             </span>
                           </v-list-item-title>
@@ -127,7 +123,7 @@
             min-width="96"
             text
           >
-            <v-icon>fa-gavel</v-icon>
+            <v-icon>mdi-gavel</v-icon>
             <v-spacer></v-spacer>
             Make A Claim.
           </v-tab>
@@ -137,7 +133,7 @@
             min-width="96"
             text
           >
-            <v-icon>fa-phone-volume</v-icon>
+            <v-icon>ring_volume</v-icon>
             <v-spacer></v-spacer>
             Request A Call
           </v-tab>
@@ -148,7 +144,7 @@
             min-width="96"
             text
           >
-            <v-icon>fa-users</v-icon>
+            <v-icon>group</v-icon>
             <v-spacer></v-spacer>
             About
           </v-tab>
@@ -160,7 +156,7 @@
             min-width="96"
             text
           >
-            <v-icon>fa-phone</v-icon>
+            <v-icon>phone_enabled</v-icon>
             <v-spacer></v-spacer>
             Contact Us
           </v-tab>

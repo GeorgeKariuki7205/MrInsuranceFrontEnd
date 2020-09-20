@@ -1,17 +1,19 @@
 <template>
-  <base-section id="theme-features">
+  <base-section id="theme-features" style="margin-top:-5%;">
     <base-section-heading
       :title="navigationStateGetter[navigationCoverGetter]['cover']"
     >
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, in!
-      Asperiores, impedit libero. Veniam rerum saepe unde nihil possimus
-      quibusdam esse accusamus mollitia magni fuga.
     </base-section-heading>
 
     <!-- THIS SECTIONS IS USED TO DISPLAY THE SUB CATEGORIES. -->
 
-    <v-container>
-      <v-row class="hidden-sm-and-down" justify="center" align="center">
+    <v-container style="margin-top:0%;">
+      <v-row
+        style="margin-top:-4%;"
+        class="hidden-sm-and-down"
+        justify="center"
+        align="center"
+      >
         <v-col
           v-for="(feature, i) in cover.subCategories"
           :key="i + 'subCategories'"
@@ -75,14 +77,11 @@
           ].name
         "
       />
-      <h3 class="text-center">
-        Complete The Three Easy Steps Below To Get Your Estimates.
-      </h3>
 
       <!-- THIS SECTION IS USED TO DEFINE THE QUESTIONS FOR THE LARGE SCREEN. -->
 
       <template>
-        <v-stepper class="hidden-sm-and-down" v-model="nextStepInStepperStateGetter">
+        <!-- <v-stepper class="hidden-sm-and-down" v-model="nextStepInStepperStateGetter">
           <v-stepper-header style="backgrouns-color: red;">
             <v-stepper-step
               :editable="personalDetailsStatusGetter"
@@ -200,27 +199,123 @@
               </div>
             </v-stepper-content>
           </v-stepper-items>
-        </v-stepper>
+        </v-stepper> -->
+
+        <!-- ! THIS SECTION IS USED TO INCREASE THE INTERACTIVITY OF THE APPLICATION. -->
+
+        <v-container class="text-center">
+          <template>
+            <transition-group
+              name="custom-classes-transition2"
+              enter-active-class="animate__animated animate__fadeInRight"
+              leave-active-class="animate__animated animate__fadeOutLeft"
+              @enter="enter"
+              @leave="leave"                      
+            > 
+            <template v-if="show">           
+            <v-divider key="{{'nama1'}}"> </v-divider>
+            <div key="{{'nama2'}}">
+              <v-avatar
+              
+                size="60"
+                class="bounce-2 box"
+                style="margin-top:-2.5%;"
+              >
+                <img
+                  src="https://cdn.vuetifyjs.com/images/john.jpg"
+                  alt="John"
+                />
+              </v-avatar>
+            </div>
+
+            <h1 key="{{'nama3'}}"
+              style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;"
+            >
+              Hey! I'm Mr Insurance. I'll get you an awesome quote in seconds.
+            </h1>
+            <h1 key="{{'nama4'}}"> Ready to go ??</h1>
+
+            <v-row key="{{'nama5'}}"
+              class="mt-2 text-center"
+              justify="center"
+              align="center"
+              dense
+            >
+              <v-col cols="12" sm="6" md="3">
+                <v-text-field
+                  height="10"
+                  dense
+                  label="Your First Name"
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="3">
+                <v-text-field
+                  dense
+                  label="Your Second Name"
+                  outlined
+                ></v-text-field>
+              </v-col>                            
+            </v-row>  
+            <v-row key="{{'nama51'}}">
+            <v-col>
+            <v-btn @click="show = !show" color="error" dark large>
+              <span
+                >Let's Start <v-icon color="yellow"> fa-smile-wink</v-icon>
+              </span>
+            </v-btn> 
+              </v-col>
+            </v-row>             
+            </template>        
+            </transition-group>
+
+          </template>
+
+          <div id="example-3">
+  <button @click="show = !show">
+    Toggle render
+  </button>
+  <transition
+    name="custom-classes-transition"
+    enter-active-class="animate__animated animate__bounce"
+    leave-active-class="animate__animated animate__bounce"
+  >
+    <p v-if="show">hello</p>
+  </transition>
+          </div>
+        </v-container>
       </template>
     </v-container>
 
     <!-- THIS SECTION IS USED TO DEFINE THE QUESTIONS FOR THE SMALL SCREEN. -->
     <template>
-      <v-stepper class="hidden-md-and-up" v-model="nextStepInStepperStateGetter" vertical>
-        <v-stepper-step :editable="personalDetailsStatusGetter" :complete="nextStepInStepperStateGetter > 1" step="1">
+      <v-stepper
+        class="hidden-md-and-up"
+        v-model="nextStepInStepperStateGetter"
+        vertical
+      >
+        <v-stepper-step
+          :editable="personalDetailsStatusGetter"
+          :complete="nextStepInStepperStateGetter > 1"
+          step="1"
+        >
           Add Insurance Specific Questions.
         </v-stepper-step>
 
         <v-stepper-content step="1">
-            <health-component-questions :questions="questions"/>
+          <health-component-questions :questions="questions" />
         </v-stepper-content>
 
-        <v-stepper-step :editable="personalDetailsStatusGetter" :complete="nextStepInStepperStateGetter > 2" step="2">
+        <v-stepper-step
+          :editable="personalDetailsStatusGetter"
+          :complete="nextStepInStepperStateGetter > 2"
+          step="2"
+        >
           Add Personal Details.
         </v-stepper-step>
 
         <v-stepper-content step="2">
-                <health-component-personal-questions/>           
+          <health-component-personal-questions />
         </v-stepper-content>
 
         <v-stepper-step :complete="nextStepInStepperStateGetter > 3" step="3">
@@ -304,21 +399,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { HollowDotsSpinner } from 'epic-spinners'
-import { OrbitSpinner } from 'epic-spinners'
-import router from '../../router'
+import { mapGetters } from "vuex";
+import { HollowDotsSpinner } from "epic-spinners";
+import { OrbitSpinner } from "epic-spinners";
+import router from "../../router";
+import 'animate.css'
 export default {
-  name: 'SectionThemeFeatures',
+  name: "SectionThemeFeatures",
   computed: {
     ...mapGetters([
-      'navigationCoverGetter',
-      'navigationStateGetter',
-      'navigationSubCategory',
-      'personalDetailsStatusGetter',
-      'premiumsDataGetter',
-      'premiumsDataStatusGetter',
-      'nextStepInStepperStateGetter'
+      "navigationCoverGetter",
+      "navigationStateGetter",
+      "navigationSubCategory",
+      "personalDetailsStatusGetter",
+      "premiumsDataGetter",
+      "premiumsDataStatusGetter",
+      "nextStepInStepperStateGetter",
     ]),
   },
   components: {
@@ -327,51 +423,59 @@ export default {
   },
   methods: {
     activateTheSubCategory(subCategory) {
-      this.inputData = []
-      this.$store.dispatch("nextStepInStepper",1);
-      this.$store.dispatch('updatingTheSubCategoryCoverIndex', subCategory)
-      this.$store.dispatch('updatingPremiumDataStatus', false)
-      this.$store.dispatch('updatingPersonalDetails', null)
-      this.$store.commit("UPDATING_PERSONAL_DETAILS_STATUS",false);
-      
-      
+      this.inputData = [];
+      this.$store.dispatch("nextStepInStepper", 1);
+      this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategory);
+      this.$store.dispatch("updatingPremiumDataStatus", false);
+      this.$store.dispatch("updatingPersonalDetails", null);
+      this.$store.commit("UPDATING_PERSONAL_DETAILS_STATUS", false);
     },
 
-    
-    step3GoToStep2() {      
-      this.$store.dispatch("nextStepInStepper",2);
-    },   
+    tooglingVisibility(){
+      this.show = !this.show;      
+    },  
+
+    enter(){
+      this.show = true;                    
+    },
+    leave(){
+        this.show = true;                       
+    },    
+    step3GoToStep2() {
+      this.$store.dispatch("nextStepInStepper", 2);
+    },
     redirectToSmallScreen() {
-      router.push('healthPremiumsMobileView')
+      router.push("healthPremiumsMobileView");
     },
   },
   data: () => ({
     cover: null,
     questions: null,
-    subCategory: null,                    
+    subCategory: null,
+    show: true,
   }),
   created() {
-    this.cover = this.navigationStateGetter[this.navigationCoverGetter]
+    this.cover = this.navigationStateGetter[this.navigationCoverGetter];
     this.questions = this.navigationStateGetter[
       this.navigationCoverGetter
-    ].subCategories[this.navigationSubCategory].questions
-    this.subCategory = this.navigationSubCategory
+    ].subCategories[this.navigationSubCategory].questions;
+    this.subCategory = this.navigationSubCategory;
   },
 
   // ! this sections is used to monitor if there is any change that happens to the change in the categories and subCategories.
 
   watch: {
-    navigationCoverGetter: function () {
-      this.cover = this.navigationStateGetter[this.navigationCoverGetter]
+    navigationCoverGetter: function() {
+      this.cover = this.navigationStateGetter[this.navigationCoverGetter];
     },
-    navigationSubCategory: function () {
+    navigationSubCategory: function() {
       this.questions = this.navigationStateGetter[
         this.navigationCoverGetter
-      ].subCategories[this.navigationSubCategory].questions
-      this.subCategory = this.navigationSubCategory
+      ].subCategories[this.navigationSubCategory].questions;
+      this.subCategory = this.navigationSubCategory;
     },
   },
-}
+};
 </script>
 <style>
 input::-webkit-outer-spin-button,
@@ -381,7 +485,31 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type='number'] {
+input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.bounce-2 {
+  animation-name: bounce-2;
+  animation-timing-function: ease;
+}
+@keyframes bounce-2 {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+
+.box {
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  transform-origin: center;
 }
 </style>

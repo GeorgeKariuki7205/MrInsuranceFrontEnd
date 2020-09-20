@@ -2,6 +2,7 @@
   <div
     :class="classes"
     class="base-section-heading"
+    style="margin:0%;"
   >
     <base-avatar
       v-if="icon"

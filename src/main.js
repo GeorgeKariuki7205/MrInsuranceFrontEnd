@@ -9,11 +9,12 @@ import  './plugins/section'
 import  './plugins/userCore'
 import  './plugins/adminCore'
 import  './plugins/health'
+import AnimateCSS from 'animate.css';
 Vue.config.productionTip = false
-
+Vue.use(AnimateCSS);
 new Vue({
   store,
   router,
-  vuetify,
+  vuetify,  
   render: h => h(App)
 }).$mount('#app')

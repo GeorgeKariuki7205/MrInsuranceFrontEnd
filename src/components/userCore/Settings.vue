@@ -35,20 +35,20 @@
       <v-card-text>
         <v-container class="text-center">
           <p>Your Name:</p>
-          <v-text-field placeholder="Your Name" outlined></v-text-field>
+          <v-text-field dense placeholder="Your Name" outlined></v-text-field>
           <p>Your Email Address:</p>
-          <v-text-field
+          <v-text-field dense
             placeholder="Your Email Address:"
             outlined
           ></v-text-field>
           <p>Your Phone Number:</p>
-          <v-text-field
+          <v-text-field dense
             placeholder="Your Phone Number:"
             outlined
           ></v-text-field>
 
           <p>Insurance Cover Interested In:</p>
-          <v-select            
+          <v-select    dense        
             label="Insurance Cover Interested In:"
             outlined
           ></v-select>
