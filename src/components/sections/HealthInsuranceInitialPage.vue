@@ -1,48 +1,43 @@
 <template>
   <base-section id="theme-features" style="margin-top:-5%;">
-    <base-section-heading
-      :title="navigationStateGetter[navigationCoverGetter]['cover']"
-    >
-    </base-section-heading>
+    <base-section-heading :title="navigationStateGetter[navigationCoverGetter]['cover']"></base-section-heading>
 
     <!-- THIS SECTIONS IS USED TO DISPLAY THE SUB CATEGORIES. -->
 
     <v-container style="margin-top:0%;">
-      <v-row
-        style="margin-top:-4%;"
-        class="hidden-sm-and-down"
-        justify="center"
-        align="center"
-      >
-        <v-col
-          v-for="(feature, i) in cover.subCategories"
-          :key="i + 'subCategories'"
-          cols="12"
-          md="3"
-          @click="activateTheSubCategory(i)"
-        >
-          <base-avatar-card-insurance-sub-category
-            v-if="navigationSubCategory === i"
-            style="cursor: pointer;"
-            :dark="true"
-            color="primary"
-            align="center"
-            :horizontal="true"
-            :icon="feature.icon"
-            :title="feature.name"
-            :text="feature.description"
-          ></base-avatar-card-insurance-sub-category>
-          <base-avatar-card-insurance-sub-category
-            v-else
-            style="cursor: pointer;"
-            align="center"
-            :horizontal="true"
-            :icon="feature.icon"
-            :title="feature.name"
-            :text="feature.description"
-          ></base-avatar-card-insurance-sub-category>
-        </v-col>
-      </v-row>
+      <div style="margin-top:-4%;">
+        <v-row class="hidden-sm-and-down" justify="center" align="center">
+          <v-col
+            v-for="(feature, i) in cover.subCategories"
+            :key="i + 'subCategories'"
+            cols="12"
+            md="3"
+            @click="activateTheSubCategory(i)"
+          >
+            <base-avatar-card-insurance-sub-category
+              v-if="navigationSubCategory === i"
+              style="cursor: pointer;"
+              :dark="true"
+              color="primary"
+              align="center"
+              :horizontal="true"
+              :icon="feature.icon"
+              :title="feature.name"
+              :text="feature.description"
+            ></base-avatar-card-insurance-sub-category>
+            <base-avatar-card-insurance-sub-category
+              v-else
+              style="cursor: pointer;"
+              align="center"
+              :horizontal="true"
+              :icon="feature.icon"
+              :title="feature.name"
+              :text="feature.description"
+            ></base-avatar-card-insurance-sub-category>
+          </v-col>
+        </v-row>
+      </div>
+
       <div class="text-center hidden-sm-and-up">
         <template v-for="(feature, i) in cover.subCategories">
           <v-chip
@@ -69,6 +64,7 @@
         </template>
       </div>
       <base-title
+        style="margin-top:-3.5%"
         @click="activateTheSubCategory()"
         class="text-center"
         :title="
@@ -199,7 +195,7 @@
               </div>
             </v-stepper-content>
           </v-stepper-items>
-        </v-stepper> -->
+        </v-stepper>-->
 
         <!-- ! THIS SECTION IS USED TO INCREASE THE INTERACTIVITY OF THE APPLICATION. -->
 
@@ -210,97 +206,111 @@
               enter-active-class="animate__animated animate__fadeInRight"
               leave-active-class="animate__animated animate__fadeOutLeft"
               @enter="enter"
-              @leave="leave"                      
-            > 
-            <template v-if="show">           
-            <v-divider key="{{'nama1'}}"> </v-divider>
-            <div key="{{'nama2'}}">
-              <v-avatar
-              
-                size="60"
-                class="bounce-2 box"
-                style="margin-top:-2.5%;"
-              >
-                <img
-                  src="https://cdn.vuetifyjs.com/images/john.jpg"
-                  alt="John"
-                />
-              </v-avatar>
-            </div>
-
-            <h1 key="{{'nama3'}}"
-              style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;"
+              @leave="leave"
             >
-              Hey! I'm Mr Insurance. I'll get you an awesome quote in seconds.
-            </h1>
-            <h1 key="{{'nama4'}}"> Ready to go ??</h1>
+              <template v-if="show">
+                <v-divider key="{{'nama1'}}"></v-divider>
+                <div key="{{'nama2'}}">
+                  <v-avatar size="60" class="bounce-2 box" style="margin-top:-2.5%;">
+                    <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+                  </v-avatar>
+                </div>
 
-            <v-row key="{{'nama5'}}"
-              class="mt-2 text-center"
-              justify="center"
-              align="center"
-              dense
-            >
-              <v-col cols="12" sm="6" md="3">
-                <v-text-field
-                  height="10"
-                  dense
-                  label="Your First Name"
-                  outlined
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="3">
-                <v-text-field
-                  dense
-                  label="Your Second Name"
-                  outlined
-                ></v-text-field>
-              </v-col>                            
-            </v-row>  
-            <v-row key="{{'nama51'}}">
-            <v-col>
-            <v-btn @click="show = !show" color="error" dark large>
-              <span
-                >Let's Start <v-icon color="yellow"> fa-smile-wink</v-icon>
-              </span>
-            </v-btn> 
-              </v-col>
-            </v-row>             
-            </template>        
+                <h1
+                  key="{{'nama3'}}"
+                  style=" font-size:35px; color:#4A4A60; font-family:Georgia, serif;"
+                >
+                  Mmmmh !!! It Seem you are interested in
+                  <span
+                    style="color:black;text-decoration:underline;"
+                  >
+                    {{
+                    navigationStateGetter[navigationCoverGetter]
+                    .subCategories[navigationSubCategory].name
+                    }}
+                  </span>,
+                </h1>
+                <h1
+                  style=" font-size:35px; color:#4A4A60; font-family:Georgia, serif;"
+                  key="{{'nama45'}}"
+                >Ready to go ??</h1>
+
+                <template v-if="questionsStartValue >= 0">
+                  <!-- Creating the Names Value Of The Person. -->
+                  <v-form key="{{'form'}}" ref="form2" v-model="form2Validation">
+                  <template v-if="personalQuestions[questionsStartValue].name == 'name'">
+                    <h1
+                      style=" font-size:20px;color:black; font-family:Georgia, serif;"
+                      key="{{'nama4'}}"
+                    >Lets Get Your Name First.</h1>
+                    <v-row
+                      key="{{'nama5'}}"
+                      class="mt-2 text-center"
+                      justify="center"
+                      align="center"
+                      dense
+                    >
+                      <v-col cols="12" sm="6" md="3">
+                        <v-text-field height="10" :rules="nameRules" v-model="personalData['firstName']" dense label="Your First Name" outlined></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="3">
+                        <v-text-field dense label="Your Second Name" v-model="personalData['secondName']" outlined :rules="nameRules"></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </template>
+
+                  <template
+                    v-if="
+                      personalQuestions[questionsStartValue].name ==
+                        'contactDetails'
+                    "
+                  >
+                  <h1
+                      style="color:black; font-size:20px; font-family:Georgia, serif;"
+                      key="{{'nama4'}}"
+                    >We did't Get Your Contact Info, Kindly Add Them.</h1>
+                    <v-row
+                      key="{{'nama5'}}"
+                      class="mt-2 text-center"
+                      justify="center"
+                      align="center"
+                      dense
+                    >
+                      <v-col cols="12" sm="6" md="3">
+                        <v-text-field height="10" :rules="emailRules" v-model="personalData['emailAddres']" dense label="Your Email Address" outlined></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="3">
+                        <v-text-field dense label="Your Phone Number." v-model="personalData['phoneNumber']" :rules="RequiredPhoneNumber" outlined></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </template>
+                  </v-form>
+                </template>
+                <v-row key="{{'nama51'}}">
+                  <v-col>
+                    <v-btn rounded @click="tooglingVisibility" color="error" dark x-large>
+                      <span>
+                        Let's Get Startted
+                        <v-icon color="yellow">fa-smile-wink</v-icon>
+                      </span>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </template>
             </transition-group>
-
           </template>
-
-          <div id="example-3">
-  <button @click="show = !show">
-    Toggle render
-  </button>
-  <transition
-    name="custom-classes-transition"
-    enter-active-class="animate__animated animate__bounce"
-    leave-active-class="animate__animated animate__bounce"
-  >
-    <p v-if="show">hello</p>
-  </transition>
-          </div>
         </v-container>
       </template>
     </v-container>
 
     <!-- THIS SECTION IS USED TO DEFINE THE QUESTIONS FOR THE SMALL SCREEN. -->
     <template>
-      <v-stepper
-        class="hidden-md-and-up"
-        v-model="nextStepInStepperStateGetter"
-        vertical
-      >
+      <v-stepper class="hidden-md-and-up" v-model="nextStepInStepperStateGetter" vertical>
         <v-stepper-step
           :editable="personalDetailsStatusGetter"
           :complete="nextStepInStepperStateGetter > 1"
           step="1"
-        >
-          Add Insurance Specific Questions.
-        </v-stepper-step>
+        >Add Insurance Specific Questions.</v-stepper-step>
 
         <v-stepper-content step="1">
           <health-component-questions :questions="questions" />
@@ -310,36 +320,28 @@
           :editable="personalDetailsStatusGetter"
           :complete="nextStepInStepperStateGetter > 2"
           step="2"
-        >
-          Add Personal Details.
-        </v-stepper-step>
+        >Add Personal Details.</v-stepper-step>
 
         <v-stepper-content step="2">
           <health-component-personal-questions />
         </v-stepper-content>
 
-        <v-stepper-step :complete="nextStepInStepperStateGetter > 3" step="3">
-          Insurance Cover Estimates.
-        </v-stepper-step>
+        <v-stepper-step
+          :complete="nextStepInStepperStateGetter > 3"
+          step="3"
+        >Insurance Cover Estimates.</v-stepper-step>
 
         <v-stepper-content step="3">
-          <v-container
-            v-if="!premiumsDataStatusGetter"
-            class="fill-height"
-            style="margin-top: 2%;"
-          >
+          <v-container v-if="!premiumsDataStatusGetter" class="fill-height" style="margin-top: 2%;">
             <v-row align="center" justify="center">
-              <h2 style="color: #29ab87;" class="text-center">
-                Mr Insurance Is Searching For The best policy For You
-              </h2>
+              <h2
+                style="color: #29ab87;"
+                class="text-center"
+              >Mr Insurance Is Searching For The best policy For You</h2>
             </v-row>
 
             <v-row align="center" justify="center">
-              <orbit-spinner
-                :animation-duration="1200"
-                :size="155"
-                color="#29ab87"
-              />
+              <orbit-spinner :animation-duration="1200" :size="155" color="#29ab87" />
             </v-row>
             <v-row align="center" justify="center">
               <h4 style="color: #29ab87;">Just A Second</h4>
@@ -353,43 +355,31 @@
           </v-container>
           <v-container v-else>
             <template v-if="premiumsDataGetter.length > 0">
-              <h2 class="text-center" style="color: black;">
-                {{ premiumsDataGetter.length }} Premiums Found.
-              </h2>
+              <h2
+                class="text-center"
+                style="color: black;"
+              >{{ premiumsDataGetter.length }} Premiums Found.</h2>
 
               <v-row align="center" justify="center">
-                <v-btn
-                  @click="redirectToSmallScreen()"
-                  outlined
-                  medium
-                  color="success"
-                  dark
-                >
+                <v-btn @click="redirectToSmallScreen()" outlined medium color="success" dark>
                   Redirect To Better View.
                   <v-icon>mdi-redo</v-icon>
                 </v-btn>
               </v-row>
             </template>
             <template v-else>
-              <h2 class="text-center" style="color: red;">
-                {{ premiumsDataGetter.length }} Premiums Found.
-              </h2>
-              <h3 style="color: black;" class="text-center">
-                Try Another Search...
-              </h3>
+              <h2
+                class="text-center"
+                style="color: red;"
+              >{{ premiumsDataGetter.length }} Premiums Found.</h2>
+              <h3 style="color: black;" class="text-center">Try Another Search...</h3>
             </template>
           </v-container>
 
           <div class="text-center">
-            <v-btn
-              style="text-align: right;"
-              color="red"
-              outlined=""
-              @click="step3GoToStep2()"
-            >
+            <v-btn style="text-align: right;" color="red" outlined @click="step3GoToStep2()">
               <v-icon>mdi-arrow_back_ios</v-icon>
-              <v-icon>mdi-arrow_back_ios</v-icon>
-              Go Back.
+              <v-icon>mdi-arrow_back_ios</v-icon>Go Back.
             </v-btn>
           </div>
         </v-stepper-content>
@@ -403,7 +393,7 @@ import { mapGetters } from "vuex";
 import { HollowDotsSpinner } from "epic-spinners";
 import { OrbitSpinner } from "epic-spinners";
 import router from "../../router";
-import 'animate.css'
+import "animate.css";
 export default {
   name: "SectionThemeFeatures",
   computed: {
@@ -431,16 +421,31 @@ export default {
       this.$store.commit("UPDATING_PERSONAL_DETAILS_STATUS", false);
     },
 
-    tooglingVisibility(){
-      this.show = !this.show;      
-    },  
-
-    enter(){
-      this.show = true;                    
+    tooglingVisibility() {
+      
+      if (this.questionsStartValue == 1) {        
+        if (this.$refs.form2.validate()) {
+          // this.show = !this.show;
+          alert("We Done, Move to cover Specific Questions.");
+          this.$store.dispatch('updatingPersonalDetails', this.personalData)
+          console.log("Success in Validation.");
+        }
+      } else {
+         if (this.$refs.form2.validate()) {
+          console.log("Success in Validation.");
+          this.questionsStartValue = this.questionsStartValue + 1;
+          this.show = !this.show;
+        }               
+      }
+      
     },
-    leave(){
-        this.show = true;                       
-    },    
+
+    enter() {
+      this.show = true;
+    },
+    leave() {
+      this.show = true;
+    },
     step3GoToStep2() {
       this.$store.dispatch("nextStepInStepper", 2);
     },
@@ -449,10 +454,49 @@ export default {
     },
   },
   data: () => ({
+    questionsStartValue: 0,
     cover: null,
     questions: null,
     subCategory: null,
     show: true,
+    personalData: [],
+    form2Validation: false,
+    // ! this section is used to define the personal qusetions that will be used .
+    personalQuestions: [
+      {
+        name: "name",
+        rules: "nameRules",
+      },
+      {
+        name: "contactDetails",
+        rules: {
+          email: "emailRules",
+          phoneNumber: "RequiredPhoneNumber",
+        },
+      },
+    ],
+    RequiredDateRules: [(v) => !!v || "Date is required"],
+    RequiredNumber: [
+      (v) => !!v || "Number is required",
+      (v) => /^\d+$/.test(v) || "Number must be valid",
+    ],
+    RequiredPhoneNumber: [
+      (v) => !!v || "Phone Number is required",
+      (v) =>
+        (v && v.length <= 10) || "Phone Number must be less than 10 characters",
+
+      (v) =>
+        /^0(7(?:(?:[0-9][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$/.test(v) ||
+        "Phone Number must be valid",
+    ],
+    emailRules: [
+      (v) => !!v || "E-mail is required",
+      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+    ],
+    nameRules: [
+      (v) => !!v || "Name is required",
+      (v) => (v && v.length >= 3) || "Name must be less than 3 characters",
+    ],
   }),
   created() {
     this.cover = this.navigationStateGetter[this.navigationCoverGetter];
@@ -465,10 +509,10 @@ export default {
   // ! this sections is used to monitor if there is any change that happens to the change in the categories and subCategories.
 
   watch: {
-    navigationCoverGetter: function() {
+    navigationCoverGetter: function () {
       this.cover = this.navigationStateGetter[this.navigationCoverGetter];
     },
-    navigationSubCategory: function() {
+    navigationSubCategory: function () {
       this.questions = this.navigationStateGetter[
         this.navigationCoverGetter
       ].subCategories[this.navigationSubCategory].questions;
@@ -504,8 +548,6 @@ input[type="number"] {
     transform: scale(1);
   }
 }
-
-
 
 .box {
   animation-duration: 2s;
