@@ -1,6 +1,13 @@
 <template>
-  <v-form ref="form" v-model="valid">
-    <h3 class="text-center">Insurance Cover Specific Details.</h3>
+<v-container class="text-center;">
+  
+  <div style="text-align:center;border:2px solid black;width:70%;" >
+      <h1 width="70px"
+      style=" font-size:35px; color:#4A4A60; font-family:Georgia, serif;"
+    >A few Details are required to get the best policy for you  </h1>
+    </div>
+
+  <v-form ref="form" v-model="valid">        
     <br />
     <h5 class="text-center">1. Cover Amount.</h5>
     <v-col class="d-flex" md="6" offset-md="3">
@@ -9,28 +16,34 @@
         label="Cover Amount."
         outlined
         required
+        dense
         prepend-inner-icon="monetization_on"
         :rules="RequiredNumber"
         v-model="inputData['cover_amount']"
       ></v-select>
     </v-col>
     <template v-for="(feature, i) in questions">
-      <template v-if="questions[i].type !== 'checkbox'">
+      <!-- <template v-if="questions[i].type !== 'checkbox'">
         <h5 class="text-center" :key="i + 'checkBoxQusetionLargeScreen'">
           {{ i + 2 + "." }} {{ questions[i].question }}
         </h5>
-      </template>
+      </template>-->
 
       <template v-if="questions[i].type == 'date'">
         <v-container :key="i + 'dateQusetionLargeScreen'">
           <v-row dense :key="i + 'dateQuestionRow'">
-            <v-col md="6" offset-md="3">
+            <v-col md="2" offset-md="2">
+              <h5
+                class="text-center"
+                :key="i + 'checkBoxQusetionLargeScreen'"
+              >{{ i + 2 + "." }} {{ questions[i].question }}</h5>
               <v-text-field
                 v-if="questions[i].required == 1"
                 type="date"
                 prepend-inner-icon="event"
                 single-line
                 outlined
+                dense
                 :rules="RequiredDateRules"
                 validateOnBlur
                 :error="principalMemberErrorMessageStatus"
@@ -40,6 +53,7 @@
               <v-text-field
                 :error-messages="spouseErrorMessage"
                 v-else
+                dense
                 type="date"
                 prepend-inner-icon="event"
                 single-line
@@ -52,12 +66,17 @@
       </template>
       <template v-else-if="questions[i].type === 'number'">
         <v-row dense :key="i + 'numberQuestionRow'">
-          <v-col md="6" offset-md="3">
+          <v-col md="2" offset-md="2">
+            <h5
+              class="text-center"
+              :key="i + 'checkBoxQusetionLargeScreen'"
+            >{{ i + 2 + "." }} {{ questions[i].question }}</h5>
             <v-text-field
               v-if="questions[i].required == 1"
               type="number"
               prepend-inner-icon="child_care"
               single-line
+              dense
               outlined
               value="0"
               :rules="RequiredNumber"
@@ -66,6 +85,7 @@
             <v-text-field
               v-else
               type="number"
+              dense
               value="0"
               prepend-inner-icon="child_care"
               outlined
@@ -78,9 +98,7 @@
       <template v-else-if="questions[i].type === 'checkbox'">
         <v-row :key="i + 'checkBoxQuestionRow'" align="center" justify="center">
           <v-col md="4" offset-md="2">
-            <h5 class="text-center">
-              {{ i + 2 + "." }} {{ questions[i].question }}
-            </h5>
+            <h5 class="text-center">{{ i + 2 + "." }} {{ questions[i].question }}</h5>
           </v-col>
           <v-col md="4">
             <v-checkbox v-model="inputData[questions[i].name]"></v-checkbox>
@@ -90,18 +108,14 @@
     </template>
 
     <div style="text-align: right;">
-      <v-btn
-        type="submit"
-        color="success"
-        outlined
-        @click.prevent="step1GoToStep2()"
-      >
+      <v-btn type="submit" color="success" outlined @click.prevent="step1GoToStep2()">
         Next
         <v-icon>navigate_next</v-icon>
         <v-icon>arrow_forward_ios</v-icon>
       </v-btn>
     </div>
   </v-form>
+  </v-container>
 </template>
 
 <script>
@@ -128,18 +142,18 @@ export default {
 
         var hasError = false;
 
-         var dob_entry;
-          var split_dob ;
-          var month;
-          var day;
-          var year;
-          var ageValue;
-          var condition1;
-          var today_date;
-          var today_year;
-          var today_day;
-          var today_month;
-          var condition2;
+        var dob_entry;
+        var split_dob;
+        var month;
+        var day;
+        var year;
+        var ageValue;
+        var condition1;
+        var today_date;
+        var today_year;
+        var today_day;
+        var today_month;
+        var condition2;
 
         // ! validating the dates that have been provided by the users.
         if (this.inputData["principal_member_age"]) {

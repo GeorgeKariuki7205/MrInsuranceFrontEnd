@@ -4,7 +4,7 @@
 
     <!-- THIS SECTIONS IS USED TO DISPLAY THE SUB CATEGORIES. -->
 
-    <v-container style="margin-top:0%;">
+    <v-container id="coverQuestions" style="margin-top:0%;">
       <div style="margin-top:-4%;">
         <v-row class="hidden-sm-and-down" justify="center" align="center">
           <v-col
@@ -238,64 +238,116 @@
                 <template v-if="questionsStartValue >= 0">
                   <!-- Creating the Names Value Of The Person. -->
                   <v-form key="{{'form'}}" ref="form2" v-model="form2Validation">
-                  <template v-if="personalQuestions[questionsStartValue].name == 'name'">
-                    <h1
-                      style=" font-size:20px;color:black; font-family:Georgia, serif;"
-                      key="{{'nama4'}}"
-                    >Lets Get Your Name First.</h1>
-                    <v-row
-                      key="{{'nama5'}}"
-                      class="mt-2 text-center"
-                      justify="center"
-                      align="center"
-                      dense
-                    >
-                      <v-col cols="12" sm="6" md="3">
-                        <v-text-field height="10" :rules="nameRules" v-model="personalData['firstName']" dense label="Your First Name" outlined></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="3">
-                        <v-text-field dense label="Your Second Name" v-model="personalData['secondName']" outlined :rules="nameRules"></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </template>
+                    <template v-if="personalQuestions[questionsStartValue].name == 'name'">
+                      <h1
+                        style=" font-size:20px;color:black; font-family:Georgia, serif;"
+                        key="{{'nama4'}}"
+                      >Lets Get Your Name First.</h1>
+                      <v-row
+                        key="{{'nama5'}}"
+                        class="mt-2 text-center"
+                        justify="center"
+                        align="center"
+                        dense
+                      >
+                        <v-col cols="12" sm="6" md="3">
+                          <v-text-field
+                            height="10"
+                            :rules="nameRules"
+                            v-model="personalData['firstName']"
+                            dense
+                            counter
+                            label="Your First Name"
+                            outlined
+                            prepend-inner-icon="account_box"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="3">
+                          <v-text-field
+                          prepend-inner-icon="account_box"
+                          counter
+                            dense
+                            label="Your Second Name"
+                            v-model="personalData['secondName']"
+                            outlined
+                            :rules="nameRules"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </template>
 
-                  <template
-                    v-if="
+                    <template
+                      v-if="
                       personalQuestions[questionsStartValue].name ==
                         'contactDetails'
                     "
-                  >
-                  <h1
-                      style="color:black; font-size:20px; font-family:Georgia, serif;"
-                      key="{{'nama4'}}"
-                    >We did't Get Your Contact Info, Kindly Add Them.</h1>
-                    <v-row
-                      key="{{'nama5'}}"
-                      class="mt-2 text-center"
-                      justify="center"
-                      align="center"
-                      dense
                     >
-                      <v-col cols="12" sm="6" md="3">
-                        <v-text-field height="10" :rules="emailRules" v-model="personalData['emailAddres']" dense label="Your Email Address" outlined></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="3">
-                        <v-text-field dense label="Your Phone Number." v-model="personalData['phoneNumber']" :rules="RequiredPhoneNumber" outlined></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </template>
+                      <h1
+                        style="color:black; font-size:20px; font-family:Georgia, serif;"
+                        key="{{'nama4'}}"
+                      >We did't Get Your Contact Info, Kindly Add Them.</h1>
+                      <v-row
+                        key="{{'nama5'}}"
+                        class="mt-2 text-center"
+                        justify="center"
+                        align="center"
+                        dense
+                      >
+                        <v-col cols="12" sm="6" md="3">
+                         <v-text-field
+                            :rules="emailRules"
+                            counter
+                            dense
+                            required
+                            v-model="personalData['email_address']"
+                            label="Email Address"
+                            outlined
+                            prepend-inner-icon="email"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="3">
+                         <v-text-field
+                          :rules="RequiredPhoneNumber"
+                          :counter="10"
+                          placeholder="07...."
+                          required
+                          dense
+                          v-model="personalData['phoneNumber']"
+                          label="Phone Number"
+                          maxlength="10"
+                          type="tel"
+                          outlined
+                          prepend-inner-icon="call"
+                        ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </template>
                   </v-form>
                 </template>
                 <v-row key="{{'nama51'}}">
                   <v-col>
-                    <v-btn rounded @click="tooglingVisibility" color="error" dark x-large>
+                    
+                    <v-btn v-if="questionsStartValue == 0" rounded @click="tooglingVisibility" color="error" dark x-large>
                       <span>
                         Let's Get Startted
                         <v-icon color="yellow">fa-smile-wink</v-icon>
                       </span>
                     </v-btn>
+                    <v-btn v-if="questionsStartValue == 1" href="#coverQuestions"  rounded @click="tooglingVisibility" color="error" dark x-large>
+                      <span>
+                        Finally.
+                        <v-icon color="yellow">fa-smile-wink</v-icon>
+                      </span>
+                    </v-btn>
                   </v-col>
                 </v-row>
+              </template>
+
+              <!-- !  THIS SECTION IS USED TO SHOW THE COVER RELARED QUESTIONS. -->
+              <template v-if="showingCoverRelatedQuestions" >
+                <div key="nanna">                 
+                  <health-component-questions :questions="questions"/>
+                </div>
               </template>
             </transition-group>
           </template>
@@ -405,6 +457,7 @@ export default {
       "premiumsDataGetter",
       "premiumsDataStatusGetter",
       "nextStepInStepperStateGetter",
+      "personalDetailsGetter",
     ]),
   },
   components: {
@@ -422,29 +475,38 @@ export default {
     },
 
     tooglingVisibility() {
-      
-      if (this.questionsStartValue == 1) {        
-        if (this.$refs.form2.validate()) {
-          // this.show = !this.show;
-          alert("We Done, Move to cover Specific Questions.");
-          this.$store.dispatch('updatingPersonalDetails', this.personalData)
+      if (this.questionsStartValue > 1) {
+        if (this.$refs.form2.validate()) {          
+          this.show = false;
+          this.showingCoverRelatedQuestions = true;
+          this.$store.dispatch("updatingPersonalDetails", this.personalData);          
           console.log("Success in Validation.");
         }
       } else {
-         if (this.$refs.form2.validate()) {
+        if (this.$refs.form2.validate()) {
           console.log("Success in Validation.");
           this.questionsStartValue = this.questionsStartValue + 1;
           this.show = !this.show;
-        }               
+          this.$store.dispatch("updatingPersonalDetails", this.personalData);
+        }
       }
-      
     },
 
     enter() {
-      this.show = true;
+      if (this.questionsStartValue > 1) {
+        this.show = false;
+        this.showingCoverRelatedQuestions = true;        
+      } else {
+        this.show = true;
+      }
     },
     leave() {
-      this.show = true;
+      if (this.questionsStartValue > 1) {
+        this.show = false;
+        this.showingCoverRelatedQuestions = true;        
+      } else {
+        this.show = true;
+      }
     },
     step3GoToStep2() {
       this.$store.dispatch("nextStepInStepper", 2);
@@ -455,6 +517,7 @@ export default {
   },
   data: () => ({
     questionsStartValue: 0,
+    showingCoverRelatedQuestions: false,
     cover: null,
     questions: null,
     subCategory: null,

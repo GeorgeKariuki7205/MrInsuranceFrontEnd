@@ -2,7 +2,7 @@
   <v-form ref="form2" v-model="form2Validation">
     <h3 class="text-center">Personal Details.</h3>
     <v-row dense>
-      <v-col md="6" offset-md="3">
+      <v-col md="2" offset-md="2">
         <h5>1. Name:</h5>
         <br />
         <v-text-field
@@ -18,7 +18,7 @@
     </v-row>
 
     <v-row dense>
-      <v-col md="6" offset-md="3">
+      <v-col md="2" offset-md="2">
         <h5>2. Email Address:</h5>
         <br />
         <v-text-field
@@ -34,7 +34,7 @@
     </v-row>
 
     <v-row dense>
-      <v-col md="6" offset-md="3">
+      <v-col md="2" offset-md="2">
         <h5>3. Phone Number:</h5>
         <br />
         <v-text-field
