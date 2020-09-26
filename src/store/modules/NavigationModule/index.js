@@ -216,7 +216,7 @@ const actions = {
                     });
                     commit("UPDATING_THE_PAYABLE_AMOUNT", payableAmounts);
                     commit("UPDATING_THE_FINANCIAL_BREAKDOWN", combinedHealthFinancialBreakDown);
-                    commit("UPDATING_PREMIUM_DETAILS_STATUS", true);
+                    commit("UPDATING_PREMIUM_DETAILS_STATUS", false);
                 }
             }
         ).catch(
