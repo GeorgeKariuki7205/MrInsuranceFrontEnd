@@ -38,7 +38,7 @@ export default {
     clicked(data){
       var index = this.navigationStateGetter.indexOf(data);
       console.log("I have Been Clicked."+index);
-      router.push({ name: data.route_name})
+      router.push({ name: 'InsuranceCover' })
       this.$store.dispatch("updatingTheCoverIndex",index);
 
     }

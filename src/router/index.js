@@ -29,6 +29,11 @@ Vue.use(VueRouter)
     component: Health
   },
   {
+    path: '/insuranceCover',
+    name: 'InsuranceCover',
+    component: Health
+  },
+  {
     path: '/healthPremiumsMobileView',
     name: 'HealthSmallScreen',
     component: HealthSmallScreen

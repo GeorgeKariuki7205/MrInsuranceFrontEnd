@@ -192,7 +192,8 @@ export default {
 
       //! after update, redirect to the proper page.
       router.push({
-        name: this.navigationStateGetter[this.navigationCoverGetter].route_name,
+        // name: this.navigationStateGetter[this.navigationCoverGetter].route_name,
+        name: 'InsuranceCover'
       });
     },
   },

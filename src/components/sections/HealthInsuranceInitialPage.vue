@@ -6,14 +6,12 @@
 
     <!-- THIS SECTIONS IS USED TO DISPLAY THE SUB CATEGORIES. -->
 
-    <v-container style="margin-top: 0%">
-      <div style="margin-top: -4%">
-        <v-row class="hidden-sm-and-down" justify="center" align="center">
+    <v-container>
+      <div style="margin-top: -4%;width:80%;">
+        <v-row class="hidden-sm-and-down">
           <v-col
             v-for="(feature, i) in cover.subCategories"
-            :key="i + 'subCategories'"
-            cols="12"
-            md="3"
+            :key="i + 'subCategories'"                        
             @click="activateTheSubCategory(i)"
           >
             <base-avatar-card-insurance-sub-category
@@ -74,131 +72,9 @@
             navigationSubCategory
           ].name
         "
-      />
-
-      <!-- THIS SECTION IS USED TO DEFINE THE QUESTIONS FOR THE LARGE SCREEN. -->
+      />      
 
       <template>
-        <!-- <v-stepper class="hidden-sm-and-down" v-model="nextStepInStepperStateGetter">
-          <v-stepper-header style="backgrouns-color: red;">
-            <v-stepper-step
-              :editable="personalDetailsStatusGetter"
-              :complete="nextStepInStepperStateGetter > 1"
-              step="1"
-            >
-              Add Cover Specific Details.
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step
-              :editable="personalDetailsStatusGetter"
-              :complete="nextStepInStepperStateGetter > 2"
-              step="2"
-            >
-              Add Personal Details.
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step step="3">Insurance Estimates.</v-stepper-step>
-          </v-stepper-header>
-
-          <v-stepper-items>
-            <v-stepper-content step="1">                            
-              
-              <health-component-questions :questions="questions"/>
-
-            </v-stepper-content>
-
-
-            <v-stepper-content step="2">
-
-             <health-component-personal-questions/>              
-             
-            </v-stepper-content>
-
-            <v-stepper-content step="3">
-              <v-container
-                v-if="!premiumsDataStatusGetter"
-                class="fill-height"
-                style="margin-top: 2%;"
-              >
-                <v-row align="center" justify="center">
-                  <h2 style="color: #29ab87;" class="text-center">
-                    Mr Insurance Is Searching For The best policy For You
-                  </h2>
-                </v-row>
-
-                <v-row align="center" justify="center">
-                  <orbit-spinner
-                    :animation-duration="1200"
-                    :size="155"
-                    color="#29ab87"
-                  />
-                </v-row>
-                <v-row align="center" justify="center">
-                  <h4 style="color: #29ab87;">Just A Second</h4>
-                  <hollow-dots-spinner
-                    :animation-duration="1200"
-                    :dot-size="8"
-                    :dots-num="4"
-                    color="#29ab87"
-                  />
-                </v-row>
-              </v-container>
-
-              <v-container v-else>
-                <template v-if="premiumsDataGetter.length === 0">
-                  <h2 class="text-center">The Insurance Coer Selected is not availbale, kindly try 'Family Health'.</h2>
-                </template>
-                <template v-else>                
-                <h3 style="text-decoration: underline;" class="text-center">
-                  <span v-if="premiumsDataGetter[0].subCategory">
-                    {{ premiumsDataGetter[0].subCategory }}
-                  </span>
-                  Covers Retrieved For Cover Amount Of:
-                  <span style="color: green; type: bold;">
-                    {{
-                      premiumsDataGetter[0].coveredAmount
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    }}
-                  </span>
-                </h3>
-                <h4 style="margin-bottom: 2%; margin-left: 2%;">
-                  {{ premiumsDataGetter.length }} Premiums Found.
-                </h4>
-                <v-container>
-                  <template v-for="(premiumsData, index) in premiumsDataGetter">
-                    <section-health-premium
-                      :premium="premiumsData"
-                      :key="index + 'premiumsDataGetter'"
-                    />
-                    <div
-                      style="margin-top: 2%; margin-bottom: 4%;"
-                      :key="index + 'premiumsDataGetterSpacer'"
-                    ></div>
-                  </template>
-                </v-container>
-                </template>
-              </v-container>
-              <div class="text-center">
-                <v-btn
-                  style="text-align: right;"
-                  color="red"
-                  outlined=""
-                  @click="step3GoToStep2()"
-                >
-                  <v-icon>mdi-arrow_back_ios</v-icon>
-                  <v-icon>mdi-arrow_back_ios</v-icon>
-                  Go Back.
-                </v-btn>
-              </div>
-            </v-stepper-content>
-          </v-stepper-items>
-        </v-stepper>-->
-
         <!-- ! THIS SECTION IS USED TO INCREASE THE INTERACTIVITY OF THE APPLICATION. -->
 
         <v-container id="coverQuestions" class="text-center">
@@ -403,9 +279,7 @@
               <!-- !  THIS SECTION IS USED TO SHOW THE COVER RELARED QUESTIONS. -->
               <template v-if="showingCoverRelatedQuestions">
                 <div key="nanna">
-                  <health-component-questions :questions="questions" />
-                  This is premiumsDataStatus {{ premiumsDataStatusGetter }} This
-                  is overRelatedQuestions {{ showingCoverRelatedQuestions }}
+                  <health-component-questions :questions="questions" />                 
                 </div>
               </template>
 
@@ -494,10 +368,7 @@
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }}
                       </span>
-                    </h1>
-                    <!-- <h4 style="margin-bottom: 2%; margin-left: 2%">
-                      {{ premiumsDataGetter.length }} Premiums Found.
-                    </h4>                     -->
+                    </h1>                                     
                     <template
                       v-for="(premiumsData, index) in premiumsDataGetter"
                     >
@@ -517,113 +388,8 @@
           </div>
         </v-container>
       </template>
-    </v-container>
+    </v-container>    
 
-    <!-- THIS SECTION IS USED TO DEFINE THE QUESTIONS FOR THE SMALL SCREEN. -->
-    <!-- <template>
-      <v-stepper
-        class="hidden-md-and-up"
-        v-model="nextStepInStepperStateGetter"
-        vertical
-      >
-        <v-stepper-step
-          :editable="personalDetailsStatusGetter"
-          :complete="nextStepInStepperStateGetter > 1"
-          step="1"
-          >Add Insurance Specific Questions.</v-stepper-step
-        >
-
-        <v-stepper-content step="1">
-          <health-component-questions :questions="questions" />
-        </v-stepper-content>
-
-        <v-stepper-step
-          :editable="personalDetailsStatusGetter"
-          :complete="nextStepInStepperStateGetter > 2"
-          step="2"
-          >Add Personal Details.</v-stepper-step
-        >
-
-        <v-stepper-content step="2">
-          <health-component-personal-questions />
-        </v-stepper-content>
-
-        <v-stepper-step :complete="nextStepInStepperStateGetter > 3" step="3"
-          >Insurance Cover Estimates.</v-stepper-step
-        >
-
-        <v-stepper-content step="3">
-          <v-container
-            v-if="!premiumsDataStatusGetter"
-            class="fill-height"
-            style="margin-top: 2%"
-          >
-            <v-row align="center" justify="center">
-              <h2 style="color: #29ab87" class="text-center">
-                Mr Insurance Is Searching For The best policy For You
-              </h2>
-            </v-row>
-
-            <v-row align="center" justify="center">
-              <orbit-spinner
-                :animation-duration="1200"
-                :size="155"
-                color="#29ab87"
-              />
-            </v-row>
-            <v-row align="center" justify="center">
-              <h4 style="color: #29ab87">Just A Second</h4>
-              <hollow-dots-spinner
-                :animation-duration="1200"
-                :dot-size="8"
-                :dots-num="4"
-                color="#29ab87"
-              />
-            </v-row>
-          </v-container>
-          <v-container v-else>
-            <template v-if="premiumsDataGetter.length > 0">
-              <h2 class="text-center" style="color: black">
-                {{ premiumsDataGetter.length }} Premiums Found.
-              </h2>
-
-              <v-row align="center" justify="center">
-                <v-btn
-                  @click="redirectToSmallScreen()"
-                  outlined
-                  medium
-                  color="success"
-                  dark
-                >
-                  Redirect To Better View.
-                  <v-icon>mdi-redo</v-icon>
-                </v-btn>
-              </v-row>
-            </template>
-            <template v-else>
-              <h2 class="text-center" style="color: red">
-                {{ premiumsDataGetter.length }} Premiums Found.
-              </h2>
-              <h3 style="color: black" class="text-center">
-                Try Another Search...
-              </h3>
-            </template>
-          </v-container>
-
-          <div class="text-center">
-            <v-btn
-              style="text-align: right"
-              color="red"
-              outlined
-              @click="step3GoToStep2()"
-            >
-              <v-icon>mdi-arrow_back_ios</v-icon>
-              <v-icon>mdi-arrow_back_ios</v-icon>Go Back.
-            </v-btn>
-          </div>
-        </v-stepper-content>
-      </v-stepper>
-    </template> -->
   </base-section>
 </template>
 

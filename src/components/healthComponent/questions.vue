@@ -242,11 +242,7 @@ export default {
       if (this.$refs.form.validate()) {
         // ! after filling the table, store the data a state.
 
-        // ! creating the status To prevent the posting of wrong data.
-
-        console.log(
-          this.inputData["principal_member_ageday"] + " This is the Day."
-        );
+        // ! creating the status To prevent the posting of wrong data.        
         // ! validating the dates that have been provided by the users.
         if (
           this.inputData["principal_member_ageday"] ||
@@ -285,12 +281,7 @@ export default {
         
         // ! simultaneously call the function to end the request to get data.
 
-        this.$store.dispatch("postingTheDataForCoverSearch");
-
-        console.log("This is the data posted to get the new implementation.");
-        console.log(this.insuranceCoverDetailsGetter);
-
-      // ! create the preloader for the app.
+        this.$store.dispatch("postingTheDataForCoverSearch");              
 
       }
     },
