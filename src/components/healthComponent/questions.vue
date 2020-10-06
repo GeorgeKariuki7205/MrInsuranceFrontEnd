@@ -2,36 +2,7 @@
   <v-container
     class="text-center"
     style="margin-left: auto; margin-right: auto"
-  >
-    <div
-      class="text-center"
-      style="margin-left: auto; margin-right: auto; width: 90%"
-    >
-      <v-divider key="{{'nama1'}}"></v-divider>
-      <div key="{{'nama2'}}">
-        <v-avatar size="70" class="bounce-2 box" style="margin-top: -2.5%">
-          <img :src="require('@/assets/tie-svgrepo-com.svg')" alt="John" />
-        </v-avatar>
-      </div>
-      <v-icon class="d-inline" size="65">arrow_back_ios</v-icon>
-      <h1
-        key="{{'nama3'}}"
-        class="d-inline"
-        style="font-size: 35px; color: #4a4a60; font-family: Georgia, serif"
-      >
-        <span></span> Hey
-        {{
-          personalDetailsGetter.firstName.charAt(0).toUpperCase() +
-          personalDetailsGetter.firstName.substr(1).toLowerCase()
-        }}, I can't Wait to get you the best deals for
-        <span style="color: black; text-decoration: underline">
-          {{
-            navigationStateGetter[navigationCoverGetter].subCategories[
-              navigationSubCategory
-            ].name
-          }} </span
-        >, I just need the details below,
-      </h1>
+  >          
       <v-form
         ref="form"
         style="margin-left: auto; margin-right: auto"
@@ -41,9 +12,10 @@
         <br />
 
         <v-row dense align="center" justify="center">
-          <v-col md="4" offset-md="1">
+          <v-col md="4" offset-md="1" v-if="cover.id === 1">
             <h5 class="text-center">
               <v-icon color="red" x-small>fa-asterisk</v-icon> 1. Cover Amount.
+              {{ cover.id }}
             </h5>
             <v-select
               :items="items"
@@ -171,6 +143,7 @@
                 </h5>
 
                 <h5
+                  v-else
                   class="text-center"
                   :key="i + 'checkBoxQusetionLargeScreen'"
                 >
@@ -179,7 +152,6 @@
                 <v-text-field
                   v-if="questions[i].required == 1"
                   type="number"
-                  prepend-inner-icon="child_care"
                   single-line
                   dense
                   outlined
@@ -192,11 +164,52 @@
                   type="number"
                   dense
                   value="0"
-                  prepend-inner-icon="child_care"
                   outlined
                   :rules="RequiredNumberOnly"
                   v-model="inputData[questions[i].name]"
                 ></v-text-field>
+              </v-col>
+            </template>
+            <template v-else-if="questions[i].type === 'select'">
+              <v-col
+                class="6"
+                md="4"
+                offset-md="1"
+                :key="i + 'numberQuestionRow'"
+              >
+                <h5
+                  v-if="questions[i].required == 1"
+                  class="text-center"
+                  :key="i + 'checkBoxQusetionLargeScreen'"
+                >
+                  <v-icon color="red" x-small>fa-asterisk</v-icon>
+                  {{ i + 2 + "." }} {{ questions[i].question }}
+                </h5>
+
+                <h5
+                  v-else
+                  class="text-center"
+                  :key="i + 'checkBoxQusetionLargeScreen'"
+                >
+                  {{ i + 2 + "." }} {{ questions[i].question }}
+                </h5>
+                <v-select
+                  v-if="questions[i].required == 1"
+                  :key="i + 'numberQuestionRow'"
+                  :items="questions[i].selectName"
+                  label="Select"
+                  outlined
+                  dense
+                  :rules="RequiredSelect"
+                ></v-select>
+                <v-select
+                  v-else
+                  :key="i + 'numberQuestionRow'"
+                  :items="items"
+                  label="Select"
+                  outlined
+                  dense
+                ></v-select>
               </v-col>
             </template>
           </template>
@@ -215,7 +228,7 @@
           </span>
         </v-btn>
       </v-form>
-    </div>
+    
   </v-container>
 </template>
 
@@ -233,16 +246,16 @@ export default {
       "nextStepInStepperStateGetter",
       "personalDetailsGetter",
       "insuranceCoverDetailsGetter",
-      "insuranceCoverDetailsGetter"
+      "insuranceCoverDetailsGetter",
     ]),
   },
-  props: ["questions"],
+
   methods: {
-    coverSpecificQuestionsValidation() {      
+    coverSpecificQuestionsValidation() {
       if (this.$refs.form.validate()) {
         // ! after filling the table, store the data a state.
 
-        // ! creating the status To prevent the posting of wrong data.        
+        // ! creating the status To prevent the posting of wrong data.
         // ! validating the dates that have been provided by the users.
         if (
           this.inputData["principal_member_ageday"] ||
@@ -254,7 +267,7 @@ export default {
             "-" +
             this.inputData["principal_member_agemonth"] +
             "-" +
-            this.inputData["principal_member_ageday"];          
+            this.inputData["principal_member_ageday"];
         }
 
         if (
@@ -275,24 +288,52 @@ export default {
           this.inputData
         );
 
-        // ! updating the status of the loading to be true. 
+        // ! updating the status of the loading to be true.
 
-        this.$store.dispatch("updatingPremiumDataStatus",true);
-        
+        this.$store.dispatch("updatingPremiumDataStatus", true);
+
         // ! simultaneously call the function to end the request to get data.
 
-        this.$store.dispatch("postingTheDataForCoverSearch");              
-
+        this.$store.dispatch("postingTheDataForCoverSearch");
       }
     },
   },
+  created() {
+    (this.firstName = this.personalDetailsGetter.firstName),
+      (this.cover = this.navigationStateGetter[this.navigationCoverGetter]);
+    this.questions = this.navigationStateGetter[
+      this.navigationCoverGetter
+    ].subCategories[this.navigationSubCategory].questions;
+    this.subCategory = this.navigationSubCategory;
+
+    console.log("These are te details of the user.");
+    console.log(this.personalDetailsGetter);
+  },
   data: () => ({
+    questions: null,
+    firstName: null,
     inputData: [],
+    cover: null,
     principalMemberErrorMessage: null,
     principalMemberErrorMessageStatus: false,
     spouseErrorMessage: null,
     valid: false,
     items: [100000, 250000, 500000, 1000000],
+    // items:[{
+    //         id: 1,
+    //         name: "John",
+    //         last: "Doe"
+    //       },
+    //       {
+    //         id: 2,
+    //         name: "Harry",
+    //         last: "Potter"
+    //       },
+    //       {
+    //         id: 3,
+    //         name: "George",
+    //         last: "Bush"
+    //       }],
 
     // ! the name rules.
     RequiredDateRules: [(v) => !!v || "Date is required"],
@@ -300,6 +341,7 @@ export default {
       (v) => !!v || "Number is required",
       (v) => /^\d+$/.test(v) || "Number must be valid",
     ],
+    RequiredSelect: [(v) => !!v || "Kindly Select One."],
     RequiredNumberOnly: [(v) => /^\d+$/.test(v) || "Number must be valid"],
     RequiredPhoneNumber: [
       (v) => !!v || "Phone Number is required",
@@ -349,6 +391,24 @@ export default {
     //   (v) => (v>0 && v > 1955 ) || "You are too old.",
     // ]
   }),
+
+  // ! watching the change in the ubCategory.
+  watch: {
+    navigationSubCategory: function () {
+      console.log("I have changed the navigationSubCategory.");
+      this.questions = this.navigationStateGetter[
+        this.navigationCoverGetter
+      ].subCategories[this.navigationSubCategory].questions;
+      this.subCategory = this.navigationSubCategory;
+    },
+    navigationCoverGetter: function () {
+      this.cover = this.navigationStateGetter[this.navigationCoverGetter];
+       this.questions = this.navigationStateGetter[
+        this.navigationCoverGetter
+      ].subCategories[this.navigationSubCategory].questions;
+      this.subCategory = this.navigationSubCategory;
+    },
+  },
 };
 </script>
 

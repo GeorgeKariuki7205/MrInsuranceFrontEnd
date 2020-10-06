@@ -27,7 +27,7 @@
         width="100%"
         height="100%"
       />
-      <h1 style="font-family:'cursive';">Mr Insurance</h1>
+      <h1 style="font-family: 'cursive'">Mr Insurance</h1>
       <v-spacer />
 
       <div color="#29AB87">
@@ -70,15 +70,15 @@
               </v-tab>
             </template>
 
-            <div style="background-color:white;" width="100%">
+            <div style="background-color: white" width="100%">
               <h2 class="text-center pa-2">
                 These are All Insurance Covers We Have.
               </h2>
-              <v-row style="background-color:white;">
+              <v-row style="background-color: white">
                 <template v-for="(item, coverIndex) in navigationStateGetter">
                   <template v-if="item.subCategories">
                     <v-col :key="coverIndex">
-                      <v-list shaped style="background-color:white;">
+                      <v-list shaped style="background-color: white">
                         <v-subheader>{{ item["cover"] }}</v-subheader>
                         <v-list-item
                           v-for="(item, index) in item['subCategories']"
@@ -99,7 +99,7 @@
                   </template>
                   <template v-else>
                     <v-col :key="coverIndex">
-                      <v-list shaped style="background-color:white;">
+                      <v-list shaped style="background-color: white">
                         <v-subheader>{{ item["cover"] }}</v-subheader>
                         <v-list-item @click="clickedSubCategory(0, 0)">
                           <v-list-item-title>
@@ -193,7 +193,7 @@ export default {
       //! after update, redirect to the proper page.
       router.push({
         // name: this.navigationStateGetter[this.navigationCoverGetter].route_name,
-        name: 'InsuranceCover'
+        name: "InsuranceCover",
       });
     },
   },

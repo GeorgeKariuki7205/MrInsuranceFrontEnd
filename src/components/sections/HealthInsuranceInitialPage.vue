@@ -7,11 +7,11 @@
     <!-- THIS SECTIONS IS USED TO DISPLAY THE SUB CATEGORIES. -->
 
     <v-container>
-      <div style="margin-top: -4%;width:80%;">
+      <div style="margin-top: -4%; width: 80%">
         <v-row class="hidden-sm-and-down">
           <v-col
             v-for="(feature, i) in cover.subCategories"
-            :key="i + 'subCategories'"                        
+            :key="i + 'subCategories'"
             @click="activateTheSubCategory(i)"
           >
             <base-avatar-card-insurance-sub-category
@@ -72,7 +72,7 @@
             navigationSubCategory
           ].name
         "
-      />      
+      />
 
       <template>
         <!-- ! THIS SECTION IS USED TO INCREASE THE INTERACTIVITY OF THE APPLICATION. -->
@@ -278,8 +278,43 @@
 
               <!-- !  THIS SECTION IS USED TO SHOW THE COVER RELARED QUESTIONS. -->
               <template v-if="showingCoverRelatedQuestions">
-                <div key="nanna">
-                  <health-component-questions :questions="questions" />                 
+                <div key="nana"
+                  class="text-center"
+                  style="margin-left: auto; margin-right: auto; width: 90%"
+                >
+                <v-divider key="{{'nama1'}}"></v-divider>
+                <div key="{{'nama2'}}">
+                  <v-avatar size="70" class="bounce-2 box" style="margin-top: -2.5%">
+                    <img :src="require('@/assets/tie-svgrepo-com.svg')" alt="John" />
+                  </v-avatar>
+                </div>
+                <span
+                    ><v-icon
+                      @click="goingbackToFillDetails()"
+                      style="cursor: pointer"
+                      size="65"
+                      >arrow_back_ios</v-icon
+                    ></span>
+                <h1
+                  key="{{'nama3'}}"
+                  class="d-inline"
+                  style="font-size: 35px; color: #4a4a60; font-family: Georgia, serif"
+                >
+                   Hey
+                  {{
+                    personalData.firstName.charAt(0).toUpperCase() +
+                    personalData.firstName.substr(1).toLowerCase()
+                  }}
+                  I can't Wait to get you the best deals for
+                  <span style="color: black; text-decoration: underline">
+                    {{
+                      navigationStateGetter[navigationCoverGetter].subCategories[
+                        navigationSubCategory
+                      ].name
+                    }} </span
+                  >, I just need the details below,
+                </h1>
+                  <health-component-questions />
                 </div>
               </template>
 
@@ -357,7 +392,10 @@
                         premiumsDataGetter.length
                       }}</span>
                       Premiums Found, For
-                      <span  style="text-decoration:underline;" v-if="premiumsDataGetter[0].subCategory">
+                      <span
+                        style="text-decoration: underline"
+                        v-if="premiumsDataGetter[0].subCategory"
+                      >
                         {{ premiumsDataGetter[0].subCategory }}
                       </span>
                       With Cover Amount Of Up To :
@@ -368,7 +406,7 @@
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }}
                       </span>
-                    </h1>                                     
+                    </h1>
                     <template
                       v-for="(premiumsData, index) in premiumsDataGetter"
                     >
@@ -388,8 +426,7 @@
           </div>
         </v-container>
       </template>
-    </v-container>    
-
+    </v-container>
   </base-section>
 </template>
 
@@ -420,7 +457,6 @@ export default {
   methods: {
     activateTheSubCategory(subCategory) {
       this.inputData = [];
-      this.$store.dispatch("nextStepInStepper", 1);
       this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategory);
       this.$store.dispatch("updatingPremiumDataStatus", false);
       this.$store.dispatch("updatingPersonalDetails", null);
@@ -462,6 +498,9 @@ export default {
             this.showingCoverRelatedQuestions = true;
             this.marginValue =
               "margin-left: auto; margin-right: auto; margin-top:8%; width: 90%";
+
+              console.log("Thses are the details of the user.");
+              console.log(this.personalDetailsGetter);
           }
         }
       } else {
@@ -475,7 +514,15 @@ export default {
       router.push("healthPremiumsMobileView");
     },
     goingbackToFillDetails() {
-      alert("Going Back.");
+      if (this.show) {
+        this.show = true
+        this.questionsStartValue = this.questionsStartValue - 1;
+      } else {
+         this.showingCoverRelatedQuestions = false;
+         this.show = true
+        this.questionsStartValue = this.questionsStartValue - 1;
+      }
+      
     },
   },
   data: () => ({
@@ -541,6 +588,10 @@ export default {
   watch: {
     navigationCoverGetter: function () {
       this.cover = this.navigationStateGetter[this.navigationCoverGetter];
+      this.questions = this.navigationStateGetter[
+        this.navigationCoverGetter
+      ].subCategories[this.navigationSubCategory].questions;
+      this.subCategory = this.navigationSubCategory;
     },
     navigationSubCategory: function () {
       this.questions = this.navigationStateGetter[
@@ -549,16 +600,9 @@ export default {
       this.subCategory = this.navigationSubCategory;
     },
     premiumsDataStatusGetter: function () {
-      console.log(
-        "Changing to " +
-          this.premiumsDataStatusGetter +
-          "The value of the previus i :" +
-          this.showingCoverRelatedQuestions
-      );
       if (this.premiumsDataStatusGetter === true) {
         // ! changing the value of the loading to false.
         this.showingCoverRelatedQuestions = false;
-        console.log("Changing the previous value of");
       } else if (this.premiumsDataStatusGetter === false) {
         this.showingCoverRelatedQuestions = false;
         this.insuranceCoversRetrieved = true;
