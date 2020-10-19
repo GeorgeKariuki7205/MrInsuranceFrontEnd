@@ -398,16 +398,16 @@
                       >
                         {{ premiumsDataGetter[0].subCategory }}
                       </span>
-                      With Cover Amount Of Up To :
+                      <!-- With Cover Amount Of Up To :
                       <span style="color: green; type: bold">
                         {{
                           premiumsDataGetter[0].coveredAmount
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }}
-                      </span>
+                      </span> -->
                     </h1>
-                    <template
+                    <!-- <template
                       v-for="(premiumsData, index) in premiumsDataGetter"
                     >
                       <section-health-premium
@@ -418,7 +418,7 @@
                         style="margin-top: 2%; margin-bottom: 4%"
                         :key="index + 'premiumsDataGetterSpacer'"
                       ></div>
-                    </template>
+                    </template> -->
                   </template>
                 </div>
               </template>

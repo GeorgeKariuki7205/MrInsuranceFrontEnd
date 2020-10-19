@@ -156,8 +156,9 @@
                   dense
                   outlined
                   value="0"
+                  allowDecimalPadding                  
                   :rules="RequiredNumber"
-                  v-model.number="inputData[questions[i].name]"
+                  v-model="inputData[questions[i].name]"
                 ></v-text-field>
                 <v-text-field
                   v-else
@@ -196,20 +197,27 @@
                 <v-select
                   v-if="questions[i].required == 1"
                   :key="i + 'numberQuestionRow'"
-                  :items="questions[i].selectName"
+                  :items="questions[i].selectValues"
+                  item-text="name"
+                  item-value="id"
                   label="Select"
                   outlined
                   dense
                   :rules="RequiredSelect"
+                  v-model="inputData[questions[i].name]"
                 ></v-select>
+                
                 <v-select
                   v-else
                   :key="i + 'numberQuestionRow'"
-                  :items="items"
+                  :items="questions[i].selectValues"
+                  item-text="name"
+                  item-value="id"
                   label="Select"
                   outlined
                   dense
-                ></v-select>
+                  v-model="inputData[questions[i].name]"
+                ></v-select>                
               </v-col>
             </template>
           </template>
@@ -234,6 +242,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   computed: {
     ...mapGetters([
@@ -293,7 +302,7 @@ export default {
         this.$store.dispatch("updatingPremiumDataStatus", true);
 
         // ! simultaneously call the function to end the request to get data.
-
+        console.log(this.inputData);
         this.$store.dispatch("postingTheDataForCoverSearch");
       }
     },
