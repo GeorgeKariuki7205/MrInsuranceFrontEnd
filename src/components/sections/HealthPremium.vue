@@ -1,5 +1,5 @@
 <template style="margin-bottom:2%">
-  <v-card class="mx-auto" style="background-color: #fffbe6">
+  <v-card class="mx-auto" style="background-color: #EEEEEE">
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title>
@@ -9,7 +9,7 @@
           </h3>
         </v-list-item-title>
       </v-list-item-content>
-      <v-list-item-content>
+      <!-- <v-list-item-content>
         <v-list-item
           >Cover Limit:
           {{
@@ -18,20 +18,16 @@
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }}</v-list-item
         >
-      </v-list-item-content>
+      </v-list-item-content> -->
       <v-spacer></v-spacer>
-      <v-btn  text color="success darken-4">
-        Payable:
+      
+        <h3 class="mx-auto error--text">Payable:
         {{
-          payableAmountStateGetter[premium.uuid]
+          this.premium.amountPayable
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         }}
-        Ksh
-      </v-btn>
-      <v-btn large color="error" @click="snackbar = true" dark medium>
-        <v-icon>add_shopping_cart</v-icon>Get Cover.</v-btn
-      >
+        Ksh</h3>                
       <v-snackbar v-model="snackbar" app color="primary" top right>
         {{ text }}
 
@@ -47,7 +43,9 @@
       <v-container>
         <v-row no-gutters>
           <v-col md="2" class="text-center">
-            <h4 style="color: black" class="text-center">Company :</h4>
+             <h3 style="color: green">
+              <span > {{ premium.company.name }} </span>
+            </h3>
             <v-img
               src="https://picsum.photos/510/300?random"
               aspect-ratio="1.7"
@@ -55,66 +53,77 @@
               max-width="100px"
               class="text-center;"
             ></v-img>
-            <h3 style="color: black">
-              <span style="color: green"> {{ premium.company.name }} </span>
-            </h3>
-          </v-col>
+           
+          </v-col>          
           <v-col md="6">
-            <h4 style="color: black" class="text-center">Benefits</h4>
-            <template v-if="premium.coverBenefits.length > 0">
-              <ol type="number">
+            <h2 style="color: black" class="text-center">Benefits</h2>
+            <template v-if="this.premium.coverBenefits.length > 0">
+              <v-row align-content="center">
+                <!-- <v-col md="4" class="mb-n8 mx-auto">
+                  <p class="font-weight-black text-center">{{ "Initial Benefit." }}</p>
+                </v-col> -->
                 <template
-                  v-for="(coverBenefit, index) in premium.coverBenefits"
+                  v-for="(coverBenefit, index) in this.premium.coverBenefits"
                 >
-                  <li
-                    v-if="index <= 4 && morebenefits"
-                    :key="index + 'coverBenefit'"
+                  <!-- GETTING ONLY SIX OF THE RELATED BENEFIT TO PREVENT THE OVER CROWDING. -->
+                  <v-col
+                    class="mb-n8 mx-auto"
+                    v-if="index <= 5"
+                    align="center"
+                    justify="center"
+                    :key="index + 'Column'"
+                    md="4"
+
                   >
-                    {{ coverBenefit.name }}
-                  </li>
-                  <template v-if="!morebenefits">
-                    <li :key="index + 'coverBenefitsList'">
-                      {{ coverBenefit.name }}
-                    </li>
-                  </template>
+                    <p class="font-weight-black text-center" style="color: black">
+                      {{
+                        coverBenefit.name.charAt(0).toUpperCase() +
+                        coverBenefit.name.substr(1).toLowerCase()
+                      }}
+                    </p>
+                    <p style="color: black" class="text-center">
+                      {{
+                        coverBenefit.amount
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }}
+                      /=Ksh
+                    </p>
+                  </v-col>
                 </template>
-                <template class="text-center;">
-                  <a
-                    @click="morebenefits = !morebenefits"
-                    style="
-                      text-decoration: null;
-                      text-align: center;
-                      color: orange;
-                    "
-                  >
-                    <span v-if="morebenefits">Click To View More.</span>
-                    <span v-else>Click To View Less.</span>
-                  </a>
-                </template>
-              </ol>
+              </v-row>
             </template>
           </v-col>
           <v-col md="4" class="text-center">
             <h4 style="color: black" class="text-center">Cost Break Down.</h4>
 
             <!-- THIS IS THE SECTION THAT IS USED TO IMPLEMENT THE COST BREAKDOWN OF THE INSURANCE COVER. -->
-            <div style="text-align: center">
+            <!-- <div style="text-align: center">
               <v-data-table
                 :headers="headers"
                 :items="data"
                 hide-default-footer
               ></v-data-table>
-            </div>
+            </div> -->
           </v-col>
         </v-row>
       </v-container>
     </v-card-text>
     <v-divider></v-divider>
     <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn class="bounce-2 box"  color="primary" text @click="show = !show">
-        {{ show ? "Show Less" : "Show More" }}
+      
+      <v-btn class="bounce-2 box" color="primary" text @click="show = !show">
+        <v-icon v-if="!show">expand_more</v-icon>
+        <v-icon v-else> expand_less</v-icon>
+        {{ show ? "Close Insurance Details. "  : "Show Insurance Details." }}
       </v-btn>
+      <v-spacer></v-spacer>
+       <v-btn  color="warning" @click="snackbar = true" dark medium>
+        <v-icon>add_shopping_cart</v-icon>Add Benefits</v-btn
+      >
+      <v-btn large  color="error" @click="snackbar = true" dark medium>
+        <v-icon>shopping_cart</v-icon>Checkout Cover.</v-btn
+      >
     </v-card-actions>
     <v-expand-transition style="background-color: red">
       <div class="basil" style="background-color: red" v-show="show">
@@ -373,7 +382,8 @@
                         <th>Limit</th>
                       </tr>
                       <template
-                        v-for="(coverBenefit, index) in premium.coverBenefits"
+                        v-for="(coverBenefit, index) in this.premium
+                          .coverBenefits"
                       >
                         <tr :key="index + 'coverBenefitsTr'">
                           <td>{{ index + 1 }}</td>
@@ -440,41 +450,46 @@
                   <h4 style="color: black" class="text-center">
                     Insurance Cover Waiting Periods.
                   </h4>
-                  <template v-if="premium.waitingPeriod.length < 1">
-                    <h4 style="color: black" class="text-center">
-                      No Waiting Periods.
-                    </h4>
+                  <template v-if="this.premium.waitingPeriod">
+                    <template v-if="this.premium.waitingPeriod.length < 1">
+                      <h4 style="color: black" class="text-center">
+                        No Waiting Periods.
+                      </h4>
+                    </template>
+                    <template v-else>
+                      <v-row align="center" justify="center" class="my-5" my-4>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>ID</th>
+                              <th>Condition</th>
+                              <th>Waiting Period</th>
+                            </tr>
+                          </thead>
+
+                          <template
+                            v-for="(waitingPeriod, index) in this.premium
+                              .waitingPeriod"
+                          >
+                            <tr :key="index + 'waitingPeriod'">
+                              <td>{{ index + 1 }}</td>
+                              <td>
+                                {{ waitingPeriod.situation }}
+                              </td>
+                              <td>
+                                {{
+                                  waitingPeriod.period_amount +
+                                  waitingPeriod.period_time
+                                }}
+                              </td>
+                            </tr>
+                          </template>
+                        </table>
+                      </v-row>
+                    </template>
                   </template>
                   <template v-else>
-                    <v-row align="center" justify="center" class="my-5" my-4>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>ID</th>
-                            <th>Condition</th>
-                            <th>Waiting Period</th>
-                          </tr>
-                        </thead>
-
-                        <template
-                          v-for="(waitingPeriod,
-                          index) in premium.waitingPeriod"
-                        >
-                          <tr :key="index + 'waitingPeriod'">
-                            <td>{{ index + 1 }}</td>
-                            <td>
-                              {{ waitingPeriod.situation }}
-                            </td>
-                            <td>
-                              {{
-                                waitingPeriod.period_amount +
-                                waitingPeriod.period_time
-                              }}
-                            </td>
-                          </tr>
-                        </template>
-                      </table>
-                    </v-row>
+                    <h2>There Are No Waiting Period.</h2>
                   </template>
                 </v-container>
               </v-card-text>
@@ -545,55 +560,57 @@ export default {
   }),
   props: ["premium"],
   created() {
-    // ! after the creation of the component, create the array that will hold the
-    // ! data to be looped as the financial breakdown.
-    var financialBreakDownArray = [];
+    if (this.premium.cover.id == 1) {
+      // ! after the creation of the component, create the array that will hold the
+      // ! data to be looped as the financial breakdown.
+      var financialBreakDownArray = [];
 
-    var principal_memberDetails = {};
-    principal_memberDetails["name"] = "Principal Member";
-    principal_memberDetails["description"] = " ' ' ";
-    principal_memberDetails["value"] =
-      this.premium.financialBreakDown.principal_member
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
-
-    if (this.premium.financialBreakDown.spouse) {
-      var spouse_details = {};
-      spouse_details["name"] = "Spouse";
-      spouse_details["value"] =
-        this.premium.financialBreakDown.spouse
+      var principal_memberDetails = {};
+      principal_memberDetails["name"] = "Principal Member";
+      principal_memberDetails["description"] = " ' ' ";
+      principal_memberDetails["value"] =
+        this.premium.financialBreakDown.principal_member
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
-      spouse_details["description"] = " ' ' ";
-      financialBreakDownArray[1] = spouse_details;
-    }
 
-    if (this.premium.financialBreakDown.dependents) {
-      var dependents_details = {};
-      dependents_details["name"] = "Children";
-      dependents_details["value"] =
-        (
-          this.premium.financialBreakDown.dependents.dependant *
-          parseInt(
-            this.premium.financialBreakDown.dependents.number_of_dependents
+      if (this.premium.financialBreakDown.spouse) {
+        var spouse_details = {};
+        spouse_details["name"] = "Spouse";
+        spouse_details["value"] =
+          this.premium.financialBreakDown.spouse
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+        spouse_details["description"] = " ' ' ";
+        financialBreakDownArray[1] = spouse_details;
+      }
+
+      if (this.premium.financialBreakDown.dependents) {
+        var dependents_details = {};
+        dependents_details["name"] = "Children";
+        dependents_details["value"] =
+          (
+            this.premium.financialBreakDown.dependents.dependant *
+            parseInt(
+              this.premium.financialBreakDown.dependents.number_of_dependents
+            )
           )
-        )
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
-      dependents_details["description"] =
-        this.premium.financialBreakDown.dependents.number_of_dependents +
-        " Dependants Each  " +
-        this.premium.financialBreakDown.dependents.dependant
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-        "Ksh";
-      financialBreakDownArray[2] = dependents_details;
-    }
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+        dependents_details["description"] =
+          this.premium.financialBreakDown.dependents.number_of_dependents +
+          " Dependants Each  " +
+          this.premium.financialBreakDown.dependents.dependant
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+          "Ksh";
+        financialBreakDownArray[2] = dependents_details;
+      }
 
-    financialBreakDownArray[0] = principal_memberDetails;
-    this.data = financialBreakDownArray;
-    console.log("This is the data that is being passed to the Data array.");
-    console.log(this.data);
+      financialBreakDownArray[0] = principal_memberDetails;
+      this.data = financialBreakDownArray;
+      console.log("This is the data that is being passed to the Data array.");
+      console.log(this.data);
+    }
   },
   watch: {
     additionalCoversPremiumStateGetter: function () {

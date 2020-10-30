@@ -397,8 +397,9 @@
                         v-if="premiumsDataGetter[0].subCategory"
                       >
                         {{ premiumsDataGetter[0].subCategory }}
-                      </span>
-                      <!-- With Cover Amount Of Up To :
+                      </span>                      
+                      <span v-if="premiumsDataGetter[0].cover.route_name == 'Motor'">
+                         <!-- With Cover Amount Of Up To :
                       <span style="color: green; type: bold">
                         {{
                           premiumsDataGetter[0].coveredAmount
@@ -406,8 +407,13 @@
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }}
                       </span> -->
+                      This is motor insurance .
+                      </span>  
+                      <span v-else> 
+                        It is not motor.
+                        </span>                   
                     </h1>
-                    <!-- <template
+                    <template
                       v-for="(premiumsData, index) in premiumsDataGetter"
                     >
                       <section-health-premium
@@ -418,7 +424,7 @@
                         style="margin-top: 2%; margin-bottom: 4%"
                         :key="index + 'premiumsDataGetterSpacer'"
                       ></div>
-                    </template> -->
+                    </template>
                   </template>
                 </div>
               </template>
