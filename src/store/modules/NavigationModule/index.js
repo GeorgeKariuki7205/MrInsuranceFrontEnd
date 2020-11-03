@@ -156,7 +156,7 @@ const actions = {
                                 // ! creating an array that will hold the financial breakdown and the amounts payable.
 
                                 // ! implementing the PayaBle Amounts. 
-                                payableAmounts[element.uuid] = element.payableCash;
+                                payableAmounts[element.uuid] = element.amountPayable;
 
                                 // ! implementing the Financial Breakdown.                           
 
@@ -240,7 +240,7 @@ const actions = {
         var allAdditionalCovers = {};
         var additionalCover = [];
         if (state.additionalCoversPremiumState === null) {
-            console.log("The additionalCoversPremiumState is null.");
+            // console.log("The additionalCoversPremiumState is null.");
 
             additionalCover['additionalId'] = data.additionalId;
             additionalCover['premiumUUID'] = data.premiumUUID;
@@ -252,7 +252,7 @@ const actions = {
 
             for (var oldState in state.additionalCoversPremiumState) {
                 allAdditionalCovers[uuidv4()] = state.additionalCoversPremiumState[oldState];
-                console.log(oldState);                
+                // console.log(oldState);                
             }
 
 
@@ -261,18 +261,10 @@ const actions = {
             additionalCover['additionalPremiumID'] = data.additionalPremiumID;
             allAdditionalCovers[uuidv4()] = additionalCover;
             commit("UPDATING_THE_ADDITIONAL_PREMIUM", allAdditionalCovers);
-            console.log("This is all the additional Covers.");
-            console.log(allAdditionalCovers);
+            // console.log("This is all the additional Covers.");
+            // console.log(allAdditionalCovers);
         }
-    },
-
-    // ! this is a function that is used to move to the next step in the stepper. 
-    nextStepInStepper({ commit }, data) {
-
-        commit("UPDATING_THE_NEXT_STEP_IN_STEPPER", data);
-
-    },
-
+    },   
     // ! function to update the amounts payable.
 
     updatePayableAmount({commit},data){
@@ -297,38 +289,43 @@ const actions = {
         
     },
 
-    updateTheAdditionalCover({commit,dispatch},obj){
-
-        var premium = obj.premium;
-        var newAdditionalCoverPremiumState;
-        for (const element in state.additionalCoversPremiumState) {
-            console.log(element);
-            if (state.additionalCoversPremiumState[element].premiumUUID === premium) {
-                newAdditionalCoverPremiumState =  delete state.additionalCoversPremiumState[element]                
+     updateTheAdditionalCover({commit,dispatch},obj){
+    //* updateTheAdditionalCover({commit}){        
+        var premiumUUIDValue = obj.premium;       
+        var stateDefined = state.additionalCoversPremiumState;
+        var elementValue;
+        for (const element in stateDefined) { 
+                 
+            if (stateDefined[element].premiumUUID == premiumUUIDValue) {                     
+                elementValue = element;
+                                     
             }
-        }
-        
-        // ! checking to see if the state count is 0
-        var count = 0;
-        for (const prop in  state.additionalCoversPremiumState) {            
-           ++count;
-           prop+0;
         } 
-
-        if (count == 0) {
+        delete state.additionalCoversPremiumState[elementValue];                       
+        var stateOfPrmium = state.additionalCoversPremiumState;
+        // console.log("This is the deleted state");
+        // console.log(state.additionalCoversPremiumState);  
+        commit("UPDATING_THE_ADDITIONAL_PREMIUM",state.additionalCoversPremiumState);      
+        if (Object.keys(state.additionalCoversPremiumState).length === 0) {
             commit("UPDATING_THE_ADDITIONAL_PREMIUM",null);
+            // console.log("I have deleted and updated to null.");
         }
         else{
-            commit("UPDATING_THE_ADDITIONAL_PREMIUM",newAdditionalCoverPremiumState);
+            commit("UPDATING_THE_ADDITIONAL_PREMIUM",stateOfPrmium);
+            console.log("I have deleted and updated to apppropriate values..");
         }
-        
-        //!  dispatch the method to update the payable amount.
 
+        console.log("This is finally The stste I am looking for: ");
+        console.log(stateOfPrmium);
+
+        //!  dispatch the method to update the payable amount.
         var object = {};
-        object['premiumUUId'] = premium;
+        object['premiumUUId'] = premiumUUIDValue;
         object['cost'] = obj.cost;
         object['functionality'] = 'subtract';
         dispatch("updatePayableAmount",object);
+
+        // commit("UPDATING_THE_ADDITIONAL_PREMIUM", "oness");
 
     }
 }

@@ -399,18 +399,19 @@
                         {{ premiumsDataGetter[0].subCategory }}
                       </span>                      
                       <span v-if="premiumsDataGetter[0].cover.route_name == 'Motor'">
-                         <!-- With Cover Amount Of Up To :
+
+                      </span>  
+                      <span v-else> 
+                        <span v-if="premiumsDataGetter[0].cover.route_name == 'Health'">
+                          With Cover Amount Of Up To :
                       <span style="color: green; type: bold">
                         {{
                           premiumsDataGetter[0].coveredAmount
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }}
-                      </span> -->
-                      This is motor insurance .
-                      </span>  
-                      <span v-else> 
-                        It is not motor.
+                      </span>
+                        </span>
                         </span>                   
                     </h1>
                     <template
@@ -476,11 +477,11 @@ export default {
           this.showingCoverRelatedQuestions = true;
 
           this.$store.dispatch("updatingPersonalDetails", this.personalData);
-          console.log("Success in Validation.");
+          // console.log("Success in Validation.");
         }
       } else {
         if (this.$refs.form2.validate()) {
-          console.log("Success in Validation.");
+          // console.log("Success in Validation.");
           this.questionsStartValue = this.questionsStartValue + 1;
           this.show = !this.show;
           this.$store.dispatch("updatingPersonalDetails", this.personalData);
@@ -505,8 +506,8 @@ export default {
             this.marginValue =
               "margin-left: auto; margin-right: auto; margin-top:8%; width: 90%";
 
-              console.log("Thses are the details of the user.");
-              console.log(this.personalDetailsGetter);
+              // console.log("Thses are the details of the user.");
+              // console.log(this.personalDetailsGetter);
           }
         }
       } else {

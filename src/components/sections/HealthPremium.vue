@@ -1,5 +1,5 @@
 <template style="margin-bottom:2%">
-  <v-card class="mx-auto" style="background-color: #EEEEEE">
+  <v-card class="mx-auto" style="background-color: #eeeeee">
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title>
@@ -20,14 +20,16 @@
         >
       </v-list-item-content> -->
       <v-spacer></v-spacer>
-      
-        <h3 class="mx-auto error--text">Payable:
+      <h3 class="mx-auto error--text">
+        Payable:
         {{
-          this.premium.amountPayable
+          payableAmountStateGetter[premium.uuid]
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         }}
-        Ksh</h3>                
+        {{ premium.uuid }}
+        Ksh
+      </h3>
       <v-snackbar v-model="snackbar" app color="primary" top right>
         {{ text }}
 
@@ -43,8 +45,8 @@
       <v-container>
         <v-row no-gutters>
           <v-col md="2" class="text-center">
-             <h3 style="color: green">
-              <span > {{ premium.company.name }} </span>
+            <h3 style="color: green">
+              <span> {{ premium.company.name }} </span>
             </h3>
             <v-img
               src="https://picsum.photos/510/300?random"
@@ -53,8 +55,15 @@
               max-width="100px"
               class="text-center;"
             ></v-img>
-           
-          </v-col>          
+            <!-- additionalCoversPremiumStateGetter -->
+            <!-- {{additionalCoversPremiumStateGetter} -->
+            <p>Coves</p>
+            <template
+              v-for="additionalCovers in additionalCoversPremiumStateGetter"
+            >
+              {{ additionalCovers }}
+            </template>
+          </v-col>
           <v-col md="6">
             <h2 style="color: black" class="text-center">Benefits</h2>
             <template v-if="this.premium.coverBenefits.length > 0">
@@ -73,9 +82,11 @@
                     justify="center"
                     :key="index + 'Column'"
                     md="4"
-
                   >
-                    <p class="font-weight-black text-center" style="color: black">
+                    <p
+                      class="font-weight-black text-center"
+                      style="color: black"
+                    >
                       {{
                         coverBenefit.name.charAt(0).toUpperCase() +
                         coverBenefit.name.substr(1).toLowerCase()
@@ -95,46 +106,47 @@
             </template>
           </v-col>
           <v-col md="4" class="text-center">
-            <h4 style="color: black" class="text-center">Cost Break Down.</h4>
+            <h2 style="color: black" class="text-center">Cost Break Down.</h2>
 
             <!-- THIS IS THE SECTION THAT IS USED TO IMPLEMENT THE COST BREAKDOWN OF THE INSURANCE COVER. -->
-            <!-- <div style="text-align: center">
+            <div style="text-align: center">
               <v-data-table
+                style="background-color: #eeeeee; color: black; font-size: 10px"
                 :headers="headers"
                 :items="data"
                 hide-default-footer
               ></v-data-table>
-            </div> -->
+            </div>
           </v-col>
         </v-row>
       </v-container>
     </v-card-text>
     <v-divider></v-divider>
     <v-card-actions>
-      
       <v-btn class="bounce-2 box" color="primary" text @click="show = !show">
         <v-icon v-if="!show">expand_more</v-icon>
         <v-icon v-else> expand_less</v-icon>
-        {{ show ? "Close Insurance Details. "  : "Show Insurance Details." }}
+        {{ show ? "Close Insurance Details. " : "Show Insurance Details." }}
       </v-btn>
       <v-spacer></v-spacer>
-       <v-btn  color="warning" @click="snackbar = true" dark medium>
-        <v-icon>add_shopping_cart</v-icon>Add Benefits</v-btn
+      <v-btn text color="error" @click="show = !show" dark medium>
+        <v-icon>add</v-icon>Add More Benefits</v-btn
       >
-      <v-btn large  color="error" @click="snackbar = true" dark medium>
+      <v-btn large outlined color="error" @click="snackbar = true" dark medium>
         <v-icon>shopping_cart</v-icon>Checkout Cover.</v-btn
       >
     </v-card-actions>
     <v-expand-transition style="background-color: red">
-      <div class="basil" style="background-color: red" v-show="show">
+      <div class="basil" v-show="show">
+        <!-- <v-card color="basil" v-show="show" flat> -->
         <v-divider></v-divider>
-        <v-tabs centered icons-and-text>
+        <v-tabs style="background-color: red" centered icons-and-text>
           <v-tab>
-            Additonal Covers.
+            Additonal Benefits.
             <v-icon left>add_circle</v-icon>
           </v-tab>
           <v-tab active-class>
-            Benefits
+            Premium Benefits
             <v-icon left>beach_access</v-icon>
           </v-tab>
           <v-tab>
@@ -152,6 +164,13 @@
                 <!-- Additional Covers Implementations. -->
                 <h3 style="color: black" class="text-center">
                   Aditional Covers Related To The Insurance Premium.
+                  
+                  <template v-if="additionalCoversPremiumStateGetter">
+                    {{Object.keys(additionalCoversPremiumStateGetter).length + '  This is the number of additionals Selected'}}
+                  </template>
+                  <template v-else>
+                    No additional selected.
+                  </template>
                 </h3>
                 <template v-if="premium.additionalCovers.length < 1">
                   <h2
@@ -173,7 +192,7 @@
                     <template v-else>
                       <template
                         v-for="(additionalCoversInObject,
-                        i) in additionalCoversPremiumStateGetter"
+                        indexOne) in additionalCoversPremiumStateGetter"
                       >
                         <template
                           v-if="
@@ -192,7 +211,7 @@
                               "
                             >
                               <div
-                                :key="index + 'divForDescription' + i"
+                                :key="index + indexOne + index + 'div'"
                                 class="ma-4"
                               >
                                 <h2 style="color: black; text-align: center">
@@ -204,7 +223,7 @@
                                   }}
                                 </h3>
                               </div>
-                              <table :key="index + i">
+                              <table :key="index + indexOne + index + 'table'">
                                 <tr>
                                   <th>ID</th>
                                   <th>Limit</th>
@@ -215,7 +234,7 @@
                                   v-for="(additionalPremium,
                                   index) in additional.additional_premia"
                                 >
-                                  <tr :key="index">
+                                  <tr :key="index+'tableRow'">
                                     <td>{{ index + 1 }}</td>
                                     <td>
                                       {{
@@ -278,89 +297,71 @@
                       </template>
                       <template
                         v-for="(additionalNotSelected,
-                        i) in premium.additionalCovers"
+                        index) in otherAdditionalCovers"
                       >
-                        <template
-                          v-for="(additionalCoverNotSelected,
-                          index) in otherAdditionalCovers"
-                        >
+                        <div :key="index+'divNotSelected'" class="ma-4">
+                          <h2 style="color: black; text-align: center">
+                            {{ additionalNotSelected.name }}
+                          </h2>
+                          <h3 style="color: black; text-align: center">
+                            Premuims For The{{
+                              additionalNotSelected.name.toLowerCase()
+                            }}
+                          </h3>
+                        </div>
+                        <table :key="index+'tableNotSelected'">
+                          <tr>
+                            <th>ID</th>
+                            <th>Limit</th>
+                            <th>Cost</th>
+                            <th>Action</th>
+                          </tr>
                           <template
-                            v-if="
-                              additionalCoverNotSelected.id ===
-                              additionalNotSelected.id
-                            "
+                            v-for="(additionalPremiumNotelected,
+                            index) in additionalNotSelected.additional_premia"
                           >
-                            <div
-                              :key="index + 'divForDescription' + i"
-                              class="ma-4"
-                            >
-                              <h2 style="color: black; text-align: center">
-                                {{ additionalNotSelected.name }}
-                              </h2>
-                              <h3 style="color: black; text-align: center">
-                                Premuims For The{{
-                                  additionalNotSelected.name.toLowerCase()
+                            <tr :key="index+'rowNotelected'">
+                              <td>{{ index + 1 }}</td>
+                              <td>
+                                {{
+                                  additionalPremiumNotelected.limit
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                  " Ksh"
                                 }}
-                              </h3>
-                            </div>
-                            <table :key="index + i">
-                              <tr>
-                                <th>ID</th>
-                                <th>Limit</th>
-                                <th>Cost</th>
-                                <th>Action</th>
-                              </tr>
-                              <template
-                                v-for="(additionalPremiumNotelected,
-                                index) in additionalNotSelected.additional_premia"
-                              >
-                                <tr :key="index">
-                                  <td>{{ index + 1 }}</td>
-                                  <td>
-                                    {{
-                                      additionalPremiumNotelected.limit
-                                        .toString()
-                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                                      " Ksh"
-                                    }}
-                                  </td>
-                                  <td>
-                                    {{
+                              </td>
+                              <td>
+                                {{
+                                  additionalPremiumNotelected.cost
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                  " Ksh"
+                                }}
+                              </td>
+                              <td>
+                                <v-btn
+                                  small
+                                  outlined
+                                  color="primary"
+                                  dark
+                                  @click="
+                                    addAdditionCover(
+                                      additionalPremiumNotelected.id,
+                                      additionalNotSelected.id,
+                                      premium.uuid,
                                       additionalPremiumNotelected.cost
-                                        .toString()
-                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                                      " Ksh"
-                                    }}
-                                  </td>
-                                  <td>
-                                    <v-btn
-                                      small
-                                      outlined
-                                      color="primary"
-                                      dark
-                                      @click="
-                                        addAdditionCover(
-                                          additionalPremiumNotelected.id,
-                                          additionalCoverNotSelected.id,
-                                          premium.uuid,
-                                          additionalPremiumNotelected.cost
-                                        )
-                                      "
-                                    >
-                                      Add To Cover.
-                                      <v-icon>add_shopping_cart</v-icon>
-                                    </v-btn>
-                                  </td>
-                                </tr>
-                              </template>
-                            </table>
+                                    )
+                                  "
+                                >
+                                  Add To Cover.
+                                  <v-icon>add_shopping_cart</v-icon>
+                                </v-btn>
+                              </td>
+                            </tr>
                           </template>
-                        </template>
+                        </table>
                       </template>
-
-                      <!-- THIS SECTION IS USED TO IMPLEMENT THE OTHER ADDITIONALS THAT ARE NOT COVERED PREVIOUSLY. -->
-
-                      <template> </template>
+                      <!-- LOOPING THROUGH THE SELECTED ADDITIONAL COVERS. -->
                     </template>
                   </v-row>
                 </template>
@@ -408,7 +409,10 @@
           <v-tab-item>
             <v-card flat>
               <v-card-text>
-                <v-container ma-4>
+                <template v-if="!this.premium.notCovered">
+                  <p>Everything is covered.</p>
+                </template>
+                <v-container v-else ma-4>
                   <h3 style="color: black" class="text-center">
                     Conditions Not Covered.
                   </h3>
@@ -446,13 +450,17 @@
           <v-tab-item>
             <v-card flat>
               <v-card-text>
+                <template></template>
                 <v-container ma-4>
                   <h4 style="color: black" class="text-center">
                     Insurance Cover Waiting Periods.
                   </h4>
                   <template v-if="this.premium.waitingPeriod">
                     <template v-if="this.premium.waitingPeriod.length < 1">
-                      <h4 style="color: black" class="text-center">
+                      <h4
+                        style="color: black; text-align: center"
+                        class="text-center"
+                      >
                         No Waiting Periods.
                       </h4>
                     </template>
@@ -489,7 +497,9 @@
                     </template>
                   </template>
                   <template v-else>
-                    <h2>There Are No Waiting Period.</h2>
+                    <h2 style="color: black; text-align: center">
+                      There Are No Waiting Period.
+                    </h2>
                   </template>
                 </v-container>
               </v-card-text>
@@ -497,6 +507,7 @@
           </v-tab-item>
         </v-tabs>
       </div>
+      <!-- </v-card> -->
     </v-expand-transition>
   </v-card>
 </template>
@@ -520,6 +531,13 @@ export default {
   },
   methods: {
     removingAdditionalCover(premiumUUID, cost) {
+      console.log(
+        "This is the premium UUID: " +
+          premiumUUID +
+          "   This is the cost related to the additional cover to be removed: " +
+          cost
+      );
+
       var obj = {};
       obj["premium"] = premiumUUID;
       obj["cost"] = cost;
@@ -542,13 +560,13 @@ export default {
     },
   },
   data: () => ({
+    dialog: false,
     show: false,
     otherAdditionalCovers: null,
     morebenefits: true,
     headers: [
       {
-        text: "Individual",
-        align: "start",
+        text: "Item",
         value: "name",
       },
       { text: "Description", value: "description" },
@@ -608,24 +626,42 @@ export default {
 
       financialBreakDownArray[0] = principal_memberDetails;
       this.data = financialBreakDownArray;
-      console.log("This is the data that is being passed to the Data array.");
+      console.log("This is the description of the Data.");
+      console.log(this.data);
+    } else if (this.premium.cover.id == 2) {
+      var financial_break_down_array = [];
+      var motor_insurance_details = {};
+      motor_insurance_details["name"] = this.premium.subCategory;
+      motor_insurance_details["value"] = this.premium.amountPayable;
+      motor_insurance_details["description"] = " ";
+      financial_break_down_array[0] = motor_insurance_details;
+      this.data = financial_break_down_array;
+      console.log("This is the description of the Data.");
       console.log(this.data);
     }
   },
   watch: {
     additionalCoversPremiumStateGetter: function () {
-      // ! this section is used to update the otherAdditionalCovers array.
+      // ! this method watcher is used to observe any chanes in the additionalCoversPremiumStateGetter
+      // ! and update the additional covers that have not yet been updated.
+
+      console.log("The additionalCoversPremiumStateGetter:");
+      console.log(this.additionalCoversPremiumStateGetter);
+
+      // var premiumUUIDObtained = this.premium.uuid;    
       var newOtherAdditional = {};
       var count = 0;
       var count2 = 0;
 
       for (const prop in this.premium.additionalCovers) {
-        console.log(prop);
+        // console.log(prop);
+        prop.id;
         ++count;
       }
 
       for (const prop in this.additionalCoversPremiumStateGetter) {
-        console.log(prop);
+        // console.log(prop);
+        prop.id;
         ++count2;
       }
 
@@ -658,12 +694,23 @@ export default {
       }
 
       this.otherAdditionalCovers = newOtherAdditional;
+
+      console.log("This is the premiums that have not been selected by user.");
+      console.log(this.otherAdditionalCovers);
     },
   },
 };
 </script>
 
 <style>
+/* Helper classes */
+.basil {
+  background-color: #fffbe6 !important;
+}
+.basil--text {
+  color: #356859 !important;
+}
+
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
