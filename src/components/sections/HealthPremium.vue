@@ -267,7 +267,8 @@
                                           @click="
                                             removingAdditionalCover(
                                               premium.uuid,
-                                              additionalPremium.cost
+                                              additionalPremium.cost,
+                                              additional.id
                                             )
                                           "
                                           small
@@ -297,7 +298,7 @@
                       </template>
                       <template
                         v-for="(additionalNotSelected,
-                        index) in otherAdditionalCovers"
+                        index) in insurancePremiumAdditionalCoversGetter[premium.uuid]"
                       >
                         <div :key="index+'divNotSelected'" class="ma-4">
                           <h2 style="color: black; text-align: center">
@@ -527,10 +528,11 @@ export default {
       "financialBreakdownStateGetter",
       "payableAmountStateGetter",
       "additionalCoversPremiumStateGetter",
+      "insurancePremiumAdditionalCoversGetter"
     ]),
   },
   methods: {
-    removingAdditionalCover(premiumUUID, cost) {
+    removingAdditionalCover(premiumUUID, cost,additionalId) {
       console.log(
         "This is the premium UUID: " +
           premiumUUID +
@@ -541,6 +543,7 @@ export default {
       var obj = {};
       obj["premium"] = premiumUUID;
       obj["cost"] = cost;
+      obj["additionalId"] = additionalId;
       this.$store.dispatch("updateTheAdditionalCover", obj);
     },
     addAdditionCover(additionalPremiumID, additionalId, premiumUUID, cost) {
@@ -641,63 +644,7 @@ export default {
     }
   },
   watch: {
-    additionalCoversPremiumStateGetter: function () {
-      // ! this method watcher is used to observe any chanes in the additionalCoversPremiumStateGetter
-      // ! and update the additional covers that have not yet been updated.
-
-      console.log("The additionalCoversPremiumStateGetter:");
-      console.log(this.additionalCoversPremiumStateGetter);
-
-      // var premiumUUIDObtained = this.premium.uuid;    
-      var newOtherAdditional = {};
-      var count = 0;
-      var count2 = 0;
-
-      for (const prop in this.premium.additionalCovers) {
-        // console.log(prop);
-        prop.id;
-        ++count;
-      }
-
-      for (const prop in this.additionalCoversPremiumStateGetter) {
-        // console.log(prop);
-        prop.id;
-        ++count2;
-      }
-
-      var qualifier = count - count2;
-      var counter = 0;
-      console.log("This is the counter." + qualifier);
-
-      for (const additionalCover in this.premium.additionalCovers) {
-        var checker = 0;
-
-        for (const additionalCoverSelected in this
-          .additionalCoversPremiumStateGetter) {
-          if (
-            this.premium.additionalCovers[additionalCover]["id"] !==
-            this.additionalCoversPremiumStateGetter[additionalCoverSelected][
-              "additionalId"
-            ]
-          ) {
-            ++checker;
-          }
-        }
-
-        if (checker == qualifier) {
-          newOtherAdditional[checker] = this.premium.additionalCovers[
-            additionalCover
-          ];
-        }
-
-        counter + 1;
-      }
-
-      this.otherAdditionalCovers = newOtherAdditional;
-
-      console.log("This is the premiums that have not been selected by user.");
-      console.log(this.otherAdditionalCovers);
-    },
+    
   },
 };
 </script>

@@ -23,6 +23,9 @@ const state = {
 
     // ! creating the status to update and moveto the next step in filling the form.
     nextStepInStepper: 1,
+
+    // ! this state is used to update the insurace premium additionalCovers. 
+    insurancePremiumAdditionalCovers: [],
 }
 const mutations = {
     UPDATING_THE_STATE_TO_ADD_NAVIGATION_ITEMS(state, payload) {
@@ -233,7 +236,7 @@ const actions = {
 
     // ! function to implement the functionality to add covers and disable the premiums that have been activated. 
     activatingAdditionalCovers({
-        commit
+        commit,dispatch
     }, data) {
 
         //! creating the additional cover Details state. 
@@ -247,6 +250,7 @@ const actions = {
             additionalCover['additionalPremiumID'] = data.additionalPremiumID;
             allAdditionalCovers[uuidv4()] = additionalCover;
             commit("UPDATING_THE_ADDITIONAL_PREMIUM", allAdditionalCovers);
+            dispatch("updateAdditionalCovresAddedOrRemoved");
         } else {
 
 
@@ -263,6 +267,8 @@ const actions = {
             commit("UPDATING_THE_ADDITIONAL_PREMIUM", allAdditionalCovers);
             // console.log("This is all the additional Covers.");
             // console.log(allAdditionalCovers);
+            console.log("I AM DISPATCHING IN THE ADDING ADDITIONAL COVERS ACTION.");
+            dispatch("updateAdditionalCovresAddedOrRemoved");
         }
     },   
     // ! function to update the amounts payable.
@@ -291,21 +297,26 @@ const actions = {
 
      updateTheAdditionalCover({commit,dispatch},obj){
     //* updateTheAdditionalCover({commit}){        
-        var premiumUUIDValue = obj.premium;       
+        var premiumUUIDValue = obj.premium;               
         var stateDefined = state.additionalCoversPremiumState;
         var elementValue;
         for (const element in stateDefined) { 
                  
-            if (stateDefined[element].premiumUUID == premiumUUIDValue) {                     
-                elementValue = element;
-                                     
+            if (stateDefined[element].premiumUUID === premiumUUIDValue) {   
+                 
+                if (stateDefined[element].additionalId === obj.additionalId) {
+                    elementValue = element;
+                    console.log("This is what is being deleted: ");                     
+                    console.log(stateDefined[element]);
+                    console.log(obj);
+                }
+                
             }
         } 
         delete state.additionalCoversPremiumState[elementValue];                       
         var stateOfPrmium = state.additionalCoversPremiumState;
         // console.log("This is the deleted state");
-        // console.log(state.additionalCoversPremiumState);  
-        commit("UPDATING_THE_ADDITIONAL_PREMIUM",state.additionalCoversPremiumState);      
+        // console.log(state.additionalCoversPremiumState);             
         if (Object.keys(state.additionalCoversPremiumState).length === 0) {
             commit("UPDATING_THE_ADDITIONAL_PREMIUM",null);
             // console.log("I have deleted and updated to null.");
@@ -314,9 +325,7 @@ const actions = {
             commit("UPDATING_THE_ADDITIONAL_PREMIUM",stateOfPrmium);
             console.log("I have deleted and updated to apppropriate values..");
         }
-
-        console.log("This is finally The stste I am looking for: ");
-        console.log(stateOfPrmium);
+        
 
         //!  dispatch the method to update the payable amount.
         var object = {};
@@ -327,7 +336,88 @@ const actions = {
 
         // commit("UPDATING_THE_ADDITIONAL_PREMIUM", "oness");
 
-    }
+        console.log("I AM DISPATCHING IN THE DELETING ADDITIONAL COVERS ACTION.");
+        dispatch("updateAdditionalCovresAddedOrRemoved");
+
+    },
+
+    // ! THIS METHOD ID USED TO UPDATE THE ADDITIONAL COVERS SELECTED AND THOSE THAT HAVE NOT BEEN SELECTED FOR A PARTICULAR 
+    // ! INSURANCE PREMIUM. 
+
+    updateAdditionalCovresAddedOrRemoved(){
+       var premiums = state.premiumsData;
+       var currentAddedAdditionals = state.additionalCoversPremiumState;
+        // insurancePremiumAdditionalCovers 
+
+        console.log("This is the new function to update the additional Covers: ");
+        console.log("NEW NEW !!!! NEW FUNCTION.");
+        // console.log(premiumsSelected);
+        // console.log("The Current Additional Covers in the methos Dispatch:  ");
+        // console.log(currentAddedAdditionals);
+
+        for (const premium in premiums) {
+
+            var premiumUUID = premiums[premium].uuid;
+            var newOtherAdditional = {};
+            var count = 0;
+            var count2 = 0;
+      
+            for (const prop in premiums[premium].additionalCovers) {
+              // console.log(prop);
+              prop.id;
+              ++count;
+            }
+      
+            for (const prop in currentAddedAdditionals) {
+              // console.log(prop);
+              prop.id;
+              ++count2;
+            }
+
+            var qualifier = count - count2;
+            var counter = 0;
+
+            // ! looping through the additional Covers: 
+
+            for (const additionalCover in premiums[premium].additionalCovers) {
+                var checker = 0;
+        
+                for (const additionalCoverSelected in currentAddedAdditionals) {
+                    
+                if (currentAddedAdditionals[additionalCoverSelected].premiumUUID === premiumUUID) {            
+                    if (
+                        premiums[premium].additionalCovers[additionalCover]["id"] !==
+                        currentAddedAdditionals[additionalCoverSelected][
+                        "additionalId"
+                        ]
+                    ) {
+                        ++checker;
+
+                            console.log("I have gotten the additionals that have a relationship in the dispach method.");
+                            console.log(currentAddedAdditionals[additionalCoverSelected]);
+                            console.log("This are the IDS that are reated t the conruency of the data.");
+                            console.log(premiums[premium].additionalCovers[additionalCover]["id"] + " AND " + currentAddedAdditionals[additionalCoverSelected]["additionalId"]);
+
+                    }
+                }                  
+                }
+        
+                if (checker == qualifier) {
+                  newOtherAdditional[checker] = premiums[premium].additionalCovers[
+                    additionalCover
+                  ];
+                }
+        
+                counter + 1;
+              }
+
+              state.insurancePremiumAdditionalCovers[premiumUUID] = newOtherAdditional;
+
+              console.log("This is the other not Selected Final: ");
+              console.log(state.insurancePremiumAdditionalCovers);
+
+        }
+    },
 }
 const getters = {
     navigationStateGetter: state => state.navigationState,
@@ -343,6 +433,7 @@ const getters = {
     financialBreakdownStateGetter: state => state.financialBreakdownState,
     additionalCoversPremiumStateGetter: state => state.additionalCoversPremiumState,
     nextStepInStepperStateGetter: state => state.nextStepInStepper,
+    insurancePremiumAdditionalCoversGetter: state => state.insurancePremiumAdditionalCovers,
 
 }
 
