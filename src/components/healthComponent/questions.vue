@@ -315,8 +315,8 @@ export default {
     ].subCategories[this.navigationSubCategory].questions;
     this.subCategory = this.navigationSubCategory;
 
-    console.log("These are te details of the user.");
-    console.log(this.personalDetailsGetter);
+    // console.log("These are te details of the user.");
+    // console.log(this.personalDetailsGetter);
   },
   data: () => ({
     questions: null,

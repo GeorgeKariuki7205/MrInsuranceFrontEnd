@@ -2,6 +2,7 @@ import axios from "axios";
 import {
     v4 as uuidv4
 } from 'uuid';
+
 const state = {
     navigationState: null,
     navigationView: false,
@@ -16,7 +17,11 @@ const state = {
 
     // ! details related to the insurance covers that have been returned. 
     payableAmountState: null,
+
+    // ! creating the tate that will be holding the financial breakdown of the insurance premium.
     financialBreakdownState: null,
+
+    // ! creating the initial finacial breakdown of the premiums. 
 
     // ! activating Additional Premiums. 
     additionalCoversPremiumState: null,
@@ -26,6 +31,15 @@ const state = {
 
     // ! this state is used to update the insurace premium additionalCovers. 
     insurancePremiumAdditionalCovers: [],
+
+    // ! this is the state that is used to update the snackbars upon adding an additional INusrance Cover:  
+    additionalCoverSnackBar: [],
+
+     // ! this is the state that is used to update the snackbars upon removing an additional INusrance Cover:  
+     removingCoverSnackBar: [],
+
+
+
 }
 const mutations = {
     UPDATING_THE_STATE_TO_ADD_NAVIGATION_ITEMS(state, payload) {
@@ -68,8 +82,14 @@ const mutations = {
     },
     UPDATING_THE_NEXT_STEP_IN_STEPPER(state, payload) {
         state.nextStepInStepper = payload;
-    }
+    },
 
+    UPDATING_THE_ADDITIONAL_SNACKBAR_STATE_DATA(state, payload) {
+        state.additionalCoverSnackBar = payload;
+    },
+    UPDATING_THE_REMOVAL_SNACKBAR_STATE_DATA(state, payload) {
+        state.removingCoverSnackBar = payload;
+    },
 }
 const actions = {
     getAllNavigationComponents({
@@ -234,16 +254,51 @@ const actions = {
         commit("UPDATING_PREMIUM_DETAILS_STATUS", data);
     },
 
+
+    // !  this function is used to update the state of the financial Breakdown. 
+
+    updatingFinancialBreakdown({
+        commit
+    }, data) {
+        commit("UPDATING_THE_FINANCIAL_BREAKDOWN", data);
+    },
+
+    // ! creating the function that will be used to update the financial breakdown of the premiums. 
+
+    updatingTheFinancialBreakDown({
+        commit
+    }, obj) {
+        var activity = obj.activity;
+        var financialBreakDownStateDefined = state.financialBreakdownState;
+        if (activity === 'remove') {
+
+            for (const key in financialBreakDownStateDefined) {
+                if (financialBreakDownStateDefined[key].uuid === obj.uuid) {
+                    if (financialBreakDownStateDefined[key].additionId === obj.additionId) {
+                        delete financialBreakDownStateDefined[key];
+                    }
+                }
+            }
+            commit("UPDATING_THE_FINANCIAL_BREAKDOWN", financialBreakDownStateDefined);
+
+        } else if (activity === 'add') {
+
+            financialBreakDownStateDefined[Object.keys(state.additionalCoversPremiumState).length + 2] = obj;
+            commit("UPDATING_THE_FINANCIAL_BREAKDOWN", financialBreakDownStateDefined);
+
+        }
+    },
+
     // ! function to implement the functionality to add covers and disable the premiums that have been activated. 
     activatingAdditionalCovers({
-        commit,dispatch
+        commit,
+        dispatch
     }, data) {
 
         //! creating the additional cover Details state. 
         var allAdditionalCovers = {};
         var additionalCover = [];
         if (state.additionalCoversPremiumState === null) {
-            // console.log("The additionalCoversPremiumState is null.");
 
             additionalCover['additionalId'] = data.additionalId;
             additionalCover['premiumUUID'] = data.premiumUUID;
@@ -251,6 +306,9 @@ const actions = {
             allAdditionalCovers[uuidv4()] = additionalCover;
             commit("UPDATING_THE_ADDITIONAL_PREMIUM", allAdditionalCovers);
             dispatch("updateAdditionalCovresAddedOrRemoved");
+
+            // data["activity"] = "add";
+            // dispatch("updatingTheFinancialBreakDown",data);
         } else {
 
 
@@ -267,13 +325,18 @@ const actions = {
             commit("UPDATING_THE_ADDITIONAL_PREMIUM", allAdditionalCovers);
             // console.log("This is all the additional Covers.");
             // console.log(allAdditionalCovers);
-            console.log("I AM DISPATCHING IN THE ADDING ADDITIONAL COVERS ACTION.");
+            // console.log("I AM DISPATCHING IN THE ADDING ADDITIONAL COVERS ACTION.");
             dispatch("updateAdditionalCovresAddedOrRemoved");
+
+            // data["activity"] = "add";
+            // dispatch("updatingTheFinancialBreakDown",data);
         }
-    },   
+    },
     // ! function to update the amounts payable.
 
-    updatePayableAmount({commit},data){
+    updatePayableAmount({
+        commit
+    }, data) {
 
         var newPayableAmount = {};
 
@@ -281,79 +344,67 @@ const actions = {
             if (payableAmount === data.premiumUUId) {
 
                 if (data.functionality === 'subtract') {
-                    newPayableAmount[payableAmount] = state.payableAmountState[payableAmount]-data.cost;
+                    newPayableAmount[payableAmount] = state.payableAmountState[payableAmount] - data.cost;
                 } else {
-                    newPayableAmount[payableAmount] = state.payableAmountState[payableAmount]+data.cost;
+                    newPayableAmount[payableAmount] = state.payableAmountState[payableAmount] + data.cost;
                 }
-                
+
             } else {
                 newPayableAmount[payableAmount] = state.payableAmountState[payableAmount];
             }
         }
-        commit("UPDATING_THE_PAYABLE_AMOUNT",newPayableAmount);
+        commit("UPDATING_THE_PAYABLE_AMOUNT", newPayableAmount);
 
-        
+
     },
 
-     updateTheAdditionalCover({commit,dispatch},obj){
-    //* updateTheAdditionalCover({commit}){        
-        var premiumUUIDValue = obj.premium;               
+    updateTheAdditionalCover({
+        commit,
+        dispatch
+    }, obj) {
+        //* updateTheAdditionalCover({commit}){        
+        var premiumUUIDValue = obj.premium;
         var stateDefined = state.additionalCoversPremiumState;
         var elementValue;
-        for (const element in stateDefined) { 
-                 
-            if (stateDefined[element].premiumUUID === premiumUUIDValue) {   
-                 
+        for (const element in stateDefined) {
+
+            if (stateDefined[element].premiumUUID === premiumUUIDValue) {
+
                 if (stateDefined[element].additionalId === obj.additionalId) {
                     elementValue = element;
-                    console.log("This is what is being deleted: ");                     
-                    console.log(stateDefined[element]);
-                    console.log(obj);
                 }
-                
+
             }
-        } 
-        delete state.additionalCoversPremiumState[elementValue];                       
+        }
+        delete state.additionalCoversPremiumState[elementValue];
         var stateOfPrmium = state.additionalCoversPremiumState;
-        // console.log("This is the deleted state");
-        // console.log(state.additionalCoversPremiumState);             
+
         if (Object.keys(state.additionalCoversPremiumState).length === 0) {
-            commit("UPDATING_THE_ADDITIONAL_PREMIUM",null);
-            // console.log("I have deleted and updated to null.");
+            commit("UPDATING_THE_ADDITIONAL_PREMIUM", null);
+        } else {
+            commit("UPDATING_THE_ADDITIONAL_PREMIUM", stateOfPrmium);
         }
-        else{
-            commit("UPDATING_THE_ADDITIONAL_PREMIUM",stateOfPrmium);
-            console.log("I have deleted and updated to apppropriate values..");
-        }
-        
+
 
         //!  dispatch the method to update the payable amount.
         var object = {};
         object['premiumUUId'] = premiumUUIDValue;
         object['cost'] = obj.cost;
         object['functionality'] = 'subtract';
-        dispatch("updatePayableAmount",object);
+        dispatch("updatePayableAmount", object);
 
-        // commit("UPDATING_THE_ADDITIONAL_PREMIUM", "oness");
 
-        console.log("I AM DISPATCHING IN THE DELETING ADDITIONAL COVERS ACTION.");
         dispatch("updateAdditionalCovresAddedOrRemoved");
+
 
     },
 
     // ! THIS METHOD ID USED TO UPDATE THE ADDITIONAL COVERS SELECTED AND THOSE THAT HAVE NOT BEEN SELECTED FOR A PARTICULAR 
     // ! INSURANCE PREMIUM. 
 
-    updateAdditionalCovresAddedOrRemoved(){
-       var premiums = state.premiumsData;
-       var currentAddedAdditionals = state.additionalCoversPremiumState;
-        // insurancePremiumAdditionalCovers 
-
-        console.log("This is the new function to update the additional Covers: ");
-        console.log("NEW NEW !!!! NEW FUNCTION.");
-        // console.log(premiumsSelected);
-        // console.log("The Current Additional Covers in the methos Dispatch:  ");
-        // console.log(currentAddedAdditionals);
+    updateAdditionalCovresAddedOrRemoved() {
+        var premiums = state.premiumsData;
+        var currentAddedAdditionals = state.additionalCoversPremiumState;
 
         for (const premium in premiums) {
 
@@ -361,17 +412,15 @@ const actions = {
             var newOtherAdditional = {};
             var count = 0;
             var count2 = 0;
-      
+
             for (const prop in premiums[premium].additionalCovers) {
-              // console.log(prop);
-              prop.id;
-              ++count;
+                prop.id;
+                ++count;
             }
-      
+
             for (const prop in currentAddedAdditionals) {
-              // console.log(prop);
-              prop.id;
-              ++count2;
+                prop.id;
+                ++count2;
             }
 
             var qualifier = count - count2;
@@ -381,42 +430,47 @@ const actions = {
 
             for (const additionalCover in premiums[premium].additionalCovers) {
                 var checker = 0;
-        
+
                 for (const additionalCoverSelected in currentAddedAdditionals) {
-                    
-                if (currentAddedAdditionals[additionalCoverSelected].premiumUUID === premiumUUID) {            
-                    if (
-                        premiums[premium].additionalCovers[additionalCover]["id"] !==
-                        currentAddedAdditionals[additionalCoverSelected][
-                        "additionalId"
-                        ]
-                    ) {
-                        ++checker;
 
-                            console.log("I have gotten the additionals that have a relationship in the dispach method.");
-                            console.log(currentAddedAdditionals[additionalCoverSelected]);
-                            console.log("This are the IDS that are reated t the conruency of the data.");
-                            console.log(premiums[premium].additionalCovers[additionalCover]["id"] + " AND " + currentAddedAdditionals[additionalCoverSelected]["additionalId"]);
-
+                    if (currentAddedAdditionals[additionalCoverSelected].premiumUUID === premiumUUID) {
+                        if (
+                            premiums[premium].additionalCovers[additionalCover]["id"] !==
+                            currentAddedAdditionals[additionalCoverSelected][
+                                "additionalId"
+                            ]
+                        ) {
+                            ++checker;
+                        }
                     }
-                }                  
                 }
-        
+
                 if (checker == qualifier) {
-                  newOtherAdditional[checker] = premiums[premium].additionalCovers[
-                    additionalCover
-                  ];
+                    newOtherAdditional[checker] = premiums[premium].additionalCovers[
+                        additionalCover
+                    ];
                 }
-        
+
                 counter + 1;
-              }
+            }
 
-              state.insurancePremiumAdditionalCovers[premiumUUID] = newOtherAdditional;
-
-              console.log("This is the other not Selected Final: ");
-              console.log(state.insurancePremiumAdditionalCovers);
+            state.insurancePremiumAdditionalCovers[premiumUUID] = newOtherAdditional;
 
         }
+    },
+
+    // ! this action is used to implement the addition of the snackbar . 
+    updatingStatusOfAdditionalCoverSnackbar({commit},obj){
+
+        commit("UPDATING_THE_ADDITIONAL_SNACKBAR_STATE_DATA",obj);
+
+    },
+
+    // ! this action is used to implement the addition of the snackbar . 
+    updatingStatusOfRemovalCoverSnackbar({commit},obj){
+
+        commit("UPDATING_THE_REMOVAL_SNACKBAR_STATE_DATA",obj);
+
     },
 }
 const getters = {
@@ -434,6 +488,9 @@ const getters = {
     additionalCoversPremiumStateGetter: state => state.additionalCoversPremiumState,
     nextStepInStepperStateGetter: state => state.nextStepInStepper,
     insurancePremiumAdditionalCoversGetter: state => state.insurancePremiumAdditionalCovers,
+    additionalCoverSnackBarGetter: state => state.additionalCoverSnackBar,
+    removingCoverSnackBarGetter: state => state.removingCoverSnackBar,
+
 
 }
 

@@ -27,18 +27,8 @@
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         }}
-        {{ premium.uuid }}
         Ksh
       </h3>
-      <v-snackbar v-model="snackbar" app color="primary" top right>
-        {{ text }}
-
-        <template v-slot:action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
-            Close
-          </v-btn>
-        </template>
-      </v-snackbar>
     </v-list-item>
     <v-divider></v-divider>
     <v-card-text>
@@ -55,22 +45,11 @@
               max-width="100px"
               class="text-center;"
             ></v-img>
-            <!-- additionalCoversPremiumStateGetter -->
-            <!-- {{additionalCoversPremiumStateGetter} -->
-            <p>Coves</p>
-            <template
-              v-for="additionalCovers in additionalCoversPremiumStateGetter"
-            >
-              {{ additionalCovers }}
-            </template>
           </v-col>
           <v-col md="6">
             <h2 style="color: black" class="text-center">Benefits</h2>
             <template v-if="this.premium.coverBenefits.length > 0">
               <v-row align-content="center">
-                <!-- <v-col md="4" class="mb-n8 mx-auto">
-                  <p class="font-weight-black text-center">{{ "Initial Benefit." }}</p>
-                </v-col> -->
                 <template
                   v-for="(coverBenefit, index) in this.premium.coverBenefits"
                 >
@@ -105,17 +84,45 @@
               </v-row>
             </template>
           </v-col>
-          <v-col md="4" class="text-center">
+          <v-col md="4">
             <h2 style="color: black" class="text-center">Cost Break Down.</h2>
 
             <!-- THIS IS THE SECTION THAT IS USED TO IMPLEMENT THE COST BREAKDOWN OF THE INSURANCE COVER. -->
             <div style="text-align: center">
-              <v-data-table
-                style="background-color: #eeeeee; color: black; font-size: 10px"
-                :headers="headers"
-                :items="data"
-                hide-default-footer
-              ></v-data-table>
+              <table>
+                <tr>
+                  <th style="color: black">Name</th>
+                  <th style="color: black">Desciption</th>
+                  <th style="color: black">Value</th>
+                </tr>
+                <template
+                  v-for="n in Object.keys(financialBreakdownStateGetter).length"
+                >
+                  <tr :key="n">
+                    <td>
+                      {{
+                        financialBreakdownStateGetter[
+                          Object.keys(financialBreakdownStateGetter)[n - 1]
+                        ].name
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        financialBreakdownStateGetter[
+                          Object.keys(financialBreakdownStateGetter)[n - 1]
+                        ].description
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        financialBreakdownStateGetter[
+                          Object.keys(financialBreakdownStateGetter)[n - 1]
+                        ].value
+                      }}
+                    </td>
+                  </tr>
+                </template>
+              </table>
             </div>
           </v-col>
         </v-row>
@@ -161,16 +168,37 @@
           <v-tab-item>
             <v-card flat>
               <v-card-text>
+
+                <!-- ! THIS IS THE SNACK BAR THAT IS USED FOR THE ADDITION OF THE ADDITINAL COVERS TO AN INSURANCE PREMOIM.! -->
+                <v-snackbar
+                  v-model="additionalCoverSnackBarGetter.status"
+                  app
+                  color="success"
+                  top
+                  centered
+                  multi-line
+                >
+                  <p>You Have Added The Additional Cover: <b>{{additionalCoverSnackBarGetter.name}}</b> At A Cost Of: <b>{{additionalCoverSnackBarGetter.cost}}</b></p>                  
+                </v-snackbar>
+
+                 <v-snackbar
+                  v-model="removingCoverSnackBarGetter.status"
+                  app
+                  color="error"
+                  top
+                  centered
+                  multi-line
+                >
+                  <p>You Have Removed The Additional Cover: <b>{{removingCoverSnackBarGetter.name}}</b></p>                  
+                </v-snackbar>
+
                 <!-- Additional Covers Implementations. -->
                 <h3 style="color: black" class="text-center">
                   Aditional Covers Related To The Insurance Premium.
-                  
+
                   <template v-if="additionalCoversPremiumStateGetter">
-                    {{Object.keys(additionalCoversPremiumStateGetter).length + '  This is the number of additionals Selected'}}
                   </template>
-                  <template v-else>
-                    No additional selected.
-                  </template>
+                  <template v-else> No additional selected. </template>
                 </h3>
                 <template v-if="premium.additionalCovers.length < 1">
                   <h2
@@ -234,7 +262,7 @@
                                   v-for="(additionalPremium,
                                   index) in additional.additional_premia"
                                 >
-                                  <tr :key="index+'tableRow'">
+                                  <tr :key="index + 'tableRow'">
                                     <td>{{ index + 1 }}</td>
                                     <td>
                                       {{
@@ -268,7 +296,8 @@
                                             removingAdditionalCover(
                                               premium.uuid,
                                               additionalPremium.cost,
-                                              additional.id
+                                              additional.id,
+                                              additional.name
                                             )
                                           "
                                           small
@@ -298,19 +327,20 @@
                       </template>
                       <template
                         v-for="(additionalNotSelected,
-                        index) in insurancePremiumAdditionalCoversGetter[premium.uuid]"
+                        index) in insurancePremiumAdditionalCoversGetter[
+                          premium.uuid
+                        ]"
                       >
-                        <div :key="index+'divNotSelected'" class="ma-4">
+                        <div :key="index + 'divNotSelected'" class="ma-4">
                           <h2 style="color: black; text-align: center">
                             {{ additionalNotSelected.name }}
                           </h2>
                           <h3 style="color: black; text-align: center">
-                            Premuims For The{{
-                              additionalNotSelected.name.toLowerCase()
-                            }}
+                            Premuims For
+                            {{ additionalNotSelected.name.toLowerCase() }}
                           </h3>
                         </div>
-                        <table :key="index+'tableNotSelected'">
+                        <table :key="index + 'tableNotSelected'">
                           <tr>
                             <th>ID</th>
                             <th>Limit</th>
@@ -321,7 +351,7 @@
                             v-for="(additionalPremiumNotelected,
                             index) in additionalNotSelected.additional_premia"
                           >
-                            <tr :key="index+'rowNotelected'">
+                            <tr :key="index + 'rowNotSelected'">
                               <td>{{ index + 1 }}</td>
                               <td>
                                 {{
@@ -350,7 +380,8 @@
                                       additionalPremiumNotelected.id,
                                       additionalNotSelected.id,
                                       premium.uuid,
-                                      additionalPremiumNotelected.cost
+                                      additionalPremiumNotelected.cost,
+                                      additionalNotSelected.name.toLowerCase()
                                     )
                                   "
                                 >
@@ -528,30 +559,64 @@ export default {
       "financialBreakdownStateGetter",
       "payableAmountStateGetter",
       "additionalCoversPremiumStateGetter",
-      "insurancePremiumAdditionalCoversGetter"
+      "insurancePremiumAdditionalCoversGetter",
+      "additionalCoverSnackBarGetter",
+      "removingCoverSnackBarGetter"
     ]),
   },
   methods: {
-    removingAdditionalCover(premiumUUID, cost,additionalId) {
-      console.log(
-        "This is the premium UUID: " +
-          premiumUUID +
-          "   This is the cost related to the additional cover to be removed: " +
-          cost
-      );
+    removingAdditionalCover(premiumUUID, cost, additionalId, name) {
+      
+      
+      var snackBarObj = {};
+      snackBarObj['status'] = true;
+      snackBarObj['name'] = name;
+      snackBarObj['cost']= cost; 
+
+      this.$store.dispatch("updatingStatusOfRemovalCoverSnackbar",snackBarObj);
 
       var obj = {};
       obj["premium"] = premiumUUID;
       obj["cost"] = cost;
       obj["additionalId"] = additionalId;
+      obj["value"] = cost;
       this.$store.dispatch("updateTheAdditionalCover", obj);
+
+      var removeObj = {};
+      removeObj["uuid"] = premiumUUID;
+      removeObj["additionId"] = additionalId;
+      removeObj["name"] = name;
+      removeObj["description"] = "";
+      removeObj["value"] =
+        cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+      removeObj["activity"] = "remove";
+      this.$store.dispatch("updatingTheFinancialBreakDown", removeObj);
     },
-    addAdditionCover(additionalPremiumID, additionalId, premiumUUID, cost) {
+    addAdditionCover(
+      additionalPremiumID,
+      additionalId,
+      premiumUUID,
+      cost,
+      name
+    ) {
+      // console.log("I have clicked The : addAdditionCover Function");
+      // this.snackbar = true;
+      // this.text = "You Want To Purtchae The Cover: " + name + "At A Cost Of: "+cost;
+
+      var snackBarObj = {};
+      snackBarObj['status'] = true;
+      snackBarObj['name'] = name;
+      snackBarObj['cost']= cost; 
+
+      this.$store.dispatch("updatingStatusOfAdditionalCoverSnackbar",snackBarObj);
+
       // ! creating the object to hold the additional Cover details.
       var obj = {};
       obj["additionalId"] = additionalId;
       obj["premiumUUID"] = premiumUUID;
       obj["additionalPremiumID"] = additionalPremiumID;
+      obj["value"] = cost;
+
       this.$store.dispatch("activatingAdditionalCovers", obj);
 
       // ! on click, update the cost that is involved in the addition of the
@@ -560,6 +625,16 @@ export default {
       amountsPayableUpdatDetails["cost"] = cost;
 
       this.$store.dispatch("updatePayableAmount", amountsPayableUpdatDetails);
+
+      var addObj = {};
+      addObj["uuid"] = premiumUUID;
+      addObj["additionId"] = additionalId;
+      addObj["name"] = name;
+      addObj["description"] = "";
+      addObj["value"] =
+        cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+      addObj["activity"] = "add";
+      this.$store.dispatch("updatingTheFinancialBreakDown", addObj);
     },
   },
   data: () => ({
@@ -578,15 +653,22 @@ export default {
     data: null,
     snackbar: false,
     text: "You Want To Purchase The Cover.",
+    removeAdditionalCoverText: null,
+    removeAdditionalCoverSnackBar: false,
+    addAdditionalCoverText: null,
+    addAdditionalCoverSnackBar: false,
   }),
   props: ["premium"],
   created() {
+    var financialBreakdownCounter = 0;
     if (this.premium.cover.id == 1) {
       // ! after the creation of the component, create the array that will hold the
       // ! data to be looped as the financial breakdown.
       var financialBreakDownArray = [];
 
       var principal_memberDetails = {};
+      principal_memberDetails["uuid"] = "Principal Member";
+      principal_memberDetails["additionId"] = "Principal Member";
       principal_memberDetails["name"] = "Principal Member";
       principal_memberDetails["description"] = " ' ' ";
       principal_memberDetails["value"] =
@@ -594,19 +676,26 @@ export default {
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
 
+      financialBreakDownArray[
+        financialBreakdownCounter
+      ] = principal_memberDetails;
       if (this.premium.financialBreakDown.spouse) {
         var spouse_details = {};
+        spouse_details["uuid"] = "Spouse";
+        spouse_details["additionId"] = "Spouse";
         spouse_details["name"] = "Spouse";
         spouse_details["value"] =
           this.premium.financialBreakDown.spouse
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
         spouse_details["description"] = " ' ' ";
-        financialBreakDownArray[1] = spouse_details;
+        financialBreakDownArray[financialBreakdownCounter + 1] = spouse_details;
       }
 
       if (this.premium.financialBreakDown.dependents) {
         var dependents_details = {};
+        dependents_details["uuid"] = "Children";
+        dependents_details["additionId"] = "Children";
         dependents_details["name"] = "Children";
         dependents_details["value"] =
           (
@@ -624,28 +713,33 @@ export default {
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
           "Ksh";
-        financialBreakDownArray[2] = dependents_details;
+        financialBreakDownArray[
+          financialBreakdownCounter + 1
+        ] = dependents_details;
       }
-
-      financialBreakDownArray[0] = principal_memberDetails;
-      this.data = financialBreakDownArray;
-      console.log("This is the description of the Data.");
-      console.log(this.data);
+      this.$store.dispatch(
+        "updatingFinancialBreakdown",
+        financialBreakDownArray
+      );
+      // console.log("This is the description of the Data.");
+      // console.log(this.data);
     } else if (this.premium.cover.id == 2) {
       var financial_break_down_array = [];
       var motor_insurance_details = {};
+      motor_insurance_details["uuid"] = this.premium.subCategory;
+      motor_insurance_details["additionId"] = this.premium.subCategory;
       motor_insurance_details["name"] = this.premium.subCategory;
       motor_insurance_details["value"] = this.premium.amountPayable;
       motor_insurance_details["description"] = " ";
       financial_break_down_array[0] = motor_insurance_details;
-      this.data = financial_break_down_array;
-      console.log("This is the description of the Data.");
-      console.log(this.data);
+      // this.data = financial_break_down_array;
+      this.$store.dispatch(
+        "updatingFinancialBreakdown",
+        financialBreakDownArray
+      );
     }
   },
-  watch: {
-    
-  },
+  watch: {},
 };
 </script>
 
