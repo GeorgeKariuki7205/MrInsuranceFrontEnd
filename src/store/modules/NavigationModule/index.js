@@ -38,6 +38,7 @@ const state = {
      // ! this is the state that is used to update the snackbars upon removing an additional INusrance Cover:  
      removingCoverSnackBar: [],
 
+     editingPersonalDetailsOnPurchasingModal: false,
 
 
 }
@@ -89,7 +90,10 @@ const mutations = {
     },
     UPDATING_THE_REMOVAL_SNACKBAR_STATE_DATA(state, payload) {
         state.removingCoverSnackBar = payload;
-    },
+    },    
+    UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE(state, payload){
+            state.editingPersonalDetailsOnPurchasingModal = payload;
+    }
 }
 const actions = {
     getAllNavigationComponents({
@@ -472,6 +476,11 @@ const actions = {
         commit("UPDATING_THE_REMOVAL_SNACKBAR_STATE_DATA",obj);
 
     },
+
+    // ! this is the action that is used to set the value of editingPersonalDetailsOnPurchasingModal to true. 
+    editingPersonalDetailsOnPurchasingModalSetTrueAction({commit}){
+            commit("UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE",true);
+    }
 }
 const getters = {
     navigationStateGetter: state => state.navigationState,
@@ -490,6 +499,7 @@ const getters = {
     insurancePremiumAdditionalCoversGetter: state => state.insurancePremiumAdditionalCovers,
     additionalCoverSnackBarGetter: state => state.additionalCoverSnackBar,
     removingCoverSnackBarGetter: state => state.removingCoverSnackBar,
+    editingPersonalDetailsOnPurchasingModalGetter: state => state.editingPersonalDetailsOnPurchasingModal,
 
 
 }

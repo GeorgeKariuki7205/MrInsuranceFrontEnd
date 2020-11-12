@@ -139,9 +139,395 @@
       <v-btn text color="error" @click="show = !show" dark medium>
         <v-icon>add</v-icon>Add More Benefits</v-btn
       >
-      <v-btn large outlined color="error" @click="snackbar = true" dark medium>
-        <v-icon>shopping_cart</v-icon>Checkout Cover.</v-btn
+      <v-btn
+        large
+        outlined
+        color="error"
+        medium
+        dark
+        @click="checkingOutCover()"
       >
+        <v-icon>shopping_cart</v-icon>
+        Checkout Cover.
+      </v-btn>
+
+      <template>
+        <v-row justify="center">
+          <v-dialog v-model="dialog" persistent max-width="800" scrollable>
+            <v-card>
+              <v-card-title class="headline" style="backgroung-color: red">
+                <h5 style="text-align: center; overflow-wrap: anywhere">
+                  Hey
+                  {{
+                    personalDetailsGetter.firstName.charAt(0).toUpperCase() +
+                    personalDetailsGetter.firstName.substr(1).toLowerCase()
+                  }}, Kindly Confirm The Details Below To Purchase The Cover:
+                </h5>
+              </v-card-title>
+              <v-divider></v-divider>
+              <v-card-text>
+                <div>
+                  <transition-group
+                    style="margin-top: 10%"
+                    name="custom-classes-transition2"
+                    enter-active-class="animate__animated animate__fadeInRight"
+                    leave-active-class="animate__animated animate__fadeOutLeft"
+                  >
+                    <!-- THE DIV IS USED TO IDENTIFY THE DETAILS OF THE UER AND ALSO THE PERSONAL AND THE INSURANCE COVER DETAILS. -->
+                    <div
+                      key="firstDivInTransitionGroup"
+                      v-if="!visibilityOfPaymentOption"
+                    >
+                      <div>
+                        <!-- THIS IS THE SECTION THAT IS USED TO ADD THE DEATILS TO BE CONFIRMED:  -->
+                        <div class="ma-4" style="margin-bottom: 10%">
+                          <h2
+                            class="float-left"
+                            style="color: black; display: inline"
+                          >
+                            1. Personal Details:
+                          </h2>
+                          <v-btn
+                            v-if="
+                              !editingPersonalDetailsOnPurchasingModalGetter
+                            "
+                            @click="
+                              activatingEditingPersonalDetailsInCheckingOutCover()
+                            "
+                            small
+                            text
+                            style="color: green; align: right"
+                          >
+                            <v-icon size="18" color="green">edit</v-icon>
+                            <span style="font-size: 12px"
+                              >Edit Personal Details</span
+                            >
+                          </v-btn>
+                          <v-btn
+                            v-if="editingPersonalDetailsOnPurchasingModalGetter"
+                            @click="savingEditedPersonalDeailsOnCheckOutCover()"
+                            small
+                            text
+                            style="color: red"
+                          >
+                            <v-icon size="18" color="red">save</v-icon>
+                            <span style="font-size: 12px"
+                              >Save Personal Details</span
+                            >
+                          </v-btn>
+                          <v-snackbar
+                            v-model="snackbar"
+                            app
+                            color="green"
+                            top
+                            centered
+                            multi-line
+                          >
+                            <p>
+                              <v-icon>check_circle</v-icon> Saved Succesfully.
+                            </p>
+                          </v-snackbar>
+                          <span style="clear: all" class="float-none"></span>
+                          <span
+                            style="display: block"
+                            class="float-none"
+                          ></span>
+                        </div>
+
+                        <!-- CONFIRMING THE PERSONAL DETAILS OF THE USER. -->
+                        <div class="ma-8" style="clear: all; display: block">
+                          <h4
+                            class="ml-8"
+                            style="color: black; display: inline-block"
+                          >
+                            <b>First Names: </b>
+                          </h4>
+
+                          <h5
+                            style="display: inline-block"
+                            v-if="
+                              !editingPersonalDetailsOnPurchasingModalGetter
+                            "
+                            class="ml-4"
+                          >
+                            {{
+                              personalDetailsGetter.firstName
+                                .charAt(0)
+                                .toUpperCase() +
+                              personalDetailsGetter.firstName
+                                .substr(1)
+                                .toLowerCase()
+                            }}
+                          </h5>
+                          <v-text-field
+                            v-if="editingPersonalDetailsOnPurchasingModalGetter"
+                            style="display: inline-block"
+                            class="ml-4"
+                            height="10"
+                            :rules="nameRules"
+                            v-model="firstNameVModel"
+                            dense
+                            counter
+                            label="Your First Name"
+                            outlined
+                            prepend-inner-icon="account_box"
+                            :value="firstNameVModel"
+                          ></v-text-field>
+                          <span style="display: block"></span>
+                          <h4
+                            style="color: black; display: inline-block"
+                            class="ml-8"
+                          >
+                            <b>Second Name: </b>
+                          </h4>
+                          <h5
+                            style="display: inline-block"
+                            class="ml-4"
+                            v-if="
+                              !editingPersonalDetailsOnPurchasingModalGetter
+                            "
+                          >
+                            {{
+                              personalDetailsGetter.secondName
+                                .charAt(0)
+                                .toUpperCase() +
+                              personalDetailsGetter.secondName
+                                .substr(1)
+                                .toLowerCase()
+                            }}
+                          </h5>
+                          <v-text-field
+                            v-if="editingPersonalDetailsOnPurchasingModalGetter"
+                            style="display: inline-block"
+                            class="ml-4"
+                            prepend-inner-icon="account_box"
+                            counter
+                            dense
+                            label="Your Second Name"
+                            v-model="secondNameVModel"
+                            outlined
+                            :rules="nameRules"
+                            :value="secondNameVModel"
+                          ></v-text-field>
+                          <span style="display: block"></span>
+                          <h4
+                            style="color: black; display: inline-block"
+                            class="ml-8"
+                          >
+                            <b>Email Address: </b>
+                          </h4>
+                          <h5
+                            style="display: inline-block"
+                            class="ml-4"
+                            v-if="
+                              !editingPersonalDetailsOnPurchasingModalGetter
+                            "
+                          >
+                            {{ personalDetailsGetter.email_address }}
+                          </h5>
+                          <v-text-field
+                            style="display: inline-block"
+                            v-if="editingPersonalDetailsOnPurchasingModalGetter"
+                            class="ml-4"
+                            :rules="emailRules"
+                            counter
+                            dense
+                            required
+                            v-model="emailAddresVModel"
+                            label="Email Address"
+                            outlined
+                            prepend-inner-icon="email"
+                            :value="emailAddresVModel"
+                          ></v-text-field>
+                          <span style="display: block"></span>
+                          <h4
+                            style="color: black; display: inline-block"
+                            class="ml-8"
+                          >
+                            <b>Phone Number: </b>
+                          </h4>
+                          <h5
+                            style="display: inline-block"
+                            class="ml-4"
+                            v-if="
+                              !editingPersonalDetailsOnPurchasingModalGetter
+                            "
+                          >
+                            {{ personalDetailsGetter.phoneNumber }}
+                          </h5>
+                          <v-text-field
+                            v-if="editingPersonalDetailsOnPurchasingModalGetter"
+                            style="display: inline-block"
+                            class="ml-4"
+                            :rules="RequiredPhoneNumber"
+                            :counter="10"
+                            required
+                            dense
+                            v-model="phoneNumberVModel"
+                            label="Phone Number"
+                            maxlength="10"
+                            type="tel"
+                            outlined
+                            prepend-inner-icon="call"
+                            :value="phoneNumberVModel"
+                          ></v-text-field>
+                        </div>
+                      </div>
+                      <div>
+                        <h2 style="color: black">
+                          2. Insurance Cover Details:
+                        </h2>
+
+                        <span style="display: block"></span>
+                        <h4
+                          style="color: black; display: inline-block"
+                          class="ml-8"
+                        >
+                          <b>1. Cover: </b>
+                        </h4>
+                        <h5 style="display: inline-block" class="ml-4">
+                          {{ this.premium.cover.name }}
+                        </h5>
+
+                        <span style="display: block"></span>
+                        <h4
+                          style="color: black; display: inline-block"
+                          class="ml-8"
+                        >
+                          <b>2. Insurance SubCategory: </b>
+                        </h4>
+                        <h5 style="display: inline-block" class="ml-4">
+                          {{ this.premium.subCategory }}
+                        </h5>
+
+                        <span style="display: block"></span>
+                        <h4
+                          style="color: black; display: inline-block"
+                          class="ml-8"
+                        >
+                          <b>3. Company : </b>
+                        </h4>
+                        <h5 style="display: inline-block" class="ml-4">
+                          {{ this.premium.company.name }}
+                        </h5>
+
+                        <span style="display: block"></span>
+                        <h4 style="color: black" class="ml-8">
+                          <b>4.Cost Breakdwown : </b>
+                        </h4>
+                        <div style="text-align: center">
+                          <table>
+                            <tr>
+                              <th style="color: black">Name</th>
+                              <th style="color: black">Desciption</th>
+                              <th style="color: black">Value</th>
+                            </tr>
+                            <template
+                              v-for="n in Object.keys(
+                                financialBreakdownStateGetter
+                              ).length"
+                            >
+                              <tr :key="n">
+                                <td>
+                                  {{
+                                    financialBreakdownStateGetter[
+                                      Object.keys(
+                                        financialBreakdownStateGetter
+                                      )[n - 1]
+                                    ].name
+                                  }}
+                                </td>
+                                <td>
+                                  {{
+                                    financialBreakdownStateGetter[
+                                      Object.keys(
+                                        financialBreakdownStateGetter
+                                      )[n - 1]
+                                    ].description
+                                  }}
+                                </td>
+                                <td>
+                                  {{
+                                    financialBreakdownStateGetter[
+                                      Object.keys(
+                                        financialBreakdownStateGetter
+                                      )[n - 1]
+                                    ].value
+                                  }}
+                                </td>
+                              </tr>
+                            </template>
+                            <tr>
+                              <td><b>Total Cost</b></td>
+                              <td></td>
+                              <td>
+                                {{
+                                  payableAmountStateGetter[premium.uuid]
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                }}
+                                Ksh
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- THE DIV BELOW IS USED TO DEFINE THE PAYMENTS SECTION OF THE INSURANCE COVER BY MPESA:  -->
+                    <div
+                      v-else
+                      key="secondDivInPayemntTransition"
+                      class="ma-4 text-center"
+                      style="text-align: center"
+                    >
+                      <h2 style="color: black" class="text-center">
+                        Payments In This Platform Are Processed Via MPESA.
+                      </h2>
+                      <h2></h2>
+                      <h2 style="color: blue">
+                        MPESA DETAILS: AMOUNT:
+                        {{
+                          payableAmountStateGetter[premium.uuid]
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        }}
+                        Ksh
+                      </h2>
+                      <h3 style="color: black" class="text-center">
+                        Kindly Make Sure Your Phone With A Safaricom Line Is
+                        Next To You, We will be sending an STK Push Request To
+                        Complete This Transaction.
+                      </h3>
+
+                      <v-btn class="mt-8" outlined x-large color="success">
+                        Send MPESA STK PUSH TO :
+                        {{ personalDetailsGetter.phoneNumber }}
+                        <v-icon>send</v-icon></v-btn
+                      >
+                    </div>
+                  </transition-group>
+                </div>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-actions>
+                <v-btn color="red darken-1" large text @click="dialog = false">
+                  <v-icon>close</v-icon> Close
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="green darken-1"
+                  large
+                  text
+                  @click="proceedToPayments()"
+                >
+                  PROCEED TO PAYMENT. <v-icon>arrow_forward_ios</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
     </v-card-actions>
     <v-expand-transition style="background-color: red">
       <div class="basil" v-show="show">
@@ -168,7 +554,6 @@
           <v-tab-item>
             <v-card flat>
               <v-card-text>
-
                 <!-- ! THIS IS THE SNACK BAR THAT IS USED FOR THE ADDITION OF THE ADDITINAL COVERS TO AN INSURANCE PREMOIM.! -->
                 <v-snackbar
                   v-model="additionalCoverSnackBarGetter.status"
@@ -178,18 +563,26 @@
                   centered
                   multi-line
                 >
-                  <p>You Have Added The Additional Cover: <b>{{additionalCoverSnackBarGetter.name}}</b> At A Cost Of: <b>{{additionalCoverSnackBarGetter.cost}}</b></p>                  
+                  <p>
+                    <v-icon>check_circle</v-icon> You Have Added The Additional
+                    Cover: <b>{{ additionalCoverSnackBarGetter.name }}</b> At A
+                    Cost Of: <b>{{ additionalCoverSnackBarGetter.cost }}</b>
+                  </p>
                 </v-snackbar>
 
-                 <v-snackbar
+                <v-snackbar
                   v-model="removingCoverSnackBarGetter.status"
                   app
-                  color="error"
+                  color="orange"
                   top
                   centered
                   multi-line
                 >
-                  <p>You Have Removed The Additional Cover: <b>{{removingCoverSnackBarGetter.name}}</b></p>                  
+                  <p>
+                    <v-icon>cancel</v-icon>
+                    You Have Removed The Additional Cover:
+                    <b>{{ removingCoverSnackBarGetter.name }}</b>
+                  </p>
                 </v-snackbar>
 
                 <!-- Additional Covers Implementations. -->
@@ -546,6 +939,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import "animate.css";
 export default {
   computed: {
     ...mapGetters([
@@ -561,19 +955,19 @@ export default {
       "additionalCoversPremiumStateGetter",
       "insurancePremiumAdditionalCoversGetter",
       "additionalCoverSnackBarGetter",
-      "removingCoverSnackBarGetter"
+      "removingCoverSnackBarGetter",
+      "personalDetailsGetter",
+      "editingPersonalDetailsOnPurchasingModalGetter",
     ]),
   },
   methods: {
     removingAdditionalCover(premiumUUID, cost, additionalId, name) {
-      
-      
       var snackBarObj = {};
-      snackBarObj['status'] = true;
-      snackBarObj['name'] = name;
-      snackBarObj['cost']= cost; 
+      snackBarObj["status"] = true;
+      snackBarObj["name"] = name;
+      snackBarObj["cost"] = cost;
 
-      this.$store.dispatch("updatingStatusOfRemovalCoverSnackbar",snackBarObj);
+      this.$store.dispatch("updatingStatusOfRemovalCoverSnackbar", snackBarObj);
 
       var obj = {};
       obj["premium"] = premiumUUID;
@@ -599,16 +993,15 @@ export default {
       cost,
       name
     ) {
-      // console.log("I have clicked The : addAdditionCover Function");
-      // this.snackbar = true;
-      // this.text = "You Want To Purtchae The Cover: " + name + "At A Cost Of: "+cost;
-
       var snackBarObj = {};
-      snackBarObj['status'] = true;
-      snackBarObj['name'] = name;
-      snackBarObj['cost']= cost; 
+      snackBarObj["status"] = true;
+      snackBarObj["name"] = name;
+      snackBarObj["cost"] = cost;
 
-      this.$store.dispatch("updatingStatusOfAdditionalCoverSnackbar",snackBarObj);
+      this.$store.dispatch(
+        "updatingStatusOfAdditionalCoverSnackbar",
+        snackBarObj
+      );
 
       // ! creating the object to hold the additional Cover details.
       var obj = {};
@@ -636,12 +1029,44 @@ export default {
       addObj["activity"] = "add";
       this.$store.dispatch("updatingTheFinancialBreakDown", addObj);
     },
+    checkingOutCover() {
+      this.dialog = true;
+      this.firstNameVModel = this.personalDetailsGetter["firstName"];
+      this.secondNameVModel = this.personalDetailsGetter["secondName"];
+      this.phoneNumberVModel = this.personalDetailsGetter["phoneNumber"];
+      this.emailAddresVModel = this.personalDetailsGetter["email_address"];
+    },
+
+    activatingEditingPersonalDetailsInCheckingOutCover() {
+      this.$store.dispatch(
+        "editingPersonalDetailsOnPurchasingModalSetTrueAction"
+      );
+    },
+    savingEditedPersonalDeailsOnCheckOutCover() {
+      var personalDetailsEdited = {};
+      personalDetailsEdited["phoneNumber"] = this.phoneNumberVModel;
+      personalDetailsEdited["email_address"] = this.emailAddresVModel;
+      personalDetailsEdited["firstName"] = this.firstNameVModel;
+      personalDetailsEdited["secondName"] = this.secondNameVModel;
+      this.$store.dispatch("updatingPersonalDetails", personalDetailsEdited);
+      this.$store.commit("UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE", false);
+      this.snackbar = true;
+    },
+    proceedToPayments() {
+      this.visibilityOfPaymentOption = true;
+    },
   },
   data: () => ({
+    snackbar: false,
     dialog: false,
     show: false,
     otherAdditionalCovers: null,
+    visibilityOfPaymentOption: false,
     morebenefits: true,
+    firstNameVModel: null,
+    secondNameVModel: null,
+    phoneNumberVModel: null,
+    emailAddresVModel: null,
     headers: [
       {
         text: "Item",
@@ -651,12 +1076,24 @@ export default {
       { text: "Amount", value: "value" },
     ],
     data: null,
-    snackbar: false,
-    text: "You Want To Purchase The Cover.",
-    removeAdditionalCoverText: null,
-    removeAdditionalCoverSnackBar: false,
-    addAdditionalCoverText: null,
-    addAdditionalCoverSnackBar: false,
+    personalData: [],
+    RequiredPhoneNumber: [
+      (v) => !!v || "Phone Number is required",
+      (v) =>
+        (v && v.length <= 10) || "Phone Number must be less than 10 characters",
+
+      (v) =>
+        /^0(7(?:(?:[0-9][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$/.test(v) ||
+        "Phone Number must be valid",
+    ],
+    emailRules: [
+      (v) => !!v || "E-mail is required",
+      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+    ],
+    nameRules: [
+      (v) => !!v || "Name is required",
+      (v) => (v && v.length >= 3) || "Name must be less than 3 characters",
+    ],
   }),
   props: ["premium"],
   created() {
