@@ -645,12 +645,51 @@
                                 </h3>
                               </div>
                               <table :key="index + indexOne + index + 'table'">
-                                <tr>
+                                <tr v-if="additional.rate">
                                   <th>ID</th>
-                                  <th>Limit</th>
+                                  <th>Rate</th>
                                   <th>Cost</th>
-                                  <th>Action</th>
+                                  <th>Purchase</th>
                                 </tr>
+                                <tr v-else>
+                                  <th>ID</th>
+                                  <th>Cover Limit</th>
+                                  <th>Cost</th>
+                                  <th>Purchase</th>
+                                </tr>
+                                        <template v-if="premium.cover.name === 'Motor Insurance'">
+                                              <template v-if="additional.rate">
+                                                <tr :key="index + 'TableRow'">
+                                              <td>{{ index + 1 }}</td>
+                                              <td>
+                                                {{additional.rate}}
+                                              </td>
+                                              <td>
+                                              {{(additional.rate*premium.vehicleCost)/100}}              
+                                              </td>
+                                              <td>
+                                               <v-btn
+                                          @click="
+                                            removingAdditionalCover(
+                                              premium.uuid,
+                                              (additional.rate*premium.vehicleCost)/100,
+                                              additional.id,
+                                              additional.name.toLowerCase()
+                                            )
+                                          "
+                                          small
+                                          outlined
+                                          color="red"
+                                          dark
+                                        >
+                                          Remove
+                                          <v-icon>remove_circle</v-icon></v-btn
+                                        >             
+                                              </td>
+                                            </tr>
+                                              </template>
+                                          </template>
+                                <template v-else>
                                 <template
                                   v-for="(additionalPremium,
                                   index) in additional.additional_premia"
@@ -713,6 +752,7 @@
                                     </template>
                                   </tr>
                                 </template>
+                                </template>
                               </table>
                             </template>
                           </template>
@@ -724,6 +764,7 @@
                           premium.uuid
                         ]"
                       >
+                      {{insurancePremiumAdditionalCoversGetter}}
                         <div :key="index + 'divNotSelected'" class="ma-4">
                           <h2 style="color: black; text-align: center">
                             {{ additionalNotSelected.name }}
@@ -734,13 +775,52 @@
                           </h3>
                         </div>
                         <table :key="index + 'tableNotSelected'">
-                          <tr>
+                          <tr v-if="premium.cover.name === 'Motor Insurance'">
                             <th>ID</th>
-                            <th>Limit</th>
+                            <th>Rate</th>
                             <th>Cost</th>
-                            <th>Action</th>
+                            <th>Purchase</th>
                           </tr>
-                          <template
+                          <tr v-else>
+                            <th>ID</th>
+                            <th>Cover Limit</th>
+                            <th>Cost</th>
+                            <th>Purchase</th>
+                          </tr>
+                                  <template v-if="premium.cover.name === 'Motor Insurance'">
+            <template v-if="additional.rate">
+               <tr :key="index + 'TableRow'">
+            <td>{{ index + 1 }}</td>
+            <td>
+              {{additional.rate}}
+            </td>
+            <td>
+             {{(additional.rate*premium.vehicleCost)/100}}              
+            </td>
+            <td>
+              <v-btn
+                small
+                outlined
+                color="primary"
+                dark
+                @click="
+                  addAdditionCover(                    
+                    additional.id,
+                    additional.insurance_cover_id,
+                    premium.uuid,
+                    (additional.rate*premium.vehicleCost)/100,
+                    additional.name.toLowerCase()
+                  )
+                "
+              >
+                Add To Cover.
+                <v-icon>add_shopping_cart</v-icon>
+              </v-btn>              
+            </td>
+          </tr>
+            </template>
+        </template>
+                                  <template
                             v-for="(additionalPremiumNotelected,
                             index) in additionalNotSelected.additional_premia"
                           >
@@ -784,6 +864,7 @@
                               </td>
                             </tr>
                           </template>
+                         
                         </table>
                       </template>
                       <!-- LOOPING THROUGH THE SELECTED ADDITIONAL COVERS. -->
@@ -1166,13 +1247,16 @@ export default {
       motor_insurance_details["uuid"] = this.premium.subCategory;
       motor_insurance_details["additionId"] = this.premium.subCategory;
       motor_insurance_details["name"] = this.premium.subCategory;
-      motor_insurance_details["value"] = this.premium.amountPayable;
+      motor_insurance_details["value"] =
+        this.premium.amountPayable
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Ksh";
       motor_insurance_details["description"] = " ";
       financial_break_down_array[0] = motor_insurance_details;
       // this.data = financial_break_down_array;
       this.$store.dispatch(
         "updatingFinancialBreakdown",
-        financialBreakDownArray
+        financial_break_down_array
       );
     }
   },

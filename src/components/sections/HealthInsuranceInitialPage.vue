@@ -278,42 +278,54 @@
 
               <!-- !  THIS SECTION IS USED TO SHOW THE COVER RELARED QUESTIONS. -->
               <template v-if="showingCoverRelatedQuestions">
-                <div key="nana"
+                <div
+                  key="nana"
                   class="text-center"
                   style="margin-left: auto; margin-right: auto; width: 90%"
                 >
-                <v-divider key="{{'nama1'}}"></v-divider>
-                <div key="{{'nama2'}}">
-                  <v-avatar size="70" class="bounce-2 box" style="margin-top: -2.5%">
-                    <img :src="require('@/assets/tie-svgrepo-com.svg')" alt="John" />
-                  </v-avatar>
-                </div>
-                <span
+                  <v-divider key="{{'nama1'}}"></v-divider>
+                  <div key="{{'nama2'}}">
+                    <v-avatar
+                      size="70"
+                      class="bounce-2 box"
+                      style="margin-top: -2.5%"
+                    >
+                      <img
+                        :src="require('@/assets/tie-svgrepo-com.svg')"
+                        alt="John"
+                      />
+                    </v-avatar>
+                  </div>
+                  <span
                     ><v-icon
                       @click="goingbackToFillDetails()"
                       style="cursor: pointer"
                       size="65"
                       >arrow_back_ios</v-icon
-                    ></span>
-                <h1
-                  key="{{'nama3'}}"
-                  class="d-inline"
-                  style="font-size: 35px; color: #4a4a60; font-family: Georgia, serif"
-                >
-                   Hey
-                  {{
-                    personalData.firstName.charAt(0).toUpperCase() +
-                    personalData.firstName.substr(1).toLowerCase()
-                  }}
-                  I can't Wait to get you the best deals for
-                  <span style="color: black; text-decoration: underline">
+                    ></span
+                  >
+                  <h1
+                    key="{{'nama3'}}"
+                    class="d-inline"
+                    style="
+                      font-size: 35px;
+                      color: #4a4a60;
+                      font-family: Georgia, serif;
+                    "
+                  >
+                    Hey
                     {{
-                      navigationStateGetter[navigationCoverGetter].subCategories[
-                        navigationSubCategory
-                      ].name
-                    }} </span
-                  >, I just need the details below,
-                </h1>
+                      personalData.firstName.charAt(0).toUpperCase() +
+                      personalData.firstName.substr(1).toLowerCase()
+                    }}
+                    I can't Wait to get you the best deals for
+                    <span style="color: black; text-decoration: underline">
+                      {{
+                        navigationStateGetter[navigationCoverGetter]
+                          .subCategories[navigationSubCategory].name
+                      }} </span
+                    >, I just need the details below,
+                  </h1>
                   <health-component-questions />
                 </div>
               </template>
@@ -397,22 +409,27 @@
                         v-if="premiumsDataGetter[0].subCategory"
                       >
                         {{ premiumsDataGetter[0].subCategory }}
-                      </span>                      
-                      <span v-if="premiumsDataGetter[0].cover.route_name == 'Motor'">
-
-                      </span>  
-                      <span v-else> 
-                        <span v-if="premiumsDataGetter[0].cover.route_name == 'Health'">
-                          With Cover Amount Of Up To :
-                      <span style="color: green; type: bold">
-                        {{
-                          premiumsDataGetter[0].coveredAmount
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        }}
                       </span>
+                      <span
+                        v-if="premiumsDataGetter[0].cover.route_name == 'Motor'"
+                      >
+                      </span>
+                      <span v-else>
+                        <span
+                          v-if="
+                            premiumsDataGetter[0].cover.route_name == 'Health'
+                          "
+                        >
+                          With Cover Amount Of Up To :
+                          <span style="color: green; type: bold">
+                            {{
+                              premiumsDataGetter[0].coveredAmount
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            }}
+                          </span>
                         </span>
-                        </span>                   
+                      </span>
                     </h1>
                     <template
                       v-for="(premiumsData, index) in premiumsDataGetter"
@@ -455,6 +472,7 @@ export default {
       "premiumsDataStatusGetter",
       "nextStepInStepperStateGetter",
       "personalDetailsGetter",
+      "payableAmountStateGetter",
     ]),
   },
   components: {
@@ -506,8 +524,8 @@ export default {
             this.marginValue =
               "margin-left: auto; margin-right: auto; margin-top:8%; width: 90%";
 
-              // console.log("Thses are the details of the user.");
-              // console.log(this.personalDetailsGetter);
+            // console.log("Thses are the details of the user.");
+            // console.log(this.personalDetailsGetter);
           }
         }
       } else {
@@ -522,14 +540,13 @@ export default {
     },
     goingbackToFillDetails() {
       if (this.show) {
-        this.show = true
+        this.show = true;
         this.questionsStartValue = this.questionsStartValue - 1;
       } else {
-         this.showingCoverRelatedQuestions = false;
-         this.show = true
+        this.showingCoverRelatedQuestions = false;
+        this.show = true;
         this.questionsStartValue = this.questionsStartValue - 1;
       }
-      
     },
   },
   data: () => ({

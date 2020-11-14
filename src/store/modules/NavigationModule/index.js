@@ -35,10 +35,10 @@ const state = {
     // ! this is the state that is used to update the snackbars upon adding an additional INusrance Cover:  
     additionalCoverSnackBar: [],
 
-     // ! this is the state that is used to update the snackbars upon removing an additional INusrance Cover:  
-     removingCoverSnackBar: [],
+    // ! this is the state that is used to update the snackbars upon removing an additional INusrance Cover:  
+    removingCoverSnackBar: [],
 
-     editingPersonalDetailsOnPurchasingModal: false,
+    editingPersonalDetailsOnPurchasingModal: false,
 
 
 }
@@ -90,9 +90,9 @@ const mutations = {
     },
     UPDATING_THE_REMOVAL_SNACKBAR_STATE_DATA(state, payload) {
         state.removingCoverSnackBar = payload;
-    },    
-    UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE(state, payload){
-            state.editingPersonalDetailsOnPurchasingModal = payload;
+    },
+    UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE(state, payload) {
+        state.editingPersonalDetailsOnPurchasingModal = payload;
     }
 }
 const actions = {
@@ -235,6 +235,8 @@ const actions = {
                                 break;
                             case 'Motor':
                                 console.log("This is Motor.");
+                                // ! implementing the PayaBle Amounts. 
+                                payableAmounts[element.uuid] = element.amountPayable;
                                 break;
 
                             default:
@@ -335,6 +337,8 @@ const actions = {
             // data["activity"] = "add";
             // dispatch("updatingTheFinancialBreakDown",data);
         }
+        console.log("Thi is the additional Cover in The Motor Insurace Premoim");
+        console.log(allAdditionalCovers);
     },
     // ! function to update the amounts payable.
 
@@ -460,26 +464,34 @@ const actions = {
 
             state.insurancePremiumAdditionalCovers[premiumUUID] = newOtherAdditional;
 
+            console.log(newOtherAdditional);
+
         }
     },
 
     // ! this action is used to implement the addition of the snackbar . 
-    updatingStatusOfAdditionalCoverSnackbar({commit},obj){
+    updatingStatusOfAdditionalCoverSnackbar({
+        commit
+    }, obj) {
 
-        commit("UPDATING_THE_ADDITIONAL_SNACKBAR_STATE_DATA",obj);
+        commit("UPDATING_THE_ADDITIONAL_SNACKBAR_STATE_DATA", obj);
 
     },
 
     // ! this action is used to implement the addition of the snackbar . 
-    updatingStatusOfRemovalCoverSnackbar({commit},obj){
+    updatingStatusOfRemovalCoverSnackbar({
+        commit
+    }, obj) {
 
-        commit("UPDATING_THE_REMOVAL_SNACKBAR_STATE_DATA",obj);
+        commit("UPDATING_THE_REMOVAL_SNACKBAR_STATE_DATA", obj);
 
     },
 
     // ! this is the action that is used to set the value of editingPersonalDetailsOnPurchasingModal to true. 
-    editingPersonalDetailsOnPurchasingModalSetTrueAction({commit}){
-            commit("UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE",true);
+    editingPersonalDetailsOnPurchasingModalSetTrueAction({
+        commit
+    }) {
+        commit("UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE", true);
     }
 }
 const getters = {

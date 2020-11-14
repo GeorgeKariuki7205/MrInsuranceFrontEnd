@@ -19,13 +19,53 @@
         </h3>
       </div>
       <table :key="index + 'additionalCoversTable'">
-        <tr>
+        <tr v-if="premium.cover.name === 'Motor Insurance'">
+          <th>ID</th>
+          <th>Rate</th>
+          <th>Cost</th>
+          <th>Purchase</th>
+        </tr>
+        <tr v-else>
           <th>ID</th>
           <th>Cover Limit</th>
           <th>Cost</th>
           <th>Purchase</th>
         </tr>
-        <template
+        <template v-if="premium.cover.name === 'Motor Insurance'">
+            <template v-if="additional.rate">
+               <tr :key="index + 'TableRow'">
+            <td>{{ index + 1 }}</td>
+            <td>
+              {{additional.rate}}
+            </td>
+            <td>
+             {{(additional.rate*premium.vehicleCost)/100}}              
+            </td>
+            <td>
+              <v-btn
+                small
+                outlined
+                color="primary"
+                dark
+                @click="
+                  addAdditionCover(   
+                    additional.insurance_cover_id,                 
+                    additional.id,                    
+                    premium.uuid,
+                    (additional.rate*premium.vehicleCost)/100,
+                    additional.name.toLowerCase()
+                  )
+                "
+              >
+                Add To Cover.
+                <v-icon>add_shopping_cart</v-icon>
+              </v-btn>              
+            </td>
+          </tr>
+            </template>
+        </template>
+        <template v-else>
+        <template 
           v-for="(additionalPremium, index) in additional.additional_premia"
         >
           <tr :key="index + 'TableRow'">
@@ -67,6 +107,7 @@
               
             </td>
           </tr>
+        </template>
         </template>
       </table>
     </template>
