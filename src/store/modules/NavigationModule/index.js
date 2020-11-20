@@ -1,7 +1,7 @@
 import axios from "axios";
-import {
-    v4 as uuidv4
-} from 'uuid';
+// import {
+//     v4 as uuidv4
+// } from 'uuid';
 
 const state = {
     navigationState: null,
@@ -39,6 +39,10 @@ const state = {
     removingCoverSnackBar: [],
 
     editingPersonalDetailsOnPurchasingModal: false,
+
+    // ! this is the test factor.
+
+    test : 'test',
 
 
 }
@@ -88,11 +92,18 @@ const mutations = {
     UPDATING_THE_ADDITIONAL_SNACKBAR_STATE_DATA(state, payload) {
         state.additionalCoverSnackBar = payload;
     },
+
     UPDATING_THE_REMOVAL_SNACKBAR_STATE_DATA(state, payload) {
         state.removingCoverSnackBar = payload;
     },
     UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE(state, payload) {
         state.editingPersonalDetailsOnPurchasingModal = payload;
+    },
+    UPDATING_ADDITIONAL_COVERS_STATE(state, payload){
+        state.additionalCoversPremiumState = payload;
+    },
+    UPDATING_THE_TEST_VALUE(state, payload){
+            state.test = payload;
     }
 }
 const actions = {
@@ -150,6 +161,7 @@ const actions = {
     }) {
 
         // ! creating an object to hold the posted data.
+        
         var coverDetails = {};
         for (const [key, value] of Object.entries(state.insuranceCoverDetails)) {
             coverDetails[key] = value;
@@ -167,6 +179,7 @@ const actions = {
         obj['subCategoryId'] = state.navigationState[state.cover].subCategories[state.subCategory].id;
         // ! posting the data to the API endpoint. 
 
+        var caseObtained;        
         axios.post("https://mrinsuranceapi.georgekprojects.tk/api/insuranceCovers", obj).then(
             response => {
                 if (response.status === 200) {
@@ -176,15 +189,19 @@ const actions = {
                     // ! creating the cost and the cost breakdown details and mutating them.
                     console.log(response.data);
                     var payableAmounts = {};
-                    var combinedHealthFinancialBreakDown = [];
+                    var combinedHealthFinancialBreakDown = {};
+                    var combinedMotorFinancialBreakDownObject = {};                
+                    var additionalCoversInitialStates = {};
+
                     response.data.forEach(element => {
                         switch (element.cover.route_name) {
                             case 'Health':
                                 // ! creating an array that will hold the financial breakdown and the amounts payable.
 
                                 // ! implementing the PayaBle Amounts. 
+                                caseObtained = 'Health';
                                 payableAmounts[element.uuid] = element.amountPayable;
-
+                                additionalCoversInitialStates[element.uuid] = null;
                                 // ! implementing the Financial Breakdown.                           
 
                                 // ! getting the principal member financial
@@ -196,6 +213,8 @@ const actions = {
                                     element.financialBreakDown.principal_member
                                     .toString()
                                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                                principal_memberDetails["uuid"] = "Principal Member";
+                                principal_memberDetails["additionId"] = "Principal Member";
 
                                 healthFinancialBreakDown['principal_member'] = principal_memberDetails;
 
@@ -207,11 +226,15 @@ const actions = {
                                         .toString()
                                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
                                     spouse_details["description"] = " ' ' ";
+                                    spouse_details["uuid"] = "Spouse";
+                                    spouse_details["additionId"] = "Spouse";
                                     healthFinancialBreakDown['spouse'] = spouse_details;
                                 }
 
                                 if (element.financialBreakDown.dependents) {
                                     var dependents_details = [];
+                                    dependents_details["uuid"] = "Children";
+                                    dependents_details["additionId"] = "Children";
                                     dependents_details["name"] = "Children";
                                     dependents_details["value"] =
                                         (
@@ -234,9 +257,24 @@ const actions = {
                                 combinedHealthFinancialBreakDown[element.uuid] = healthFinancialBreakDown;
                                 break;
                             case 'Motor':
+                                caseObtained = 'Motor';
                                 console.log("This is Motor.");
-                                // ! implementing the PayaBle Amounts. 
+                                // ! implementing the PayaBle Amounts.                                 
                                 payableAmounts[element.uuid] = element.amountPayable;
+                                additionalCoversInitialStates[element.uuid] = null;
+                                      var financial_break_down_array = {};
+                                        var motor_insurance_details = [];
+                                        motor_insurance_details["uuid"] = element.subCategory;
+                                        motor_insurance_details["additionId"] = element.subCategory;
+                                        motor_insurance_details["name"] = element.subCategory;
+                                        motor_insurance_details["value"] =
+                                        element.amountPayable
+                                            .toString()
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Ksh";
+                                        motor_insurance_details["description"] = " ";
+                                        financial_break_down_array[element.subCategory] = motor_insurance_details;  
+                                        combinedMotorFinancialBreakDownObject[element.uuid] = financial_break_down_array;    
+                                       
                                 break;
 
                             default:
@@ -244,8 +282,28 @@ const actions = {
                         }
                     });
                     commit("UPDATING_THE_PAYABLE_AMOUNT", payableAmounts);
-                    commit("UPDATING_THE_FINANCIAL_BREAKDOWN", combinedHealthFinancialBreakDown);
+                    if (caseObtained === 'Motor') {
+                        commit("UPDATING_THE_FINANCIAL_BREAKDOWN", combinedMotorFinancialBreakDownObject);
+                    } else if(caseObtained === 'Health'){
+                        commit("UPDATING_THE_FINANCIAL_BREAKDOWN", combinedHealthFinancialBreakDown);
+                    }
+                    
                     commit("UPDATING_PREMIUM_DETAILS_STATUS", false);
+                    commit("UPDATING_ADDITIONAL_COVERS_STATE",additionalCoversInitialStates);
+
+                    // console.log("This is the financial breakdown Getter: ");
+                    // state.additionalCoversPremiumState = combinedHealthFinancialBreakDown;
+
+                    console.log("This is the state.financialBreakdownState");
+                    console.log(state.financialBreakdownState);
+
+                    // console.log("This is the payableAmounts: ");
+                    // console.log(state.payableAmountState);
+
+                    // logging the additionalcovers. 
+
+                    // console.log("Below is the state of the additinal Premium.");
+                    // console.log(state.additionalCoversPremiumState);
                 }
             }
         ).catch(
@@ -265,17 +323,21 @@ const actions = {
 
     updatingFinancialBreakdown({
         commit
-    }, data) {
+    }, data,second) {
+        
         commit("UPDATING_THE_FINANCIAL_BREAKDOWN", data);
+        console.log("This is the second Input Of The application: ");
+        console.log(second);
+        console.log("This is the financialBreakdownState after update: ");
+        console.log(state.financialBreakdownState);
+
     },
 
     // ! creating the function that will be used to update the financial breakdown of the premiums. 
 
-    updatingTheFinancialBreakDown({
-        commit
-    }, obj) {
+    updatingTheFinancialBreakDown({commit},obj) {       
         var activity = obj.activity;
-        var financialBreakDownStateDefined = state.financialBreakdownState;
+        var financialBreakDownStateDefined = state.financialBreakdownState[obj.uuid];
         if (activity === 'remove') {
 
             for (const key in financialBreakDownStateDefined) {
@@ -285,60 +347,58 @@ const actions = {
                     }
                 }
             }
-            commit("UPDATING_THE_FINANCIAL_BREAKDOWN", financialBreakDownStateDefined);
+            commit("UPDATING_THE_TEST_VALUE",'test2');
 
         } else if (activity === 'add') {
-
-            financialBreakDownStateDefined[Object.keys(state.additionalCoversPremiumState).length + 2] = obj;
-            commit("UPDATING_THE_FINANCIAL_BREAKDOWN", financialBreakDownStateDefined);
+           
+            state.financialBreakdownState[obj.uuid][obj.name] = obj;
+            // commit("UPDATING_THE_FINANCIAL_BREAKDOWN", financialBreakDownStateDefined);
 
         }
+
+        // console.log("This is the object: ");
+        // console.log(obj);
+        // console.log("This is the financialBreakdownState");
+        // console.log( state.financialBreakdownState);
     },
 
     // ! function to implement the functionality to add covers and disable the premiums that have been activated. 
-    activatingAdditionalCovers({
-        commit,
+    activatingAdditionalCovers({       
         dispatch
     }, data) {
 
+        console.log("THIS IS THE state.additionalCoversPremiumState[data.premiumUUID]:  ");
+        console.log(state.additionalCoversPremiumState[data.premiumUUID]);
         //! creating the additional cover Details state. 
-        var allAdditionalCovers = {};
-        var additionalCover = [];
-        if (state.additionalCoversPremiumState === null) {
+        var allAdditionalCovers = [];
+        var additionalCover = [];        
+        if (state.additionalCoversPremiumState[data.premiumUUID] === null) {
 
             additionalCover['additionalId'] = data.additionalId;
             additionalCover['premiumUUID'] = data.premiumUUID;
             additionalCover['additionalPremiumID'] = data.additionalPremiumID;
-            allAdditionalCovers[uuidv4()] = additionalCover;
-            commit("UPDATING_THE_ADDITIONAL_PREMIUM", allAdditionalCovers);
-            dispatch("updateAdditionalCovresAddedOrRemoved");
+            allAdditionalCovers[0] = additionalCover;            
+            state.additionalCoversPremiumState[data.premiumUUID] = allAdditionalCovers;
 
-            // data["activity"] = "add";
-            // dispatch("updatingTheFinancialBreakDown",data);
+            dispatch("updateAdditionalCovresAddedOrRemoved");                                
         } else {
+            
+            var counter = 0;
+            for (const key in state.additionalCoversPremiumState[data.premiumUUID]) {
+                
+                allAdditionalCovers[counter] = state.additionalCoversPremiumState[data.premiumUUID][key];
+                counter = counter+1;
 
-
-            for (var oldState in state.additionalCoversPremiumState) {
-                allAdditionalCovers[uuidv4()] = state.additionalCoversPremiumState[oldState];
-                // console.log(oldState);                
             }
-
-
             additionalCover['additionalId'] = data.additionalId;
             additionalCover['premiumUUID'] = data.premiumUUID;
             additionalCover['additionalPremiumID'] = data.additionalPremiumID;
-            allAdditionalCovers[uuidv4()] = additionalCover;
-            commit("UPDATING_THE_ADDITIONAL_PREMIUM", allAdditionalCovers);
-            // console.log("This is all the additional Covers.");
-            // console.log(allAdditionalCovers);
-            // console.log("I AM DISPATCHING IN THE ADDING ADDITIONAL COVERS ACTION.");
+            allAdditionalCovers[counter] = additionalCover;            
+            state.additionalCoversPremiumState[data.premiumUUID]= allAdditionalCovers;
+            // console.log("This is the state of the state.additionalCoversPremiumState after adding.");
+            // console.log(state.additionalCoversPremiumState);
             dispatch("updateAdditionalCovresAddedOrRemoved");
-
-            // data["activity"] = "add";
-            // dispatch("updatingTheFinancialBreakDown",data);
-        }
-        console.log("Thi is the additional Cover in The Motor Insurace Premoim");
-        console.log(allAdditionalCovers);
+        }                     
     },
     // ! function to update the amounts payable.
 
@@ -366,13 +426,17 @@ const actions = {
 
     },
 
-    updateTheAdditionalCover({
-        commit,
+    updateTheAdditionalCover({        
         dispatch
     }, obj) {
         //* updateTheAdditionalCover({commit}){        
         var premiumUUIDValue = obj.premium;
-        var stateDefined = state.additionalCoversPremiumState;
+        var stateDefined = state.additionalCoversPremiumState[obj.premium];
+        // const trial  = state.additionalCoversPremiumState;
+        console.log("Before: ");
+        console.log(state.additionalCoversPremiumState);
+        console.log("Before Whole Array: ");
+        console.log(state.additionalCoversPremiumState[obj.premium]);
         var elementValue;
         for (const element in stateDefined) {
 
@@ -384,16 +448,26 @@ const actions = {
 
             }
         }
-        delete state.additionalCoversPremiumState[elementValue];
-        var stateOfPrmium = state.additionalCoversPremiumState;
 
-        if (Object.keys(state.additionalCoversPremiumState).length === 0) {
-            commit("UPDATING_THE_ADDITIONAL_PREMIUM", null);
+        // console.log("Thi is the element being deleted: ");
+        // console.log("This is the Element Value: "+elementValue);
+        // console.log(state.additionalCoversPremiumState[obj.premium][elementValue]);
+        (state.additionalCoversPremiumState[obj.premium]).splice(elementValue,1);
+        var stateOfPrmium = state.additionalCoversPremiumState[obj.premium];
+
+
+        if (Object.keys(state.additionalCoversPremiumState[obj.premium]).length === 0) {
+            // commit("UPDATING_THE_ADDITIONAL_PREMIUM", null);
+            state.additionalCoversPremiumState[obj.premium] = null;
         } else {
-            commit("UPDATING_THE_ADDITIONAL_PREMIUM", stateOfPrmium);
+            // commit("UPDATING_THE_ADDITIONAL_PREMIUM", stateOfPrmium);
+            state.additionalCoversPremiumState[obj.premium]= stateOfPrmium;
         }
-
-
+       
+        console.log("After: ");
+        console.log(state.additionalCoversPremiumState[obj.premium]);
+        console.log("This is the whole array: ");
+        console.log(state.additionalCoversPremiumState);
         //!  dispatch the method to update the payable amount.
         var object = {};
         object['premiumUUId'] = premiumUUIDValue;
@@ -412,36 +486,59 @@ const actions = {
 
     updateAdditionalCovresAddedOrRemoved() {
         var premiums = state.premiumsData;
-        var currentAddedAdditionals = state.additionalCoversPremiumState;
+        
+
+       
 
         for (const premium in premiums) {
 
             var premiumUUID = premiums[premium].uuid;
             var newOtherAdditional = {};
-            var count = 0;
+            // var count = 0;
             var count2 = 0;
+            var currentAddedAdditionals = state.additionalCoversPremiumState[premiumUUID];
+            // count = Object.keys(currentAddedAdditionals).length;
+            // console.log("Tis is the count: "+count);
 
-            for (const prop in premiums[premium].additionalCovers) {
-                prop.id;
-                ++count;
-            }
+            console.log("These Are the current Additionals:");
+            console.log(currentAddedAdditionals);
+
+            // for (const prop in premiums[premium].additionalCovers) {
+            //     prop.id;
+            //     ++count;
+            // }
 
             for (const prop in currentAddedAdditionals) {
                 prop.id;
                 ++count2;
             }
 
-            var qualifier = count - count2;
+            // if (premiums[premium].cover.name === 'Motor Insurance') {
+
+            //     if (currentAddedAdditionals === null) {
+            //          count2 = 0;
+            //     } else {
+            //         count2 = currentAddedAdditionals.length;
+            //     }
+                
+            // }
+            console.log("This is the count2: "+count2);
+            // count2 = Object.keys(currentAddedAdditionals).length;
+            // var qualifier = count - count2;
+
+            // console.log("Count: "+count+" Count2: "+count2 + " qualifier: "+qualifier);
+
             var counter = 0;
 
             // ! looping through the additional Covers: 
 
             for (const additionalCover in premiums[premium].additionalCovers) {
                 var checker = 0;
-
+                
                 for (const additionalCoverSelected in currentAddedAdditionals) {
 
                     if (currentAddedAdditionals[additionalCoverSelected].premiumUUID === premiumUUID) {
+
                         if (
                             premiums[premium].additionalCovers[additionalCover]["id"] !==
                             currentAddedAdditionals[additionalCoverSelected][
@@ -450,23 +547,28 @@ const actions = {
                         ) {
                             ++checker;
                         }
+
                     }
                 }
 
-                if (checker == qualifier) {
-                    newOtherAdditional[checker] = premiums[premium].additionalCovers[
+                
+                if (checker >= count2) {
+                    newOtherAdditional[counter] = premiums[premium].additionalCovers[
                         additionalCover
                     ];
+                    // console.log("This is the checker "+checker+" And The qualifier " +qualifier + " Name Of Cover: "+premiums[premium].additionalCovers[additionalCover]["name"]+" The Counter Is: "+counter);
                 }
 
-                counter + 1;
-            }
-
-            state.insurancePremiumAdditionalCovers[premiumUUID] = newOtherAdditional;
-
-            console.log(newOtherAdditional);
-
+                counter = counter + 1;
+            }            
+            state.insurancePremiumAdditionalCovers[premiumUUID] = newOtherAdditional;  
+            
+            
+            console.log("Additionals Not Covered: ");
+            console.log(state.insurancePremiumAdditionalCovers);
         }
+
+       
     },
 
     // ! this action is used to implement the addition of the snackbar . 
@@ -492,7 +594,7 @@ const actions = {
         commit
     }) {
         commit("UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE", true);
-    }
+    },
 }
 const getters = {
     navigationStateGetter: state => state.navigationState,

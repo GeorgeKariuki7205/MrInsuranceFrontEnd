@@ -1,7 +1,7 @@
 <template>
-
+<div>  
   <v-row align="center" justify="center">    
-    <template v-for="(additional, index) in premium.additionalCovers">
+    <template v-for="(additional, index) in premium.additionalCovers">      
       <div :key="index + 'additionalCovers'" class="ma-4">
         <h2
           :key="index + 'additionalCoversHeading'"
@@ -112,6 +112,7 @@
       </table>
     </template>
   </v-row>
+  </div>
 </template>
 
 <script>
@@ -153,6 +154,8 @@ export default {
       amountsPayableUpdatDetails["premiumUUId"] = premiumUUID;
       amountsPayableUpdatDetails["cost"] = cost;
 
+      console.log("This is the ID of the premium Gotten: " + name);
+
       this.$store.dispatch("updatePayableAmount", amountsPayableUpdatDetails);
 
       var addObj = {};
@@ -163,6 +166,8 @@ export default {
       addObj["value"] =
         cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
       addObj["activity"] = "add";
+      // console.log("This is the object before sending: ");
+      // console.log(addObj);
       this.$store.dispatch("updatingTheFinancialBreakDown", addObj);
     },
   },

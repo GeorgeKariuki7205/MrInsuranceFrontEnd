@@ -20,6 +20,7 @@
         >
       </v-list-item-content> -->
       <v-spacer></v-spacer>
+      {{ premium.uuid }}
       <h3 class="mx-auto error--text">
         Payable:
         {{
@@ -96,30 +97,15 @@
                   <th style="color: black">Value</th>
                 </tr>
                 <template
-                  v-for="n in Object.keys(financialBreakdownStateGetter).length"
+                  v-for="(financialBreakdown,
+                  indexFinancialBreakdown) in financialBreakdownStateGetter[
+                    premium.uuid
+                  ]"
                 >
-                  <tr :key="n">
-                    <td>
-                      {{
-                        financialBreakdownStateGetter[
-                          Object.keys(financialBreakdownStateGetter)[n - 1]
-                        ].name
-                      }}
-                    </td>
-                    <td>
-                      {{
-                        financialBreakdownStateGetter[
-                          Object.keys(financialBreakdownStateGetter)[n - 1]
-                        ].description
-                      }}
-                    </td>
-                    <td>
-                      {{
-                        financialBreakdownStateGetter[
-                          Object.keys(financialBreakdownStateGetter)[n - 1]
-                        ].value
-                      }}
-                    </td>
+                  <tr :key="indexFinancialBreakdown + 'tableRow'">
+                    <td>{{ financialBreakdown.name }}</td>
+                    <td>{{ financialBreakdown.description }}</td>
+                    <td>{{ financialBreakdown.value }}</td>
                   </tr>
                 </template>
               </table>
@@ -423,52 +409,17 @@
                               <th style="color: black">Value</th>
                             </tr>
                             <template
-                              v-for="n in Object.keys(
-                                financialBreakdownStateGetter
-                              ).length"
+                              v-for="(financialBreakdown,
+                              indexFinancialBreakdown) in financialBreakdownStateGetter[
+                                premium.uuid
+                              ]"
                             >
-                              <tr :key="n">
-                                <td>
-                                  {{
-                                    financialBreakdownStateGetter[
-                                      Object.keys(
-                                        financialBreakdownStateGetter
-                                      )[n - 1]
-                                    ].name
-                                  }}
-                                </td>
-                                <td>
-                                  {{
-                                    financialBreakdownStateGetter[
-                                      Object.keys(
-                                        financialBreakdownStateGetter
-                                      )[n - 1]
-                                    ].description
-                                  }}
-                                </td>
-                                <td>
-                                  {{
-                                    financialBreakdownStateGetter[
-                                      Object.keys(
-                                        financialBreakdownStateGetter
-                                      )[n - 1]
-                                    ].value
-                                  }}
-                                </td>
+                              <tr :key="indexFinancialBreakdown + 'tableRow'">
+                                <td>{{ financialBreakdown.name }}</td>
+                                <td>{{ financialBreakdown.description }}</td>
+                                <td>{{ financialBreakdown.value }}</td>
                               </tr>
                             </template>
-                            <tr>
-                              <td><b>Total Cost</b></td>
-                              <td></td>
-                              <td>
-                                {{
-                                  payableAmountStateGetter[premium.uuid]
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                }}
-                                Ksh
-                              </td>
-                            </tr>
                           </table>
                         </div>
                       </div>
@@ -604,268 +555,293 @@
                 <template v-else>
                   <v-row align="center" justify="center">
                     <template
-                      v-if="additionalCoversPremiumStateGetter === null"
+                      v-if="
+                        additionalCoversPremiumStateGetter[premium.uuid] ===
+                        null
+                      "
                     >
                       <health-component-additional-covers-with-null-value
                         :premium="premium"
                       />
                     </template>
                     <template v-else>
-                      <template
-                        v-for="(additionalCoversInObject,
-                        indexOne) in additionalCoversPremiumStateGetter"
-                      >
+                      <template>
                         <template
-                          v-if="
-                            additionalCoversInObject.premiumUUID ===
+                          v-for="(additionalCoversInObject,
+                          indexOne) in additionalCoversPremiumStateGetter[
                             premium.uuid
-                          "
+                          ]"
                         >
                           <template
-                            v-for="(additional,
-                            index) in premium.additionalCovers"
+                            v-if="
+                              additionalCoversInObject.premiumUUID ===
+                              premium.uuid
+                            "
                           >
                             <template
-                              v-if="
-                                additional.id ===
-                                additionalCoversInObject.additionalId
-                              "
+                              v-for="(additional,
+                              index) in premium.additionalCovers"
                             >
-                              <div
-                                :key="index + indexOne + index + 'div'"
-                                class="ma-4"
+                              <template
+                                v-if="
+                                  additional.id ===
+                                  additionalCoversInObject.additionalId
+                                "
                               >
-                                <h2 style="color: black; text-align: center">
-                                  {{ additional.name }}
-                                </h2>
-                                <h3 style="color: black; text-align: center">
-                                  Premuims For The{{
-                                    additional.name.toLowerCase()
-                                  }}
-                                </h3>
-                              </div>
-                              <table :key="index + indexOne + index + 'table'">
-                                <tr v-if="additional.rate">
-                                  <th>ID</th>
-                                  <th>Rate</th>
-                                  <th>Cost</th>
-                                  <th>Purchase</th>
-                                </tr>
-                                <tr v-else>
-                                  <th>ID</th>
-                                  <th>Cover Limit</th>
-                                  <th>Cost</th>
-                                  <th>Purchase</th>
-                                </tr>
-                                        <template v-if="premium.cover.name === 'Motor Insurance'">
-                                              <template v-if="additional.rate">
-                                                <tr :key="index + 'TableRow'">
-                                              <td>{{ index + 1 }}</td>
-                                              <td>
-                                                {{additional.rate}}
-                                              </td>
-                                              <td>
-                                              {{(additional.rate*premium.vehicleCost)/100}}              
-                                              </td>
-                                              <td>
-                                               <v-btn
-                                          @click="
-                                            removingAdditionalCover(
-                                              premium.uuid,
-                                              (additional.rate*premium.vehicleCost)/100,
-                                              additional.id,
-                                              additional.name.toLowerCase()
-                                            )
-                                          "
-                                          small
-                                          outlined
-                                          color="red"
-                                          dark
-                                        >
-                                          Remove
-                                          <v-icon>remove_circle</v-icon></v-btn
-                                        >             
-                                              </td>
-                                            </tr>
-                                              </template>
-                                          </template>
-                                <template v-else>
-                                <template
-                                  v-for="(additionalPremium,
-                                  index) in additional.additional_premia"
+                                <div
+                                  :key="index + indexOne + index + 'div'"
+                                  class="ma-4"
                                 >
-                                  <tr :key="index + 'tableRow'">
-                                    <td>{{ index + 1 }}</td>
-                                    <td>
-                                      {{
-                                        additionalPremium.limit
-                                          .toString()
-                                          .replace(
-                                            /\B(?=(\d{3})+(?!\d))/g,
-                                            ","
-                                          ) + " Ksh"
-                                      }}
-                                    </td>
-                                    <td>
-                                      {{
-                                        additionalPremium.cost
-                                          .toString()
-                                          .replace(
-                                            /\B(?=(\d{3})+(?!\d))/g,
-                                            ","
-                                          ) + " Ksh"
-                                      }}
-                                    </td>
-                                    <template
-                                      v-if="
-                                        additionalPremium.id ===
-                                        additionalCoversInObject.additionalPremiumID
-                                      "
-                                    >
-                                      <td class="text-center">
-                                        <v-btn
-                                          @click="
-                                            removingAdditionalCover(
-                                              premium.uuid,
-                                              additionalPremium.cost,
-                                              additional.id,
-                                              additional.name
-                                            )
-                                          "
-                                          small
-                                          outlined
-                                          color="red"
-                                          dark
-                                        >
-                                          Remove
-                                          <v-icon>remove_circle</v-icon></v-btn
-                                        >
-                                      </td>
-                                    </template>
-                                    <template v-else>
-                                      <p
-                                        class="text-center"
-                                        style="color: blue"
-                                      >
-                                        Not Available
-                                      </p>
-                                    </template>
+                                  <h2 style="color: black; text-align: center">
+                                    {{ additional.name }}
+                                  </h2>
+                                  <h3 style="color: black; text-align: center">
+                                    Premuims For The{{
+                                      additional.name.toLowerCase()
+                                    }}
+                                  </h3>
+                                </div>
+                                <table
+                                  :key="index + indexOne + index + 'table'"
+                                >
+                                  <tr v-if="premium.cover.name === 'Motor Insurance'">
+                                    <th>ID</th>
+                                    <th>Rate</th>
+                                    <th>Cost</th>
+                                    <th>Purchase</th>
                                   </tr>
-                                </template>
-                                </template>
-                              </table>
+                                  <tr v-else>
+                                    <th>ID</th>
+                                    <th>Cover Limit</th>
+                                    <th>Cost</th>
+                                    <th>Purchase</th>
+                                  </tr>
+                                  <template
+                                    v-if="
+                                      premium.cover.name === 'Motor Insurance'
+                                    "
+                                  >
+                                    <template v-if="additional.rate">
+                                      <tr :key="index + 'TableRow'">
+                                        <td>{{ index + 1 }}</td>
+                                        <td>
+                                          {{ additional.rate }}
+                                        </td>
+                                        <td>
+                                          {{
+                                            (additional.rate *
+                                              premium.vehicleCost) /
+                                            100
+                                          }}
+                                        </td>
+                                        <td>
+                                          <v-btn
+                                            @click="
+                                              removingAdditionalCover(
+                                                premium.uuid,
+                                                (additional.rate *
+                                                  premium.vehicleCost) /
+                                                  100,
+                                                additional.id,
+                                                additional.name.toLowerCase()
+                                              )
+                                            "
+                                            small
+                                            outlined
+                                            color="red"
+                                            dark
+                                          >
+                                            Remove
+                                            <v-icon
+                                              >remove_circle</v-icon
+                                            ></v-btn
+                                          >
+                                        </td>
+                                      </tr>
+                                    </template>
+                                  </template>
+                                  <template v-else>
+                                    <template
+                                      v-for="(additionalPremium,
+                                      index) in additional.additional_premia"
+                                    >
+                                      <tr :key="index + 'tableRow'">
+                                        <td>{{ index + 1 }}</td>
+                                        <td>
+                                          {{
+                                            additionalPremium.limit
+                                              .toString()
+                                              .replace(
+                                                /\B(?=(\d{3})+(?!\d))/g,
+                                                ","
+                                              ) + " Ksh"
+                                          }}
+                                        </td>
+                                        <td>
+                                          {{
+                                            additionalPremium.cost
+                                              .toString()
+                                              .replace(
+                                                /\B(?=(\d{3})+(?!\d))/g,
+                                                ","
+                                              ) + " Ksh"
+                                          }}
+                                        </td>
+                                        <template
+                                          v-if="
+                                            additionalPremium.id ===
+                                            additionalCoversInObject.additionalPremiumID
+                                          "
+                                        >
+                                          <td class="text-center">
+                                            <v-btn
+                                              @click="
+                                                removingAdditionalCover(
+                                                  premium.uuid,
+                                                  additionalPremium.cost,
+                                                  additional.id,
+                                                  additional.name
+                                                )
+                                              "
+                                              small
+                                              outlined
+                                              color="red"
+                                              dark
+                                            >
+                                              Remove
+                                              <v-icon
+                                                >remove_circle</v-icon
+                                              ></v-btn
+                                            >
+                                          </td>
+                                        </template>
+                                        <template v-else>
+                                          <p
+                                            class="text-center"
+                                            style="color: blue"
+                                          >
+                                            Not Available
+                                          </p>
+                                        </template>
+                                      </tr>
+                                    </template>
+                                  </template>
+                                </table>
+                              </template>
                             </template>
                           </template>
-                        </template>
-                      </template>
-                      <template
-                        v-for="(additionalNotSelected,
-                        index) in insurancePremiumAdditionalCoversGetter[
-                          premium.uuid
-                        ]"
-                      >
-                      {{insurancePremiumAdditionalCoversGetter}}
-                        <div :key="index + 'divNotSelected'" class="ma-4">
-                          <h2 style="color: black; text-align: center">
-                            {{ additionalNotSelected.name }}
-                          </h2>
-                          <h3 style="color: black; text-align: center">
-                            Premuims For
-                            {{ additionalNotSelected.name.toLowerCase() }}
-                          </h3>
-                        </div>
-                        <table :key="index + 'tableNotSelected'">
-                          <tr v-if="premium.cover.name === 'Motor Insurance'">
-                            <th>ID</th>
-                            <th>Rate</th>
-                            <th>Cost</th>
-                            <th>Purchase</th>
-                          </tr>
-                          <tr v-else>
-                            <th>ID</th>
-                            <th>Cover Limit</th>
-                            <th>Cost</th>
-                            <th>Purchase</th>
-                          </tr>
-                                  <template v-if="premium.cover.name === 'Motor Insurance'">
-            <template v-if="additional.rate">
-               <tr :key="index + 'TableRow'">
-            <td>{{ index + 1 }}</td>
-            <td>
-              {{additional.rate}}
-            </td>
-            <td>
-             {{(additional.rate*premium.vehicleCost)/100}}              
-            </td>
-            <td>
-              <v-btn
-                small
-                outlined
-                color="primary"
-                dark
-                @click="
-                  addAdditionCover(                    
-                    additional.id,
-                    additional.insurance_cover_id,
-                    premium.uuid,
-                    (additional.rate*premium.vehicleCost)/100,
-                    additional.name.toLowerCase()
-                  )
-                "
-              >
-                Add To Cover.
-                <v-icon>add_shopping_cart</v-icon>
-              </v-btn>              
-            </td>
-          </tr>
-            </template>
-        </template>
-                                  <template
-                            v-for="(additionalPremiumNotelected,
-                            index) in additionalNotSelected.additional_premia"
-                          >
-                            <tr :key="index + 'rowNotSelected'">
-                              <td>{{ index + 1 }}</td>
-                              <td>
-                                {{
-                                  additionalPremiumNotelected.limit
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                                  " Ksh"
-                                }}
-                              </td>
-                              <td>
-                                {{
-                                  additionalPremiumNotelected.cost
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                                  " Ksh"
-                                }}
-                              </td>
-                              <td>
-                                <v-btn
-                                  small
-                                  outlined
-                                  color="primary"
-                                  dark
-                                  @click="
-                                    addAdditionCover(
-                                      additionalPremiumNotelected.id,
-                                      additionalNotSelected.id,
-                                      premium.uuid,
-                                      additionalPremiumNotelected.cost,
-                                      additionalNotSelected.name.toLowerCase()
-                                    )
-                                  "
-                                >
-                                  Add To Cover.
-                                  <v-icon>add_shopping_cart</v-icon>
-                                </v-btn>
-                              </td>
+                        </template>                        
+                        <template
+                          v-for="(additionalNotSelected,
+                          index) in insurancePremiumAdditionalCoversGetter[
+                            premium.uuid
+                          ]"
+                        >
+                          <!-- {{ additionalNotSelected }} -->
+                          <div :key="index + 'divNotSelected'" class="ma-4">
+                            <h2 style="color: black; text-align: center">
+                              {{ additionalNotSelected.name }}
+                            </h2>
+                            <h3 style="color: black; text-align: center">
+                              Premuims For
+                              {{ additionalNotSelected.name.toLowerCase() }}
+                            </h3>
+                          </div>
+                          <table :key="index + 'tableNotSelected'">
+                            <tr v-if="premium.cover.name === 'Motor Insurance'">
+                              <th>ID</th>
+                              <th>Rate</th>
+                              <th>Cost</th>
+                              <th>Purchase</th>
                             </tr>
-                          </template>
-                         
-                        </table>
+                            <tr v-else>
+                              <th>ID</th>
+                              <th>Cover Limit</th>
+                              <th>Cost</th>
+                              <th>Purchase</th>
+                            </tr>
+
+                            <template v-if="premium.cover.name === 'Motor Insurance'">
+                              <tr>
+                                <td>1</td>
+                                <td>{{ additionalNotSelected.rate }}</td>
+                                <td>
+                                  {{(additionalNotSelected.rate *
+                                            premium.vehicleCost) /
+                                          100, }}
+                                </td>
+                                <td>
+                                  <v-btn
+                                    small
+                                    outlined
+                                    color="primary"
+                                    dark
+                                    @click="
+                                      addAdditionCover(                                        
+                                        additionalNotSelected.insurance_cover_id,
+                                        additionalNotSelected.id,
+                                        premium.uuid,
+                                        (additionalNotSelected.rate *
+                                          premium.vehicleCost) /
+                                          100,
+                                        additionalNotSelected.name.toLowerCase()
+                                      )
+                                    "
+                                  >
+                                    Add To Cover.
+                                    <v-icon>add_shopping_cart</v-icon>
+                                  </v-btn>
+                                </td>
+                              </tr>
+                            </template>
+                            <template v-else>
+                              <template
+                                v-for="(additionalPremiumNotelected,
+                                index) in additionalNotSelected.additional_premia"
+                              >
+                                <tr :key="index + 'rowNotSelected'">
+                                  <td>{{ index + 1 }}</td>
+                                  <td>
+                                    {{
+                                      additionalPremiumNotelected.limit
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                      " Ksh"
+                                    }}
+                                  </td>
+                                  <td>
+                                    {{
+                                      additionalPremiumNotelected.cost
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                      " Ksh"
+                                    }}
+                                  </td>
+                                  <td>
+                                    <v-btn
+                                      small
+                                      outlined
+                                      color="primary"
+                                      dark
+                                      @click="
+                                        addAdditionCover(
+                                          additionalPremiumNotelected.id,
+                                          additionalNotSelected.id,
+                                          premium.uuid,
+                                          additionalPremiumNotelected.cost,
+                                          additionalNotSelected.name.toLowerCase()
+                                        )
+                                      "
+                                    >
+                                      Add To Cover.
+                                      <v-icon>add_shopping_cart</v-icon>
+                                    </v-btn>
+                                  </td>
+                                </tr>
+                              </template>
+                            </template>
+                          </table>
+                        </template>
                       </template>
                       <!-- LOOPING THROUGH THE SELECTED ADDITIONAL COVERS. -->
                     </template>
@@ -1084,6 +1060,7 @@ export default {
         snackBarObj
       );
 
+      console.log("This is the ID of the premium Gotten: " + name);
       // ! creating the object to hold the additional Cover details.
       var obj = {};
       obj["additionalId"] = additionalId;
@@ -1138,6 +1115,7 @@ export default {
     },
   },
   data: () => ({
+    countingThePremiumUUID: 0,
     snackbar: false,
     dialog: false,
     show: false,
@@ -1177,89 +1155,88 @@ export default {
     ],
   }),
   props: ["premium"],
-  created() {
-    var financialBreakdownCounter = 0;
-    if (this.premium.cover.id == 1) {
-      // ! after the creation of the component, create the array that will hold the
-      // ! data to be looped as the financial breakdown.
-      var financialBreakDownArray = [];
+  // created() {
+  //   var financialBreakdownCounter = 0;
+  //   if (this.premium.cover.id == 1) {
+  //     // ! after the creation of the component, create the array that will hold the
+  //     // ! data to be looped as the financial breakdown.
+  //     var financialBreakDownArray = [];
 
-      var principal_memberDetails = {};
-      principal_memberDetails["uuid"] = "Principal Member";
-      principal_memberDetails["additionId"] = "Principal Member";
-      principal_memberDetails["name"] = "Principal Member";
-      principal_memberDetails["description"] = " ' ' ";
-      principal_memberDetails["value"] =
-        this.premium.financialBreakDown.principal_member
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+  //     var principal_memberDetails = {};
+  //     principal_memberDetails["uuid"] = "Principal Member";
+  //     principal_memberDetails["additionId"] = "Principal Member";
+  //     principal_memberDetails["name"] = "Principal Member";
+  //     principal_memberDetails["description"] = " ' ' ";
+  //     principal_memberDetails["value"] =
+  //       this.premium.financialBreakDown.principal_member
+  //         .toString()
+  //         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
 
-      financialBreakDownArray[
-        financialBreakdownCounter
-      ] = principal_memberDetails;
-      if (this.premium.financialBreakDown.spouse) {
-        var spouse_details = {};
-        spouse_details["uuid"] = "Spouse";
-        spouse_details["additionId"] = "Spouse";
-        spouse_details["name"] = "Spouse";
-        spouse_details["value"] =
-          this.premium.financialBreakDown.spouse
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
-        spouse_details["description"] = " ' ' ";
-        financialBreakDownArray[financialBreakdownCounter + 1] = spouse_details;
-      }
+  //     financialBreakDownArray[
+  //       financialBreakdownCounter
+  //     ] = principal_memberDetails;
+  //     if (this.premium.financialBreakDown.spouse) {
+  //       var spouse_details = {};
+  //       spouse_details["uuid"] = "Spouse";
+  //       spouse_details["additionId"] = "Spouse";
+  //       spouse_details["name"] = "Spouse";
+  //       spouse_details["value"] =
+  //         this.premium.financialBreakDown.spouse
+  //           .toString()
+  //           .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+  //       spouse_details["description"] = " ' ' ";
+  //       financialBreakDownArray[financialBreakdownCounter + 1] = spouse_details;
+  //     }
 
-      if (this.premium.financialBreakDown.dependents) {
-        var dependents_details = {};
-        dependents_details["uuid"] = "Children";
-        dependents_details["additionId"] = "Children";
-        dependents_details["name"] = "Children";
-        dependents_details["value"] =
-          (
-            this.premium.financialBreakDown.dependents.dependant *
-            parseInt(
-              this.premium.financialBreakDown.dependents.number_of_dependents
-            )
-          )
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
-        dependents_details["description"] =
-          this.premium.financialBreakDown.dependents.number_of_dependents +
-          " Dependants Each  " +
-          this.premium.financialBreakDown.dependents.dependant
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-          "Ksh";
-        financialBreakDownArray[
-          financialBreakdownCounter + 1
-        ] = dependents_details;
-      }
-      this.$store.dispatch(
-        "updatingFinancialBreakdown",
-        financialBreakDownArray
-      );
-      // console.log("This is the description of the Data.");
-      // console.log(this.data);
-    } else if (this.premium.cover.id == 2) {
-      var financial_break_down_array = [];
-      var motor_insurance_details = {};
-      motor_insurance_details["uuid"] = this.premium.subCategory;
-      motor_insurance_details["additionId"] = this.premium.subCategory;
-      motor_insurance_details["name"] = this.premium.subCategory;
-      motor_insurance_details["value"] =
-        this.premium.amountPayable
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Ksh";
-      motor_insurance_details["description"] = " ";
-      financial_break_down_array[0] = motor_insurance_details;
-      // this.data = financial_break_down_array;
-      this.$store.dispatch(
-        "updatingFinancialBreakdown",
-        financial_break_down_array
-      );
-    }
-  },
+  //     if (this.premium.financialBreakDown.dependents) {
+  //       var dependents_details = {};
+  //       dependents_details["uuid"] = "Children";
+  //       dependents_details["additionId"] = "Children";
+  //       dependents_details["name"] = "Children";
+  //       dependents_details["value"] =
+  //         (
+  //           this.premium.financialBreakDown.dependents.dependant *
+  //           parseInt(
+  //             this.premium.financialBreakDown.dependents.number_of_dependents
+  //           )
+  //         )
+  //           .toString()
+  //           .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+  //       dependents_details["description"] =
+  //         this.premium.financialBreakDown.dependents.number_of_dependents +
+  //         " Dependants Each  " +
+  //         this.premium.financialBreakDown.dependents.dependant
+  //           .toString()
+  //           .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+  //         "Ksh";
+  //       financialBreakDownArray[
+  //         financialBreakdownCounter + 1
+  //       ] = dependents_details;
+  //     }
+  //     this.$store.dispatch(
+  //       "updatingFinancialBreakdown",
+  //       financialBreakDownArray,this.premium.uuid
+  //     );
+
+  //   } else if (this.premium.cover.id == 2) {
+  //     var financial_break_down_array = [];
+  //     var motor_insurance_details = {};
+  //     motor_insurance_details["uuid"] = this.premium.subCategory;
+  //     motor_insurance_details["additionId"] = this.premium.subCategory;
+  //     motor_insurance_details["name"] = this.premium.subCategory;
+  //     motor_insurance_details["value"] =
+  //       this.premium.amountPayable
+  //         .toString()
+  //         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Ksh";
+  //     motor_insurance_details["description"] = " ";
+  //     financial_break_down_array[0] = motor_insurance_details;
+  //     this.$store.dispatch(
+  //       "updatingFinancialBreakdown",
+  //       financial_break_down_array
+  //     );
+  //   }
+
+  // },
   watch: {},
 };
 </script>
