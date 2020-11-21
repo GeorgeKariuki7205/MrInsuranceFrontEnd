@@ -108,6 +108,18 @@
                     <td>{{ financialBreakdown.value }}</td>
                   </tr>
                 </template>
+                <tr>
+                  <td><b>Total</b></td>
+                  <td></td>
+                  <td>
+                    {{
+                      payableAmountStateGetter[premium.uuid]
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }}
+                    Ksh
+                  </td>
+                </tr>
               </table>
             </div>
           </v-col>
@@ -420,6 +432,18 @@
                                 <td>{{ financialBreakdown.value }}</td>
                               </tr>
                             </template>
+                            <tr>
+                              <td><b>Total</b></td>
+                              <td></td>
+                              <td>
+                                {{
+                                  payableAmountStateGetter[premium.uuid]
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                }}
+                                Ksh
+                              </td>
+                            </tr>
                           </table>
                         </div>
                       </div>
@@ -604,7 +628,11 @@
                                 <table
                                   :key="index + indexOne + index + 'table'"
                                 >
-                                  <tr v-if="premium.cover.name === 'Motor Insurance'">
+                                  <tr
+                                    v-if="
+                                      premium.cover.name === 'Motor Insurance'
+                                    "
+                                  >
                                     <th>ID</th>
                                     <th>Rate</th>
                                     <th>Cost</th>
@@ -730,7 +758,7 @@
                               </template>
                             </template>
                           </template>
-                        </template>                        
+                        </template>
                         <template
                           v-for="(additionalNotSelected,
                           index) in insurancePremiumAdditionalCoversGetter[
@@ -761,7 +789,9 @@
                               <th>Purchase</th>
                             </tr>
 
-                            <template v-if="premium.cover.name === 'Motor Insurance'">
+                            <template
+                              v-if="premium.cover.name === 'Motor Insurance'"
+                            >
                               <tr>
                                 <td>1</td>
                                 <td>{{ additionalNotSelected.rate }}</td>
@@ -777,7 +807,7 @@
                                     color="primary"
                                     dark
                                     @click="
-                                      addAdditionCover(                                        
+                                      addAdditionCover(
                                         additionalNotSelected.insurance_cover_id,
                                         additionalNotSelected.id,
                                         premium.uuid,

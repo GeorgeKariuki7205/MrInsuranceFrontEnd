@@ -15,6 +15,7 @@ const state = {
     premiumsData: null,
     premiumsDataStatus: false,
 
+    updatingSubCategoryAndCoverState: false,
     // ! details related to the insurance covers that have been returned. 
     payableAmountState: null,
 
@@ -104,7 +105,10 @@ const mutations = {
     },
     UPDATING_THE_TEST_VALUE(state, payload){
             state.test = payload;
-    }
+    },
+    UPDATING_THE_STATE_OF_COVER_AND_SUB_CATEGORY(state,payload){
+        state.updatingSubCategoryAndCoverState = payload;
+    },
 }
 const actions = {
     getAllNavigationComponents({
@@ -139,6 +143,11 @@ const actions = {
     }, index) {
 
         commit("UPDATING_THE_SUB_COVER_INDEX", index);
+
+    },
+    updatatingupdatingSubCategoryAndCoverState({commit},data){
+
+        commit("UPDATING_THE_STATE_OF_COVER_AND_SUB_CATEGORY",data);
 
     },
     updatingTheInsuranceCoverDetails({
@@ -294,8 +303,8 @@ const actions = {
                     // console.log("This is the financial breakdown Getter: ");
                     // state.additionalCoversPremiumState = combinedHealthFinancialBreakDown;
 
-                    console.log("This is the state.financialBreakdownState");
-                    console.log(state.financialBreakdownState);
+                    // console.log("This is the state.financialBreakdownState");
+                    // console.log(state.financialBreakdownState);
 
                     // console.log("This is the payableAmounts: ");
                     // console.log(state.payableAmountState);
@@ -304,6 +313,9 @@ const actions = {
 
                     // console.log("Below is the state of the additinal Premium.");
                     // console.log(state.additionalCoversPremiumState);
+
+                    console.log("This is the personal Details of the User: ");
+                    console.log(state.personalDetails);
                 }
             }
         ).catch(
@@ -614,7 +626,8 @@ const getters = {
     additionalCoverSnackBarGetter: state => state.additionalCoverSnackBar,
     removingCoverSnackBarGetter: state => state.removingCoverSnackBar,
     editingPersonalDetailsOnPurchasingModalGetter: state => state.editingPersonalDetailsOnPurchasingModal,
-
+    updatingSubCategoryAndCoverStateGetter: state => state.updatingSubCategoryAndCoverState,
+    
 
 }
 

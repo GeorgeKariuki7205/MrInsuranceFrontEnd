@@ -189,6 +189,7 @@ export default {
 
       this.$store.dispatch("updatingTheCoverIndex", coverIndex);
       this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategoryId);
+      this.$store.dispatch("updatatingupdatingSubCategoryAndCoverState",true);
 
       //! after update, redirect to the proper page.
       router.push({

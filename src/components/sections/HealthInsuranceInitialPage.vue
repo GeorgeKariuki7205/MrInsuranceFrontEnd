@@ -7,8 +7,9 @@
     <!-- THIS SECTIONS IS USED TO DISPLAY THE SUB CATEGORIES. -->
 
     <v-container>
-      <div style="margin-top: -4%; width: 80%">
-        <v-row class="hidden-sm-and-down">
+      <div style="margin-top: -4%; width: 100%;align:center;">        
+        <v-row class="hidden-sm-and-down" justify="center">
+          
           <v-col
             v-for="(feature, i) in cover.subCategories"
             :key="i + 'subCategories'"
@@ -365,7 +366,7 @@
                   <template v-if="premiumsDataGetter.length === 0">
                     <h2 class="text-center">
                       The Insurance Coer Selected is not availbale, kindly try
-                      'Family Health'.
+                      Another Cover.
                     </h2>
                   </template>
                   <template v-else>
@@ -393,6 +394,14 @@
                         text-align: center;
                       "
                     >
+                    <span
+                    ><v-icon
+                      @click="goBackToCoverSpecificQuestions()"
+                      style="cursor: pointer"
+                      size="65"
+                      >arrow_back_ios</v-icon
+                    ></span
+                  >
                       Hey
                       {{
                         personalDetailsGetter.firstName
@@ -413,6 +422,14 @@
                       <span
                         v-if="premiumsDataGetter[0].cover.route_name == 'Motor'"
                       >
+                      of Vehicle of cost :
+                      <span style="color: green; type: bold">
+                       {{
+                              premiumsDataGetter[0].vehicleCost
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")+ "/= Ksh"
+                            }} 
+                            </span>
                       </span>
                       <span v-else>
                         <span
@@ -425,7 +442,7 @@
                             {{
                               premiumsDataGetter[0].coveredAmount
                                 .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")+ " Ksh"
                             }}
                           </span>
                         </span>
@@ -473,6 +490,7 @@ export default {
       "nextStepInStepperStateGetter",
       "personalDetailsGetter",
       "payableAmountStateGetter",
+      "updatingSubCategoryAndCoverStateGetter"
     ]),
   },
   components: {
@@ -481,11 +499,29 @@ export default {
   },
   methods: {
     activateTheSubCategory(subCategory) {
-      this.inputData = [];
+
+      if (this.insuranceCoversRetrieved) {
+        
+        this.insuranceCoversRetrieved = !this.insuranceCoversRetrieved;
+        this.showingCoverRelatedQuestions = !this.showingCoverRelatedQuestions;
+         // this.inputData = [];
+        this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategory);
+        this.$store.dispatch("updatingPremiumDataStatus", false);
+      // this.$store.dispatch("updatingPersonalDetails", null);
+        this.$store.commit("UPDATING_PERSONAL_DETAILS_STATUS", false);
+
+
+      } else {
+      
+      console.log('personalDetailsGetter');
+      console.log(this.personalDetailsGetter);
+      // this.inputData = [];
       this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategory);
       this.$store.dispatch("updatingPremiumDataStatus", false);
-      this.$store.dispatch("updatingPersonalDetails", null);
+      // this.$store.dispatch("updatingPersonalDetails", null);
       this.$store.commit("UPDATING_PERSONAL_DETAILS_STATUS", false);
+      }
+     
     },
 
     tooglingVisibility() {
@@ -505,6 +541,16 @@ export default {
           this.$store.dispatch("updatingPersonalDetails", this.personalData);
         }
       }
+    },
+
+    // ! this is the functon that is called once the go back icn is cicked when the premiums appear. 
+
+    goBackToCoverSpecificQuestions(){
+
+      this.insuranceCoversRetrieved = !this.insuranceCoversRetrieved;
+      this.showingCoverRelatedQuestions = !this.showingCoverRelatedQuestions;
+
+
     },
 
     enter() {
@@ -610,6 +656,26 @@ export default {
   // ! this sections is used to monitor if there is any change that happens to the change in the categories and subCategories.
 
   watch: {
+
+    updatingSubCategoryAndCoverStateGetter:function(){
+
+      if(this.updatingSubCategoryAndCoverStateGetter){
+
+        if (this.insuranceCoversRetrieved ) {
+          this.insuranceCoversRetrieved =false;
+          this.showingCoverRelatedQuestions = true;
+
+        this.$store.dispatch("updatatingupdatingSubCategoryAndCoverState",false);
+        }
+        
+        // if (this.show) {
+        //   this.show = false;
+        // }
+        
+
+      }
+    },
+
     navigationCoverGetter: function () {
       this.cover = this.navigationStateGetter[this.navigationCoverGetter];
       this.questions = this.navigationStateGetter[
