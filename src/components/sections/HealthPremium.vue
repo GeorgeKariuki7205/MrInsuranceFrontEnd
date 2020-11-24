@@ -475,11 +475,27 @@
                         Complete This Transaction.
                       </h3>
 
-                      <v-btn class="mt-8" outlined x-large color="success">
+                      <v-btn @click="sendingPaymentRequestToBackEnd(payableAmountStateGetter[premium.uuid],personalDetailsGetter)" class="mt-8" outlined x-large color="success">
                         Send MPESA STK PUSH TO :
                         {{ personalDetailsGetter.phoneNumber }}
                         <v-icon>send</v-icon></v-btn
                       >
+                      <p>Trial</p>
+                      <half-circle-spinner
+                        :animation-duration="1000"
+                        :size="120"
+                        color="#29AB87"
+                      />
+                      <trinity-rings-spinner
+                        :animation-duration="1500"
+                        :size="120"
+                        color="#29AB87"
+                      />
+                      <orbit-spinner
+                        :animation-duration="1200"
+                        :size="100"
+                        color="#29AB87"
+                      />
                     </div>
                   </transition-group>
                 </div>
@@ -1027,6 +1043,9 @@
 <script>
 import { mapGetters } from "vuex";
 import "animate.css";
+import { HalfCircleSpinner } from 'epic-spinners';
+import { TrinityRingsSpinner } from 'epic-spinners';
+import { OrbitSpinner } from 'epic-spinners';
 export default {
   computed: {
     ...mapGetters([
@@ -1047,7 +1066,23 @@ export default {
       "editingPersonalDetailsOnPurchasingModalGetter",
     ]),
   },
+  components: {
+    HalfCircleSpinner,  
+    TrinityRingsSpinner,
+    OrbitSpinner,
+  },
   methods: {
+    sendingPaymentRequestToBackEnd(cost,personalDetailsArray){
+
+        var obj = {};
+        obj['cost'] = cost;
+        obj['personalDetails']= personalDetailsArray;
+
+        this.$store.dispatch("sendingPaymentRequest",obj);
+
+        console.log("Sending The Payment Response.");
+
+    },
     removingAdditionalCover(premiumUUID, cost, additionalId, name) {
       var snackBarObj = {};
       snackBarObj["status"] = true;

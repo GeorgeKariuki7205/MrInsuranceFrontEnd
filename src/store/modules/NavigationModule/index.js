@@ -298,24 +298,7 @@ const actions = {
                     }
                     
                     commit("UPDATING_PREMIUM_DETAILS_STATUS", false);
-                    commit("UPDATING_ADDITIONAL_COVERS_STATE",additionalCoversInitialStates);
-
-                    // console.log("This is the financial breakdown Getter: ");
-                    // state.additionalCoversPremiumState = combinedHealthFinancialBreakDown;
-
-                    // console.log("This is the state.financialBreakdownState");
-                    // console.log(state.financialBreakdownState);
-
-                    // console.log("This is the payableAmounts: ");
-                    // console.log(state.payableAmountState);
-
-                    // logging the additionalcovers. 
-
-                    // console.log("Below is the state of the additinal Premium.");
-                    // console.log(state.additionalCoversPremiumState);
-
-                    console.log("This is the personal Details of the User: ");
-                    console.log(state.personalDetails);
+                    commit("UPDATING_ADDITIONAL_COVERS_STATE",additionalCoversInitialStates);                   
                 }
             }
         ).catch(
@@ -607,6 +590,18 @@ const actions = {
     }) {
         commit("UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE", true);
     },
+    sendingPaymentRequest(obj){
+        axios.post("https://mrinsuranceapi.georgekprojects.tk/api/stkPush", obj).then(
+            response => {
+                if (response.status === 200) {
+                    console.log("This is the 200 response after sending the request.");
+                }
+}).catch(
+            error => {
+                console.log(error);
+            }
+        );
+    }
 }
 const getters = {
     navigationStateGetter: state => state.navigationState,
