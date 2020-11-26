@@ -536,6 +536,9 @@
                   </v-row>
                 </div>
                       </div>
+                      <div v-if="paymentProcessedSuccesfullyGetter">
+                        <v-icon color="yellow">sentiment_satisfied_alt</v-icon>
+                      </div>
                      
                     </div>
                   </transition-group>
@@ -1086,6 +1089,7 @@ import { mapGetters } from "vuex";
 import "animate.css";
 import { OrbitSpinner } from 'epic-spinners';
 import { HollowDotsSpinner } from "epic-spinners";
+import Pusher from "pusher-js";
 export default {
   computed: {
     ...mapGetters([
@@ -1107,7 +1111,9 @@ export default {
       "sendingPaymentRequestStatusGetter",
       "sendingPaymentRequestSuccessfulGetter",
       "sendingRequestForPaymentInitialStateGetter",
-      "sendingRequestForPaymentNotSuccessfulGetter"
+      "sendingRequestForPaymentNotSuccessfulGetter",
+      "paymentDetailsGetterGetter",
+      "paymentProcessedSuccesfullyGetter"
     ]),
   },
   components: {    
@@ -1257,88 +1263,32 @@ export default {
     ],
   }),
   props: ["premium"],
-  // created() {
-  //   var financialBreakdownCounter = 0;
-  //   if (this.premium.cover.id == 1) {
-  //     // ! after the creation of the component, create the array that will hold the
-  //     // ! data to be looped as the financial breakdown.
-  //     var financialBreakDownArray = [];
+  
+created() {  
+    const self = this;      
+    var pusher = new Pusher("5654eeba7564603af3b2", {
+      cluster: "ap2",
+    });
+    
+    var channel = pusher.subscribe("PremiumPaymentChannel");
+    channel.bind("PaymentEvent", function(data) {   
+      //  console.log(data);
+      //  console.log("This is the data."+self.amount);
 
-  //     var principal_memberDetails = {};
-  //     principal_memberDetails["uuid"] = "Principal Member";
-  //     principal_memberDetails["additionId"] = "Principal Member";
-  //     principal_memberDetails["name"] = "Principal Member";
-  //     principal_memberDetails["description"] = " ' ' ";
-  //     principal_memberDetails["value"] =
-  //       this.premium.financialBreakDown.principal_member
-  //         .toString()
-  //         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+      console.log(self.paymentDetailsGetterGetter);      
+      console.log("A Request Come Back I Here.");
+      console.log(data.content.Body.stkCallback.CheckoutRequestID +'  '+data.content.Body.stkCallback.MerchantRequestID);
 
-  //     financialBreakDownArray[
-  //       financialBreakdownCounter
-  //     ] = principal_memberDetails;
-  //     if (this.premium.financialBreakDown.spouse) {
-  //       var spouse_details = {};
-  //       spouse_details["uuid"] = "Spouse";
-  //       spouse_details["additionId"] = "Spouse";
-  //       spouse_details["name"] = "Spouse";
-  //       spouse_details["value"] =
-  //         this.premium.financialBreakDown.spouse
-  //           .toString()
-  //           .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
-  //       spouse_details["description"] = " ' ' ";
-  //       financialBreakDownArray[financialBreakdownCounter + 1] = spouse_details;
-  //     }
+      if (self.paymentDetailsGetterGetter['CheckoutRequestID'] === data.content.Body.stkCallback.CheckoutRequestID && 
+          self.paymentDetailsGetterGetter['MerchantRequestID'] === data.content.Body.stkCallback.MerchantRequestID) {
 
-  //     if (this.premium.financialBreakDown.dependents) {
-  //       var dependents_details = {};
-  //       dependents_details["uuid"] = "Children";
-  //       dependents_details["additionId"] = "Children";
-  //       dependents_details["name"] = "Children";
-  //       dependents_details["value"] =
-  //         (
-  //           this.premium.financialBreakDown.dependents.dependant *
-  //           parseInt(
-  //             this.premium.financialBreakDown.dependents.number_of_dependents
-  //           )
-  //         )
-  //           .toString()
-  //           .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
-  //       dependents_details["description"] =
-  //         this.premium.financialBreakDown.dependents.number_of_dependents +
-  //         " Dependants Each  " +
-  //         this.premium.financialBreakDown.dependents.dependant
-  //           .toString()
-  //           .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-  //         "Ksh";
-  //       financialBreakDownArray[
-  //         financialBreakdownCounter + 1
-  //       ] = dependents_details;
-  //     }
-  //     this.$store.dispatch(
-  //       "updatingFinancialBreakdown",
-  //       financialBreakDownArray,this.premium.uuid
-  //     );
-
-  //   } else if (this.premium.cover.id == 2) {
-  //     var financial_break_down_array = [];
-  //     var motor_insurance_details = {};
-  //     motor_insurance_details["uuid"] = this.premium.subCategory;
-  //     motor_insurance_details["additionId"] = this.premium.subCategory;
-  //     motor_insurance_details["name"] = this.premium.subCategory;
-  //     motor_insurance_details["value"] =
-  //       this.premium.amountPayable
-  //         .toString()
-  //         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Ksh";
-  //     motor_insurance_details["description"] = " ";
-  //     financial_break_down_array[0] = motor_insurance_details;
-  //     this.$store.dispatch(
-  //       "updatingFinancialBreakdown",
-  //       financial_break_down_array
-  //     );
-  //   }
-
-  // },
+            console.log("I have sent That Money.");
+            self.$store.commit("UPDATING_SENDING_PAYMENTS_REQUEST_STATUS",false);
+            self.$store.commit("UPDATING_PAYMENT_PROCCESSED_SUCCESSFULLY",true);                    
+      }       
+    });
+  },
+  
   watch: {},
 };
 </script>

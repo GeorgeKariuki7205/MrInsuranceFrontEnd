@@ -61,9 +61,24 @@ const state = {
 
     sendingRequestForPaymentNotSuccessful: false,
 
+    // ! payment Details Status.
+
+    paymentDetailsGetter: [],
+
+    // ! paymentProcesed Successfully. 
+
+    paymentProcessedSuccesfully: false,
 
 }
 const mutations = {
+    
+    UPDATING_PAYMENT_PROCCESSED_SUCCESSFULLY(state,payload){
+        state.paymentProcessedSuccesfully = payload;
+    },
+    UPDATING_SENDING_PAYMENTS_REQUEST_STATUS(state,payload){
+
+        state.sendingPaymentRequestStatus = payload;
+    },
     UPDATING_THE_STATE_TO_ADD_NAVIGATION_ITEMS(state, payload) {
         state.navigationState = payload;
     },
@@ -610,6 +625,10 @@ const actions = {
 
         commit("UPDATING_THE_TEST_VALUE","test3");
 
+        state.sendingPaymentRequestSuccessful= false;
+        state.sendingRequestForPaymentInitialState= true;
+        state.sendingRequestForPaymentNotSuccessful= false;
+
         var obj = {};
         obj['cost'] = cost;
         obj['personalDetails'] = state.personalDetails;
@@ -639,6 +658,13 @@ const actions = {
 
                         state.sendingPaymentRequestSuccessful = true;
                         state.sendingRequestForPaymentInitialState = false;
+
+                        state.paymentDetailsGetter['CheckoutRequestID'] =  response.data.CheckoutRequestID;
+                        state.paymentDetailsGetter['MerchantRequestID'] =  response.data.MerchantRequestID;
+
+                        console.log("This is the state.paymentDetailsGetter");
+                        console.log(state.paymentDetailsGetter);
+
                         
                     } else {
                         // state.sendingPaymentRequestStatus = false;
@@ -677,6 +703,8 @@ const getters = {
     sendingPaymentRequestSuccessfulGetter: state => state.sendingPaymentRequestSuccessful,
     sendingRequestForPaymentInitialStateGetter: state => state.sendingRequestForPaymentInitialState,
     sendingRequestForPaymentNotSuccessfulGetter: state => state.sendingRequestForPaymentNotSuccessful,
+    paymentDetailsGetterGetter: state => state.paymentDetailsGetter,
+    paymentProcessedSuccesfullyGetter: state => state.paymentProcessedSuccesfully,
     
 
 }
