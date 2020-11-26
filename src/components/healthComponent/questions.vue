@@ -358,7 +358,7 @@ export default {
         (v && v.length <= 10) || "Phone Number must be less than 10 characters",
 
       (v) =>
-        /^0(7(?:(?:[0-9][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$/.test(v) ||
+        /^0((7|1)(?:(?:[0-9][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$/.test(v) ||
         "Phone Number must be valid",
     ],
     emailRules: [

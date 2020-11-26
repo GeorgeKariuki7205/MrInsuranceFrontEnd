@@ -475,27 +475,68 @@
                         Complete This Transaction.
                       </h3>
 
-                      <v-btn @click="sendingPaymentRequestToBackEnd(payableAmountStateGetter[premium.uuid],personalDetailsGetter)" class="mt-8" outlined x-large color="success">
-                        Send MPESA STK PUSH TO :
+                      <v-btn @click="sendingPaymentRequestToBackEnd(payableAmountStateGetter[premium.uuid])" class="mt-8" outlined x-large color="success">
+                       <span v-if="sendingRequestForPaymentInitialStateGetter">Send MPESA STK PUSH TO :</span> 
+                       <span v-else>RESEND MPESA STK PUSH TO :</span> 
                         {{ personalDetailsGetter.phoneNumber }}
                         <v-icon>send</v-icon></v-btn
                       >
-                      <p>Trial</p>
-                      <half-circle-spinner
-                        :animation-duration="1000"
-                        :size="120"
-                        color="#29AB87"
-                      />
-                      <trinity-rings-spinner
-                        :animation-duration="1500"
-                        :size="120"
-                        color="#29AB87"
-                      />
-                      <orbit-spinner
+
+
+                      <div style="text-align:center;" v-if="sendingPaymentRequestStatusGetter">
+                      <!-- <orbit-spinner
                         :animation-duration="1200"
                         :size="100"
                         color="#29AB87"
-                      />
+                      /> -->
+                       <div key="loader" class="fill-height" style="margin-top: 2%">
+                  <v-row align="center" justify="center">
+                    <h2 style="color: #29ab87" class="text-center" v-if="sendingRequestForPaymentInitialStateGetter">
+                      Mr Insurance Is Sending A request To your Safaricom MPESA Line to complete Payment, Keep Your Phone Close.
+                    </h2>
+                    <h2 style="color: orange" class="text-center" v-else-if="sendingPaymentRequestSuccessfulGetter">
+                      Safaricom Has Succesfuly Sent You An STK PUSH to your phoneNumber, Kindly confirm the detail and continue to payment.
+                    </h2>
+                    <h2 style="color: red" class="text-center" v-else-if="sendingRequestForPaymentNotSuccessfulGetter">
+                        The Request To Your Safaricom Line Has Failed, Kindly Try Again.
+                    </h2>
+                  </v-row>
+
+                  <v-row align="center" justify="center" v-if="sendingRequestForPaymentInitialStateGetter">
+                    <orbit-spinner
+                      :animation-duration="1200"
+                      :size="155"
+                      color="#29ab87"
+                    />
+                  </v-row>
+                   <v-row align="center" justify="center" v-if="sendingPaymentRequestSuccessfulGetter">
+                    <orbit-spinner
+                      :animation-duration="1200"
+                      :size="155"
+                      color="orange"
+                    />
+                  </v-row>
+                   <v-row align="center" justify="center" v-if="sendingPaymentRequestSuccessfulGetter">
+                    <h3 style="color: orange">Waiting For You To Complete Tranaction.</h3>
+                    <hollow-dots-spinner
+                      :animation-duration="1200"
+                      :dot-size="8"
+                      :dots-num="4"
+                      color="orange"
+                    />
+                  </v-row>
+                  <v-row align="center" justify="center" v-if="sendingRequestForPaymentInitialStateGetter">
+                    <h3 style="color: #29ab87">Just A Second</h3>
+                    <hollow-dots-spinner
+                      :animation-duration="1200"
+                      :dot-size="8"
+                      :dots-num="4"
+                      color="#29ab87"
+                    />
+                  </v-row>
+                </div>
+                      </div>
+                     
                     </div>
                   </transition-group>
                 </div>
@@ -1043,9 +1084,8 @@
 <script>
 import { mapGetters } from "vuex";
 import "animate.css";
-import { HalfCircleSpinner } from 'epic-spinners';
-import { TrinityRingsSpinner } from 'epic-spinners';
 import { OrbitSpinner } from 'epic-spinners';
+import { HollowDotsSpinner } from "epic-spinners";
 export default {
   computed: {
     ...mapGetters([
@@ -1064,23 +1104,20 @@ export default {
       "removingCoverSnackBarGetter",
       "personalDetailsGetter",
       "editingPersonalDetailsOnPurchasingModalGetter",
+      "sendingPaymentRequestStatusGetter",
+      "sendingPaymentRequestSuccessfulGetter",
+      "sendingRequestForPaymentInitialStateGetter",
+      "sendingRequestForPaymentNotSuccessfulGetter"
     ]),
   },
-  components: {
-    HalfCircleSpinner,  
-    TrinityRingsSpinner,
+  components: {    
     OrbitSpinner,
+    HollowDotsSpinner,
   },
   methods: {
-    sendingPaymentRequestToBackEnd(cost,personalDetailsArray){
+    sendingPaymentRequestToBackEnd(cost){
 
-        var obj = {};
-        obj['cost'] = cost;
-        obj['personalDetails']= personalDetailsArray;
-
-        this.$store.dispatch("sendingPaymentRequest",obj);
-
-        console.log("Sending The Payment Response.");
+        this.$store.dispatch("sendingPaymentRequest",cost);        
 
     },
     removingAdditionalCover(premiumUUID, cost, additionalId, name) {
@@ -1207,7 +1244,7 @@ export default {
         (v && v.length <= 10) || "Phone Number must be less than 10 characters",
 
       (v) =>
-        /^0(7(?:(?:[0-9][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$/.test(v) ||
+        /^0((7|1)(?:(?:[0-9][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$/.test(v) ||
         "Phone Number must be valid",
     ],
     emailRules: [

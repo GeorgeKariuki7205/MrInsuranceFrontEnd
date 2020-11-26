@@ -45,6 +45,22 @@ const state = {
 
     test : 'test',
 
+    // ! this state is used to keep the status of the sending the request to request for payments by MPESA.
+
+    sendingPaymentRequestStatus: false,
+
+    // ! this state is used to keep the state of successfully sending the STK Push to the correct phone number.
+
+    sendingPaymentRequestSuccessful: false,
+
+    // ! this is the initial state of the comment of the payment.
+
+    sendingRequestForPaymentInitialState: true,
+
+    // ! this is the not successful request for payent.
+
+    sendingRequestForPaymentNotSuccessful: false,
+
 
 }
 const mutations = {
@@ -590,18 +606,53 @@ const actions = {
     }) {
         commit("UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE", true);
     },
-    sendingPaymentRequest(obj){
+    sendingPaymentRequest({commit},cost){
+
+        commit("UPDATING_THE_TEST_VALUE","test3");
+
+        var obj = {};
+        obj['cost'] = cost;
+        obj['personalDetails'] = state.personalDetails;
+
+
+        // ! editing Phone Number  phoneNumberEdited
+        var phoneNumberEdited = state.personalDetails['phoneNumber'];
+
+        phoneNumberEdited = '254'+(phoneNumberEdited.toString().substr(1, 9));
+
+
+        phoneNumberEdited = parseInt(phoneNumberEdited,10);
+
+        obj['phoneNumberEdited'] = phoneNumberEdited;
+        console.log("Thi is the object bein sent.");
+        console.log(obj);
+        state.sendingPaymentRequestStatus = true;
         axios.post("https://mrinsuranceapi.georgekprojects.tk/api/stkPush", obj).then(
             response => {
                 if (response.status === 200) {
                     console.log("This is the 200 response after sending the request.");
+                    console.log(response);
+                    if (response.data.ResponseCode === "0") {
+
+                        // state.sendingPaymentRequestStatus = false;
+                        console.log("This is on the true ide.");
+
+                        state.sendingPaymentRequestSuccessful = true;
+                        state.sendingRequestForPaymentInitialState = false;
+                        
+                    } else {
+                        // state.sendingPaymentRequestStatus = false;
+                        state.sendingRequestForPaymentNotSuccessful = true;
+                        state.sendingRequestForPaymentInitialState = false;
+                        console.log("This is in the fase side.");
+                    }
                 }
-}).catch(
-            error => {
-                console.log(error);
-            }
-        );
-    }
+                }).catch(
+                            error => {
+                                console.log(error);
+                            }
+                        );
+                    }
 }
 const getters = {
     navigationStateGetter: state => state.navigationState,
@@ -622,6 +673,10 @@ const getters = {
     removingCoverSnackBarGetter: state => state.removingCoverSnackBar,
     editingPersonalDetailsOnPurchasingModalGetter: state => state.editingPersonalDetailsOnPurchasingModal,
     updatingSubCategoryAndCoverStateGetter: state => state.updatingSubCategoryAndCoverState,
+    sendingPaymentRequestStatusGetter: state=> state.sendingPaymentRequestStatus,
+    sendingPaymentRequestSuccessfulGetter: state => state.sendingPaymentRequestSuccessful,
+    sendingRequestForPaymentInitialStateGetter: state => state.sendingRequestForPaymentInitialState,
+    sendingRequestForPaymentNotSuccessfulGetter: state => state.sendingRequestForPaymentNotSuccessful,
     
 
 }
