@@ -152,9 +152,7 @@ export default {
       // ! on click, update the cost that is involved in the addition of the
       var amountsPayableUpdatDetails = {};
       amountsPayableUpdatDetails["premiumUUId"] = premiumUUID;
-      amountsPayableUpdatDetails["cost"] = cost;
-
-      console.log("This is the ID of the premium Gotten: " + name);
+      amountsPayableUpdatDetails["cost"] = cost;      
 
       this.$store.dispatch("updatePayableAmount", amountsPayableUpdatDetails);
 
@@ -165,9 +163,7 @@ export default {
       addObj["description"] = "";
       addObj["value"] =
         cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
-      addObj["activity"] = "add";
-      // console.log("This is the object before sending: ");
-      // console.log(addObj);
+      addObj["activity"] = "add";            
       this.$store.dispatch("updatingTheFinancialBreakDown", addObj);
     },
   },

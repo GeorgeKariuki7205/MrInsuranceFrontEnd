@@ -72,6 +72,9 @@ const state = {
 }
 const mutations = {
     
+    UPDATING_PAYMENT_PROCESSED_SUCCESSFULLY(state,payload){
+        state.paymentProcessedSuccesfully = payload;
+    },
     UPDATING_PAYMENT_PROCCESSED_SUCCESSFULLY(state,payload){
         state.paymentProcessedSuccesfully = payload;
     },
@@ -298,7 +301,7 @@ const actions = {
                                 break;
                             case 'Motor':
                                 caseObtained = 'Motor';
-                                console.log("This is Motor.");
+                                // console.log("This is Motor.");
                                 // ! implementing the PayaBle Amounts.                                 
                                 payableAmounts[element.uuid] = element.amountPayable;
                                 additionalCoversInitialStates[element.uuid] = null;
@@ -349,13 +352,13 @@ const actions = {
 
     updatingFinancialBreakdown({
         commit
-    }, data,second) {
+    }, data) {
         
         commit("UPDATING_THE_FINANCIAL_BREAKDOWN", data);
-        console.log("This is the second Input Of The application: ");
-        console.log(second);
-        console.log("This is the financialBreakdownState after update: ");
-        console.log(state.financialBreakdownState);
+        // console.log("This is the second Input Of The application: ");
+        // console.log(second);
+        // console.log("This is the financialBreakdownState after update: ");
+        // console.log(state.financialBreakdownState);
 
     },
 
@@ -393,8 +396,8 @@ const actions = {
         dispatch
     }, data) {
 
-        console.log("THIS IS THE state.additionalCoversPremiumState[data.premiumUUID]:  ");
-        console.log(state.additionalCoversPremiumState[data.premiumUUID]);
+        // console.log("THIS IS THE state.additionalCoversPremiumState[data.premiumUUID]:  ");
+        // console.log(state.additionalCoversPremiumState[data.premiumUUID]);
         //! creating the additional cover Details state. 
         var allAdditionalCovers = [];
         var additionalCover = [];        
@@ -459,10 +462,10 @@ const actions = {
         var premiumUUIDValue = obj.premium;
         var stateDefined = state.additionalCoversPremiumState[obj.premium];
         // const trial  = state.additionalCoversPremiumState;
-        console.log("Before: ");
-        console.log(state.additionalCoversPremiumState);
-        console.log("Before Whole Array: ");
-        console.log(state.additionalCoversPremiumState[obj.premium]);
+        // console.log("Before: ");
+        // console.log(state.additionalCoversPremiumState);
+        // console.log("Before Whole Array: ");
+        // console.log(state.additionalCoversPremiumState[obj.premium]);
         var elementValue;
         for (const element in stateDefined) {
 
@@ -490,10 +493,10 @@ const actions = {
             state.additionalCoversPremiumState[obj.premium]= stateOfPrmium;
         }
        
-        console.log("After: ");
-        console.log(state.additionalCoversPremiumState[obj.premium]);
-        console.log("This is the whole array: ");
-        console.log(state.additionalCoversPremiumState);
+        // console.log("After: ");
+        // console.log(state.additionalCoversPremiumState[obj.premium]);
+        // console.log("This is the whole array: ");
+        // console.log(state.additionalCoversPremiumState);
         //!  dispatch the method to update the payable amount.
         var object = {};
         object['premiumUUId'] = premiumUUIDValue;
@@ -526,8 +529,8 @@ const actions = {
             // count = Object.keys(currentAddedAdditionals).length;
             // console.log("Tis is the count: "+count);
 
-            console.log("These Are the current Additionals:");
-            console.log(currentAddedAdditionals);
+            // console.log("These Are the current Additionals:");
+            // console.log(currentAddedAdditionals);
 
             // for (const prop in premiums[premium].additionalCovers) {
             //     prop.id;
@@ -548,7 +551,7 @@ const actions = {
             //     }
                 
             // }
-            console.log("This is the count2: "+count2);
+            // console.log("This is the count2: "+count2);
             // count2 = Object.keys(currentAddedAdditionals).length;
             // var qualifier = count - count2;
 
@@ -590,8 +593,8 @@ const actions = {
             state.insurancePremiumAdditionalCovers[premiumUUID] = newOtherAdditional;  
             
             
-            console.log("Additionals Not Covered: ");
-            console.log(state.insurancePremiumAdditionalCovers);
+            // console.log("Additionals Not Covered: ");
+            // console.log(state.insurancePremiumAdditionalCovers);
         }
 
        
@@ -643,18 +646,18 @@ const actions = {
         phoneNumberEdited = parseInt(phoneNumberEdited,10);
 
         obj['phoneNumberEdited'] = phoneNumberEdited;
-        console.log("Thi is the object bein sent.");
-        console.log(obj);
+        // console.log("Thi is the object bein sent.");
+        // console.log(obj);
         state.sendingPaymentRequestStatus = true;
         axios.post("https://mrinsuranceapi.georgekprojects.tk/api/stkPush", obj).then(
             response => {
                 if (response.status === 200) {
-                    console.log("This is the 200 response after sending the request.");
-                    console.log(response);
+                    // console.log("This is the 200 response after sending the request.");
+                    // console.log(response);
                     if (response.data.ResponseCode === "0") {
 
                         // state.sendingPaymentRequestStatus = false;
-                        console.log("This is on the true ide.");
+                        // console.log("This is on the true ide.");
 
                         state.sendingPaymentRequestSuccessful = true;
                         state.sendingRequestForPaymentInitialState = false;
@@ -662,15 +665,15 @@ const actions = {
                         state.paymentDetailsGetter['CheckoutRequestID'] =  response.data.CheckoutRequestID;
                         state.paymentDetailsGetter['MerchantRequestID'] =  response.data.MerchantRequestID;
 
-                        console.log("This is the state.paymentDetailsGetter");
-                        console.log(state.paymentDetailsGetter);
+                        // console.log("This is the state.paymentDetailsGetter");
+                        // console.log(state.paymentDetailsGetter);
 
                         
                     } else {
                         // state.sendingPaymentRequestStatus = false;
                         state.sendingRequestForPaymentNotSuccessful = true;
                         state.sendingRequestForPaymentInitialState = false;
-                        console.log("This is in the fase side.");
+                        // console.log("This is in the fase side.");
                     }
                 }
                 }).catch(

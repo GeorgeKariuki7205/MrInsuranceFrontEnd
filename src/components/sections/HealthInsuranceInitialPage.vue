@@ -505,22 +505,16 @@ export default {
       if (this.insuranceCoversRetrieved) {
         
         this.insuranceCoversRetrieved = !this.insuranceCoversRetrieved;
-        this.showingCoverRelatedQuestions = !this.showingCoverRelatedQuestions;
-         // this.inputData = [];
+        this.showingCoverRelatedQuestions = !this.showingCoverRelatedQuestions;         
         this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategory);
-        this.$store.dispatch("updatingPremiumDataStatus", false);
-      // this.$store.dispatch("updatingPersonalDetails", null);
+        this.$store.dispatch("updatingPremiumDataStatus", false);      
         this.$store.commit("UPDATING_PERSONAL_DETAILS_STATUS", false);
 
 
       } else {
-      
-      console.log('personalDetailsGetter');
-      console.log(this.personalDetailsGetter);
-      // this.inputData = [];
+
       this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategory);
-      this.$store.dispatch("updatingPremiumDataStatus", false);
-      // this.$store.dispatch("updatingPersonalDetails", null);
+      this.$store.dispatch("updatingPremiumDataStatus", false);      
       this.$store.commit("UPDATING_PERSONAL_DETAILS_STATUS", false);
       }
      
@@ -531,13 +525,10 @@ export default {
         if (this.$refs.form2.validate()) {
           this.show = false;
           this.showingCoverRelatedQuestions = true;
-
-          this.$store.dispatch("updatingPersonalDetails", this.personalData);
-          // console.log("Success in Validation.");
+          this.$store.dispatch("updatingPersonalDetails", this.personalData);          
         }
       } else {
-        if (this.$refs.form2.validate()) {
-          // console.log("Success in Validation.");
+        if (this.$refs.form2.validate()) {          
           this.questionsStartValue = this.questionsStartValue + 1;
           this.show = !this.show;
           this.$store.dispatch("updatingPersonalDetails", this.personalData);
@@ -556,8 +547,8 @@ export default {
     },
 
     enter() {
-      var showData = this.show;
-      console.log(showData);
+      var showData = this.show;  
+      console.log(showData);    
     },
     leave() {
       if (this.questionsStartValue > 1) {
@@ -570,10 +561,7 @@ export default {
             this.show = false;
             this.showingCoverRelatedQuestions = true;
             this.marginValue =
-              "margin-left: auto; margin-right: auto; margin-top:8%; width: 90%";
-
-            // console.log("Thses are the details of the user.");
-            // console.log(this.personalDetailsGetter);
+              "margin-left: auto; margin-right: auto; margin-top:8%; width: 90%";                        
           }
         }
       } else {

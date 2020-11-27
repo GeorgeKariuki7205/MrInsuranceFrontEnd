@@ -328,21 +328,6 @@ export default {
     spouseErrorMessage: null,
     valid: false,
     items: [100000, 250000, 500000, 1000000],
-    // items:[{
-    //         id: 1,
-    //         name: "John",
-    //         last: "Doe"
-    //       },
-    //       {
-    //         id: 2,
-    //         name: "Harry",
-    //         last: "Potter"
-    //       },
-    //       {
-    //         id: 3,
-    //         name: "George",
-    //         last: "Bush"
-    //       }],
 
     // ! the name rules.
     RequiredDateRules: [(v) => !!v || "Date is required"],

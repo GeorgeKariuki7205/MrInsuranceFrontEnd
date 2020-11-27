@@ -536,8 +536,14 @@
                   </v-row>
                 </div>
                       </div>
-                      <div v-if="paymentProcessedSuccesfullyGetter">
-                        <v-icon color="yellow">sentiment_satisfied_alt</v-icon>
+                      
+                        <div v-if="paymentProcessedSuccesfullyGetter" class="text-center">
+                        <v-rating
+                          v-model="rating"
+                          background-color="purple lighten-3"
+                          color="purple"
+                          large
+                        ></v-rating>
                       </div>
                      
                     </div>
@@ -546,17 +552,23 @@
               </v-card-text>
               <v-divider></v-divider>
               <v-card-actions>
-                <v-btn color="red darken-1" large text @click="dialog = false">
+                <v-btn color="red darken-1" large text @click="dialog = false" v-if="!visibilityOfPaymentOption">
                   <v-icon>close</v-icon> Close
                 </v-btn>
+                <v-btn v-else large @click="proceedToPayments()" text color="blue darken-1">
+                  <v-icon>arrow_back</v-icon> Back
+                </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn
+                <v-btn v-if="!visibilityOfPaymentOption"
                   color="green darken-1"
                   large
                   text
                   @click="proceedToPayments()"
                 >
                   PROCEED TO PAYMENT. <v-icon>arrow_forward_ios</v-icon>
+                </v-btn>
+                 <v-btn color="red darken-1" large text @click="dialog = false" v-else>
+                  <v-icon>close</v-icon> Close
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -1166,9 +1178,7 @@ export default {
       this.$store.dispatch(
         "updatingStatusOfAdditionalCoverSnackbar",
         snackBarObj
-      );
-
-      console.log("This is the ID of the premium Gotten: " + name);
+      );      
       // ! creating the object to hold the additional Cover details.
       var obj = {};
       obj["additionalId"] = additionalId;
@@ -1196,7 +1206,9 @@ export default {
       this.$store.dispatch("updatingTheFinancialBreakDown", addObj);
     },
     checkingOutCover() {
+      this.$store.commit("UPDATING_PAYMENT_PROCESSED_SUCCESSFULLY",false);
       this.dialog = true;
+      this.visibilityOfPaymentOption = false;
       this.firstNameVModel = this.personalDetailsGetter["firstName"];
       this.secondNameVModel = this.personalDetailsGetter["secondName"];
       this.phoneNumberVModel = this.personalDetailsGetter["phoneNumber"];
@@ -1219,10 +1231,11 @@ export default {
       this.snackbar = true;
     },
     proceedToPayments() {
-      this.visibilityOfPaymentOption = true;
+      this.visibilityOfPaymentOption = !this.visibilityOfPaymentOption;
     },
   },
   data: () => ({
+    rating: 4,
     countingThePremiumUUID: 0,
     snackbar: false,
     dialog: false,
@@ -1271,18 +1284,10 @@ created() {
     });
     
     var channel = pusher.subscribe("PremiumPaymentChannel");
-    channel.bind("PaymentEvent", function(data) {   
-      //  console.log(data);
-      //  console.log("This is the data."+self.amount);
-
-      console.log(self.paymentDetailsGetterGetter);      
-      console.log("A Request Come Back I Here.");
-      console.log(data.content.Body.stkCallback.CheckoutRequestID +'  '+data.content.Body.stkCallback.MerchantRequestID);
-
+    channel.bind("PaymentEvent", function(data) {         
       if (self.paymentDetailsGetterGetter['CheckoutRequestID'] === data.content.Body.stkCallback.CheckoutRequestID && 
           self.paymentDetailsGetterGetter['MerchantRequestID'] === data.content.Body.stkCallback.MerchantRequestID) {
-
-            console.log("I have sent That Money.");
+            
             self.$store.commit("UPDATING_SENDING_PAYMENTS_REQUEST_STATUS",false);
             self.$store.commit("UPDATING_PAYMENT_PROCCESSED_SUCCESSFULLY",true);                    
       }       
