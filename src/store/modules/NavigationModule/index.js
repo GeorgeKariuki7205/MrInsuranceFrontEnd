@@ -634,7 +634,12 @@ const actions = {
 
         var obj = {};
         obj['cost'] = cost;
-        obj['personalDetails'] = state.personalDetails;
+
+        var personalDetails = {};
+        for (const [key, value] of Object.entries(state.personalDetails)) {
+            personalDetails[key] = value;
+        }
+        obj['personalDetails'] = personalDetails;
 
 
         // ! editing Phone Number  phoneNumberEdited
