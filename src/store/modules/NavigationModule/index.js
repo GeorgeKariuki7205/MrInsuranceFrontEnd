@@ -69,9 +69,14 @@ const state = {
 
     paymentProcessedSuccesfully: false,
 
+    // ! state for the VisitorId 
+    visitorIdState: null,
+
 }
-const mutations = {
-    
+const mutations = {    
+    UPDATING_VISITOR_ID_STATE(state,payload){
+        state.visitorIdState = payload;
+    },
     UPDATING_PAYMENT_PROCESSED_SUCCESSFULLY(state,payload){
         state.paymentProcessedSuccesfully = payload;
     },
@@ -220,14 +225,20 @@ const actions = {
         obj['personalDetails'] = personalDetails;
         obj['coverId'] = state.navigationState[state.cover].id;
         obj['subCategoryId'] = state.navigationState[state.cover].subCategories[state.subCategory].id;
-        // ! posting the data to the API endpoint. 
 
+        // ! posting the data to the API endpoint. 
+        obj['visitorId'] = state.visitorIdState;
+        
         var caseObtained;        
         axios.post("https://mrinsuranceapi.georgekprojects.tk/api/insuranceCovers", obj).then(
             response => {
                 if (response.status === 200) {
                     // ! updating the premium data. 
                     commit("UPDATING_PREMIUM_DETAILS", response.data);
+
+                    // ! updating The Visitor Id. 
+
+                    commit("UPDATING_VISITOR_ID_STATE",response.data[0].visitorId);
 
                     // ! creating the cost and the cost breakdown details and mutating them.
                     console.log(response.data);
