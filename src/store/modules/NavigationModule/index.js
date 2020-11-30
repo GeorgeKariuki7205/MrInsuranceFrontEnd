@@ -1,7 +1,7 @@
 import axios from "axios";
-// import {
-//     v4 as uuidv4
-// } from 'uuid';
+import {
+    v4 as uuidv4
+} from 'uuid';
 
 const state = {
     navigationState: null,
@@ -673,10 +673,7 @@ const actions = {
                     if (response.data.ResponseCode === "0") {
 
                         // state.sendingPaymentRequestStatus = false;
-                        // console.log("This is on the true ide.");
-
-                        state.sendingPaymentRequestSuccessful = true;
-                        state.sendingRequestForPaymentInitialState = false;
+                        // console.log("This is on the true ide.");                        
 
                         state.paymentDetailsGetter['CheckoutRequestID'] =  response.data.CheckoutRequestID;
                         state.paymentDetailsGetter['MerchantRequestID'] =  response.data.MerchantRequestID;
@@ -684,6 +681,31 @@ const actions = {
                         // console.log("This is the state.paymentDetailsGetter");
                         // console.log(state.paymentDetailsGetter);
 
+                        
+
+                        // ! sending the obtained payent Details to the backend. 
+
+                        
+                        var objectToSendRequestForPayment = {};
+                        objectToSendRequestForPayment['uuid'] = uuidv4();
+                        objectToSendRequestForPayment['MerchantRequestID'] = response.data.MerchantRequestID;
+                        objectToSendRequestForPayment['CheckoutRequestID'] = response.data.CheckoutRequestID;
+                        objectToSendRequestForPayment['visitorId'] = state.visitorIdState;
+                        objectToSendRequestForPayment['amountPayable'] = cost;
+
+                        // ! sending post request. 
+
+                        axios.post("https://mrinsuranceapi.georgekprojects.tk/api/intentionToPay", objectToSendRequestForPayment).then(
+                            response => {
+                                if (response.status === 200) {
+                                    state.sendingPaymentRequestSuccessful = true;
+                                    state.sendingRequestForPaymentInitialState = false;
+                                }
+                            }).catch(
+                                error => {
+                                    console.log(error);
+                                }
+                            );
                         
                     } else {
                         // state.sendingPaymentRequestStatus = false;
