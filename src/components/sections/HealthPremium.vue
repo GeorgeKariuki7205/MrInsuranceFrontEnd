@@ -475,7 +475,7 @@
                         Complete This Transaction.
                       </h3>
 
-                      <v-btn @click="sendingPaymentRequestToBackEnd(payableAmountStateGetter[premium.uuid])" class="mt-8" outlined x-large color="success">
+                      <v-btn @click="sendingPaymentRequestToBackEnd(payableAmountStateGetter[premium.uuid],premium.insuranceCoverID)" class="mt-8" outlined x-large color="success">
                        <span v-if="sendingRequestForPaymentInitialStateGetter">Send MPESA STK PUSH TO :</span> 
                        <span v-else>RESEND MPESA STK PUSH TO :</span> 
                         {{ personalDetailsGetter.phoneNumber }}
@@ -1133,9 +1133,12 @@ export default {
     HollowDotsSpinner,
   },
   methods: {
-    sendingPaymentRequestToBackEnd(cost){
+    sendingPaymentRequestToBackEnd(cost,insuranceCoverID){
 
-        this.$store.dispatch("sendingPaymentRequest",cost);        
+        var obj = {};
+        obj['cost'] = cost;
+        obj['insuranceCoverID'] = insuranceCoverID;
+        this.$store.dispatch("sendingPaymentRequest",obj);        
 
     },
     removingAdditionalCover(premiumUUID, cost, additionalId, name) {

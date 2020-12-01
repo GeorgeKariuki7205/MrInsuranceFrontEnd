@@ -635,7 +635,7 @@ const actions = {
     }) {
         commit("UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE", true);
     },
-    sendingPaymentRequest({commit},cost){
+    sendingPaymentRequest({commit},objectRecieved){
 
         commit("UPDATING_THE_TEST_VALUE","test3");
 
@@ -644,7 +644,8 @@ const actions = {
         state.sendingRequestForPaymentNotSuccessful= false;
 
         var obj = {};
-        obj['cost'] = cost;
+        obj['cost'] = objectRecieved.cost;
+        obj['insuranceCoverID'] = objectRecieved.insuranceCoverID;
 
         var personalDetails = {};
         for (const [key, value] of Object.entries(state.personalDetails)) {
@@ -691,7 +692,8 @@ const actions = {
                         objectToSendRequestForPayment['MerchantRequestID'] = response.data.MerchantRequestID;
                         objectToSendRequestForPayment['CheckoutRequestID'] = response.data.CheckoutRequestID;
                         objectToSendRequestForPayment['visitorId'] = state.visitorIdState;
-                        objectToSendRequestForPayment['amountPayable'] = cost;
+                        objectToSendRequestForPayment['amountPayable'] = objectRecieved.cost;                        
+                        objectToSendRequestForPayment['insuranceCoverID'] = objectRecieved.insuranceCoverID;
 
                         // ! sending post request. 
 
