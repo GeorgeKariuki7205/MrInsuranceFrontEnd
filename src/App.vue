@@ -1,17 +1,13 @@
 <template>
   <v-app>
-
-    <transition v-if="navigationViewGetter"
-              name="custom-classes-transition2"
-              enter-active-class="animate__animated animate__fadeInRight"
-              leave-active-class="animate__animated animate__fadeOutLeft"
-            > 
-            <router-view></router-view>
-    </transition>
-    <!-- <v-slide-x-transition :duration="{enter: 0, leave: 4}" class="slide-fade-enter-active" v-if="navigationViewGetter" >
+    <transition
+      v-if="navigationViewGetter"
+      name="custom-classes-transition2"
+      enter-active-class="animate__animated animate__fadeInRight"
+      leave-active-class="animate__animated animate__fadeOutLeft"
+    >
       <router-view></router-view>
-    </v-slide-x-transition> -->
-
+    </transition>
     <div v-else>
       <v-container class="fill-height" style="margin-top:10%">
         <v-row align="center" justify="center">
@@ -43,12 +39,13 @@
 import { AtomSpinner } from "epic-spinners";
 import { HollowDotsSpinner } from "epic-spinners";
 import { mapGetters } from "vuex";
-import 'animate.css'
+import "animate.css";
 export default {
   name: "App",
 
   components: {
-    AtomSpinner,HollowDotsSpinner
+    AtomSpinner,
+    HollowDotsSpinner,
   },
   computed: {
     ...mapGetters(["navigationViewGetter"]),

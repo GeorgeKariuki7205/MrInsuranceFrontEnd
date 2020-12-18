@@ -1,20 +1,12 @@
 <template>
   <div>
-    <v-app-bar
-      id="home-app-bar"
-      app
-      light
-      color="#29AB87"
-      elevation="1"
-      height="80"
-    >
+    <v-app-bar id="home-app-bar" app color="#29AB87" height="71%" elevation="1">
       <v-app-bar-nav-icon class="hidden-md-and-up" @click="drawer = !drawer" />
       <base-img
         :src="require('@/assets/tie-svgrepo-com.svg')"
         class="hidden-sm-and-up"
         contain
         max-width="52"
-        max-height="80"
         height="100%"
         width="100%"
       />
@@ -23,7 +15,6 @@
         class="hidden-sm-and-down"
         contain
         max-width="128"
-        max-height="80"
         width="100%"
         height="100%"
       />
@@ -33,40 +24,43 @@
       <div color="#29AB87">
         <v-tabs
           background-color="#29AB87"
-          class="hidden-sm-and-down icons-and-text"
+          class="hidden-sm-and-down"
           optional
+          centered
+          style="font-size:9px;"
+          icons-and-text
+          color="white"
         >
-          <v-tabs-slider color="black"></v-tabs-slider>
+          <v-tabs-slider color="white"></v-tabs-slider>
 
           <!-- ! HOME TAB. -->
 
           <v-tab
             to="/"
-            active-class="text--primary"
             class="font-weight-bold"
-            min-width="96"
             text
+            style="font-size:10px;"
+            dark
           >
-            <v-icon>mdi-home</v-icon>
-            <v-spacer></v-spacer>
             Home
+            <v-icon>fa-home</v-icon>
           </v-tab>
 
           <v-menu bottom offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-tab
                 to="#"
-                active-class="text--primary"
                 class="font-weight-bold"
-                min-width="96"
                 text
                 v-bind="attrs"
                 v-on="on"
+                style="font-size:10px;"
               >
                 <span>
                   All Insurance Covers
                   <v-icon right>fa-caret-down</v-icon></span
                 >
+                <v-icon>fa-umbrella</v-icon>
               </v-tab>
             </template>
 
@@ -117,48 +111,41 @@
             </div>
           </v-menu>
 
-          <v-tab
-            active-class="text--primary"
-            class="font-weight-bold"
-            min-width="96"
-            text
-          >
-            <v-icon>mdi-gavel</v-icon>
-            <v-spacer></v-spacer>
+          <v-tab class="font-weight-bold" text style="font-size:10px;">
             Make A Claim.
+            <v-icon>mdi-gavel</v-icon>
           </v-tab>
-          <v-tab
-            active-class="text--primary"
-            class="font-weight-bold"
-            min-width="96"
-            text
-          >
-            <v-icon>ring_volume</v-icon>
-            <v-spacer></v-spacer>
+          <v-tab class="font-weight-bold" text style="font-size:10px;">
             Request A Call
+            <v-icon>ring_volume</v-icon>
           </v-tab>
           <v-tab
             to="/about"
-            active-class="text--primary"
             class="font-weight-bold"
-            min-width="96"
             text
+            style="font-size:10px;"
           >
-            <v-icon>group</v-icon>
-            <v-spacer></v-spacer>
             About
+            <v-icon>group</v-icon>
           </v-tab>
 
           <v-tab
             to="/contact-us"
-            active-class="text--primary"
             class="font-weight-bold"
-            min-width="96"
             text
+            style="font-size:10px;"
           >
-            <v-icon>phone_enabled</v-icon>
-            <v-spacer></v-spacer>
             Contact Us
+            <v-icon>phone_enabled</v-icon>
+          </v-tab>
+          <v-tab
+            background-color="success"
+            class="font-weight-bold"
+            text
+            style="font-size:10px;"
+          >
+            LogIn
+            <v-icon>fa-sign-in-alt</v-icon>
           </v-tab>
         </v-tabs>
       </div>
@@ -189,7 +176,7 @@ export default {
 
       this.$store.dispatch("updatingTheCoverIndex", coverIndex);
       this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategoryId);
-      this.$store.dispatch("updatatingupdatingSubCategoryAndCoverState",true);
+      this.$store.dispatch("updatatingupdatingSubCategoryAndCoverState", true);
 
       //! after update, redirect to the proper page.
       router.push({
