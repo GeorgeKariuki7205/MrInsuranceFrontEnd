@@ -1,7 +1,6 @@
 <template>
-<div>  
-  <v-row align="center" justify="center">    
-    <template v-for="(additional, index) in premium.additionalCovers">      
+<div>      
+    <template v-for="(additional, index) in premium.additionalCovers">        
       <div :key="index + 'additionalCovers'" class="ma-4">
         <h2
           :key="index + 'additionalCoversHeading'"
@@ -17,8 +16,11 @@
           Premuims For
           {{ additional.name.toLowerCase() }}
         </h3>
-      </div>
-      <table :key="index + 'additionalCoversTable'">
+      </div>      
+      <v-row :key="index + 'additionalCoversTable'">
+        <v-col md="8" offset-md="2">
+      <v-simple-table  >
+        <thead>
         <tr v-if="premium.cover.name === 'Motor Insurance'">
           <th>ID</th>
           <th>Rate</th>
@@ -31,6 +33,8 @@
           <th>Cost</th>
           <th>Purchase</th>
         </tr>
+        </thead>
+        <tbody>
         <template v-if="premium.cover.name === 'Motor Insurance'">
             <template v-if="additional.rate">
                <tr :key="index + 'TableRow'">
@@ -109,9 +113,12 @@
           </tr>
         </template>
         </template>
-      </table>
-    </template>
-  </v-row>
+        </tbody>
+      </v-simple-table> 
+        </v-col>
+      </v-row>      
+             
+    </template>  
   </div>
 </template>
 

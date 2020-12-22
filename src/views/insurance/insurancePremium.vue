@@ -69,7 +69,7 @@
                     >
                       {{
                         coverBenefit.name.charAt(0).toUpperCase() +
-                        coverBenefit.name.substr(1).toLowerCase()
+                          coverBenefit.name.substr(1).toLowerCase()
                       }}
                     </p>
                     <p style="color: black" class="text-center">
@@ -86,41 +86,45 @@
             </template>
           </v-col>
           <v-col md="4">
-            <h2 style="color: black" class="text-center">Cost Break Down.</h2>
+            <h2 style="color: black" class="text-center">Cost Break Down. 2</h2>
 
             <!-- THIS IS THE SECTION THAT IS USED TO IMPLEMENT THE COST BREAKDOWN OF THE INSURANCE COVER. -->
             <div style="text-align: center">
-              <table>
-                <tr>
-                  <th style="color: black">Name</th>
-                  <th style="color: black">Desciption</th>
-                  <th style="color: black">Value</th>
-                </tr>
-                <template
-                  v-for="(financialBreakdown,
-                  indexFinancialBreakdown) in financialBreakdownStateGetter[
-                    premium.uuid
-                  ]"
-                >
-                  <tr :key="indexFinancialBreakdown + 'tableRow'">
-                    <td>{{ financialBreakdown.name }}</td>
-                    <td>{{ financialBreakdown.description }}</td>
-                    <td>{{ financialBreakdown.value }}</td>
+              <v-simple-table style="background-color:#EEEEEE;">
+                <thead>
+                  <tr>
+                    <th style="color: black">Name</th>
+                    <th style="color: black">Desciption</th>
+                    <th style="color: black">Value</th>
                   </tr>
-                </template>
-                <tr>
-                  <td><b>Total</b></td>
-                  <td></td>
-                  <td>
-                    {{
-                      payableAmountStateGetter[premium.uuid]
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }}
-                    Ksh
-                  </td>
-                </tr>
-              </table>
+                </thead>
+                <tbody>
+                  <template
+                    v-for="(financialBreakdown,
+                    indexFinancialBreakdown) in financialBreakdownStateGetter[
+                      premium.uuid
+                    ]"
+                  >
+                    <tr :key="indexFinancialBreakdown + 'tableRow'">
+                      <td>{{ financialBreakdown.name }}</td>
+                      <td>{{ financialBreakdown.description }}</td>
+                      <td>{{ financialBreakdown.value }}</td>
+                    </tr>
+                  </template>
+                  <tr>
+                    <td><b>Total</b></td>
+                    <td></td>
+                    <td>
+                      {{
+                        payableAmountStateGetter[premium.uuid]
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }}
+                      Ksh
+                    </td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
             </div>
           </v-col>
         </v-row>
@@ -151,14 +155,14 @@
 
       <template>
         <v-row justify="center">
-          <v-dialog v-model="dialog" persistent max-width="800" scrollable>
+          <v-dialog v-model="dialog" persistent max-width="950" scrollable>
             <v-card>
               <v-card-title class="headline" style="backgroung-color: red">
                 <h5 style="text-align: center; overflow-wrap: anywhere">
                   Hey
                   {{
                     personalDetailsGetter.firstName.charAt(0).toUpperCase() +
-                    personalDetailsGetter.firstName.substr(1).toLowerCase()
+                      personalDetailsGetter.firstName.substr(1).toLowerCase()
                   }}, Kindly Confirm The Details Below To Purchase The Cover:
                 </h5>
               </v-card-title>
@@ -176,277 +180,291 @@
                       key="firstDivInTransitionGroup"
                       v-if="!visibilityOfPaymentOption"
                     >
-                      <div>
-                        <!-- THIS IS THE SECTION THAT IS USED TO ADD THE DEATILS TO BE CONFIRMED:  -->
-                        <div class="ma-4" style="margin-bottom: 10%">
-                          <h2
-                            class="float-left"
-                            style="color: black; display: inline"
+                      <v-row>
+                        <v-col md="6">
+                          <v-card
+                            style="padding-left: 5%; padding-right: 5%; padding-bottom: 5%;height: 100%;background-color:#F0FFFF"
                           >
-                            1. Personal Details:
-                          </h2>
-                          <v-btn
-                            v-if="
-                              !editingPersonalDetailsOnPurchasingModalGetter
-                            "
-                            @click="
-                              activatingEditingPersonalDetailsInCheckingOutCover()
-                            "
-                            small
-                            text
-                            style="color: green; align: right"
-                          >
-                            <v-icon size="18" color="green">edit</v-icon>
-                            <span style="font-size: 12px"
-                              >Edit Personal Details</span
+                            <v-card-title
+                              class="text-center justify-center"
+                              style="width:100%;"
                             >
-                          </v-btn>
-                          <v-btn
-                            v-if="editingPersonalDetailsOnPurchasingModalGetter"
-                            @click="savingEditedPersonalDeailsOnCheckOutCover()"
-                            small
-                            text
-                            style="color: red"
-                          >
-                            <v-icon size="18" color="red">save</v-icon>
-                            <span style="font-size: 12px"
-                              >Save Personal Details</span
+                              <b>1. Personal Details:</b>
+                            </v-card-title>
+                            <v-card-subtitle
+                              style="color: black; text-align: center"
                             >
-                          </v-btn>
-                          <v-snackbar
-                            v-model="snackbar"
-                            app
-                            color="green"
-                            top
-                            centered
-                            multi-line
-                          >
-                            <p>
-                              <v-icon>check_circle</v-icon> Saved Succesfully.
-                            </p>
-                          </v-snackbar>
-                          <span style="clear: all" class="float-none"></span>
-                          <span
-                            style="display: block"
-                            class="float-none"
-                          ></span>
-                        </div>
+                              <v-btn
+                                v-if="
+                                  !editingPersonalDetailsOnPurchasingModalGetter
+                                "
+                                @click="
+                                  activatingEditingPersonalDetailsInCheckingOutCover()
+                                "
+                                small
+                                text
+                                style="color: green; align: right"
+                              >
+                                <v-icon size="18" color="green">edit</v-icon>
+                                <span style="font-size: 12px"
+                                  >Edit Personal Details</span
+                                >
+                              </v-btn>
+                              <v-btn
+                                v-if="
+                                  editingPersonalDetailsOnPurchasingModalGetter
+                                "
+                                @click="
+                                  savingEditedPersonalDeailsOnCheckOutCover()
+                                "
+                                small
+                                text
+                                style="color: red"
+                              >
+                                <v-icon size="18" color="red">save</v-icon>
+                                <span style="font-size: 12px"
+                                  >Save Personal Details</span
+                                >
+                              </v-btn>
+                              <v-snackbar
+                                v-model="snackbar"
+                                app
+                                color="green"
+                                top
+                                centered
+                                multi-line
+                              >
+                                <p>
+                                  <v-icon>check_circle</v-icon> Saved
+                                  Succesfully.
+                                </p>
+                              </v-snackbar>
+                            </v-card-subtitle>
 
-                        <!-- CONFIRMING THE PERSONAL DETAILS OF THE USER. -->
-                        <div class="ma-8" style="clear: all; display: block">
-                          <h4
-                            class="ml-8"
-                            style="color: black; display: inline-block"
+                            <!-- CONFIRMING THE PERSONAL DETAILS OF THE USER. -->
+                            <v-simple-table style="background-color:#F0FFFF">
+                              <tbody>
+                                <tr>
+                                  <td>First Name:</td>
+                                  <td>
+                                    <b
+                                      v-if="
+                                        !editingPersonalDetailsOnPurchasingModalGetter
+                                      "
+                                    >
+                                      {{
+                                        personalDetailsGetter.firstName
+                                          .charAt(0)
+                                          .toUpperCase() +
+                                          personalDetailsGetter.firstName
+                                            .substr(1)
+                                            .toLowerCase()
+                                      }}
+                                    </b>
+                                    <v-text-field
+                                      style="margin-top:8px;margin-bottom:-20px"
+                                      v-if="
+                                        editingPersonalDetailsOnPurchasingModalGetter
+                                      "
+                                      :rules="nameRules"
+                                      v-model="firstNameVModel"
+                                      dense
+                                      label="Your First Name"
+                                      outlined
+                                      prepend-inner-icon="account_box"
+                                      :value="firstNameVModel"
+                                    ></v-text-field>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Second Name:
+                                  </td>
+                                  <td>
+                                    <b
+                                      v-if="
+                                        !editingPersonalDetailsOnPurchasingModalGetter
+                                      "
+                                    >
+                                      {{
+                                        personalDetailsGetter.secondName
+                                          .charAt(0)
+                                          .toUpperCase() +
+                                          personalDetailsGetter.secondName
+                                            .substr(1)
+                                            .toLowerCase()
+                                      }}
+                                    </b>
+                                    <v-text-field
+                                      style="margin-top:8px;margin-bottom:-20px"
+                                      v-if="
+                                        editingPersonalDetailsOnPurchasingModalGetter
+                                      "
+                                      prepend-inner-icon="account_box"
+                                      dense
+                                      label="Your Second Name"
+                                      v-model="secondNameVModel"
+                                      outlined
+                                      :rules="nameRules"
+                                      :value="secondNameVModel"
+                                    ></v-text-field>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Email Address:
+                                  </td>
+                                  <td>
+                                    <b
+                                      v-if="
+                                        !editingPersonalDetailsOnPurchasingModalGetter
+                                      "
+                                    >
+                                      {{ personalDetailsGetter.email_address }}
+                                    </b>
+                                    <v-text-field
+                                      style="margin-top:8px;margin-bottom:-20px"
+                                      v-if="
+                                        editingPersonalDetailsOnPurchasingModalGetter
+                                      "
+                                      :rules="emailRules"
+                                      dense
+                                      required
+                                      v-model="emailAddresVModel"
+                                      label="Email Address"
+                                      outlined
+                                      prepend-inner-icon="email"
+                                      :value="emailAddresVModel"
+                                    ></v-text-field>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Phone Number:
+                                  </td>
+                                  <td>
+                                    <b
+                                      v-if="
+                                        !editingPersonalDetailsOnPurchasingModalGetter
+                                      "
+                                    >
+                                      {{ personalDetailsGetter.phoneNumber }}
+                                    </b>
+                                    <v-text-field
+                                      style="margin-top:8px;margin-bottom:-20px"
+                                      v-if="
+                                        editingPersonalDetailsOnPurchasingModalGetter
+                                      "
+                                      :rules="RequiredPhoneNumber"
+                                      required
+                                      dense
+                                      v-model="phoneNumberVModel"
+                                      label="Phone Number"
+                                      maxlength="10"
+                                      type="tel"
+                                      outlined
+                                      prepend-inner-icon="call"
+                                      :value="phoneNumberVModel"
+                                    ></v-text-field>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </v-simple-table>
+                          </v-card>
+                        </v-col>
+                        <v-col md="6">
+                          <v-card
+                            style="padding-left: 5%; padding-right: 5%; padding-bottom: 5%;height: 100%;background-color:#F0FFF0;"
                           >
-                            <b>First Names: </b>
-                          </h4>
-
-                          <h5
-                            style="display: inline-block"
-                            v-if="
-                              !editingPersonalDetailsOnPurchasingModalGetter
-                            "
-                            class="ml-4"
-                          >
-                            {{
-                              personalDetailsGetter.firstName
-                                .charAt(0)
-                                .toUpperCase() +
-                              personalDetailsGetter.firstName
-                                .substr(1)
-                                .toLowerCase()
-                            }}
-                          </h5>
-                          <v-text-field
-                            v-if="editingPersonalDetailsOnPurchasingModalGetter"
-                            style="display: inline-block"
-                            class="ml-4"
-                            height="10"
-                            :rules="nameRules"
-                            v-model="firstNameVModel"
-                            dense
-                            counter
-                            label="Your First Name"
-                            outlined
-                            prepend-inner-icon="account_box"
-                            :value="firstNameVModel"
-                          ></v-text-field>
-                          <span style="display: block"></span>
-                          <h4
-                            style="color: black; display: inline-block"
-                            class="ml-8"
-                          >
-                            <b>Second Name: </b>
-                          </h4>
-                          <h5
-                            style="display: inline-block"
-                            class="ml-4"
-                            v-if="
-                              !editingPersonalDetailsOnPurchasingModalGetter
-                            "
-                          >
-                            {{
-                              personalDetailsGetter.secondName
-                                .charAt(0)
-                                .toUpperCase() +
-                              personalDetailsGetter.secondName
-                                .substr(1)
-                                .toLowerCase()
-                            }}
-                          </h5>
-                          <v-text-field
-                            v-if="editingPersonalDetailsOnPurchasingModalGetter"
-                            style="display: inline-block"
-                            class="ml-4"
-                            prepend-inner-icon="account_box"
-                            counter
-                            dense
-                            label="Your Second Name"
-                            v-model="secondNameVModel"
-                            outlined
-                            :rules="nameRules"
-                            :value="secondNameVModel"
-                          ></v-text-field>
-                          <span style="display: block"></span>
-                          <h4
-                            style="color: black; display: inline-block"
-                            class="ml-8"
-                          >
-                            <b>Email Address: </b>
-                          </h4>
-                          <h5
-                            style="display: inline-block"
-                            class="ml-4"
-                            v-if="
-                              !editingPersonalDetailsOnPurchasingModalGetter
-                            "
-                          >
-                            {{ personalDetailsGetter.email_address }}
-                          </h5>
-                          <v-text-field
-                            style="display: inline-block"
-                            v-if="editingPersonalDetailsOnPurchasingModalGetter"
-                            class="ml-4"
-                            :rules="emailRules"
-                            counter
-                            dense
-                            required
-                            v-model="emailAddresVModel"
-                            label="Email Address"
-                            outlined
-                            prepend-inner-icon="email"
-                            :value="emailAddresVModel"
-                          ></v-text-field>
-                          <span style="display: block"></span>
-                          <h4
-                            style="color: black; display: inline-block"
-                            class="ml-8"
-                          >
-                            <b>Phone Number: </b>
-                          </h4>
-                          <h5
-                            style="display: inline-block"
-                            class="ml-4"
-                            v-if="
-                              !editingPersonalDetailsOnPurchasingModalGetter
-                            "
-                          >
-                            {{ personalDetailsGetter.phoneNumber }}
-                          </h5>
-                          <v-text-field
-                            v-if="editingPersonalDetailsOnPurchasingModalGetter"
-                            style="display: inline-block"
-                            class="ml-4"
-                            :rules="RequiredPhoneNumber"
-                            :counter="10"
-                            required
-                            dense
-                            v-model="phoneNumberVModel"
-                            label="Phone Number"
-                            maxlength="10"
-                            type="tel"
-                            outlined
-                            prepend-inner-icon="call"
-                            :value="phoneNumberVModel"
-                          ></v-text-field>
-                        </div>
-                      </div>
-                      <div>
-                        <h2 style="color: black">
-                          2. Insurance Cover Details:
-                        </h2>
-
-                        <span style="display: block"></span>
-                        <h4
-                          style="color: black; display: inline-block"
-                          class="ml-8"
-                        >
-                          <b>1. Cover: </b>
-                        </h4>
-                        <h5 style="display: inline-block" class="ml-4">
-                          {{ this.premium.cover.name }}
-                        </h5>
-
-                        <span style="display: block"></span>
-                        <h4
-                          style="color: black; display: inline-block"
-                          class="ml-8"
-                        >
-                          <b>2. Insurance SubCategory: </b>
-                        </h4>
-                        <h5 style="display: inline-block" class="ml-4">
-                          {{ this.premium.subCategory }}
-                        </h5>
-
-                        <span style="display: block"></span>
-                        <h4
-                          style="color: black; display: inline-block"
-                          class="ml-8"
-                        >
-                          <b>3. Company : </b>
-                        </h4>
-                        <h5 style="display: inline-block" class="ml-4">
-                          {{ this.premium.company.name }}
-                        </h5>
-
-                        <span style="display: block"></span>
-                        <h4 style="color: black" class="ml-8">
-                          <b>4.Cost Breakdwown : </b>
-                        </h4>
-                        <div style="text-align: center">
-                          <table>
-                            <tr>
-                              <th style="color: black">Name</th>
-                              <th style="color: black">Desciption</th>
-                              <th style="color: black">Value</th>
-                            </tr>
-                            <template
-                              v-for="(financialBreakdown,
-                              indexFinancialBreakdown) in financialBreakdownStateGetter[
-                                premium.uuid
-                              ]"
+                            <v-card-title
+                              class="text-center justify-center"
+                              style="width:100%;"
                             >
-                              <tr :key="indexFinancialBreakdown + 'tableRow'">
-                                <td>{{ financialBreakdown.name }}</td>
-                                <td>{{ financialBreakdown.description }}</td>
-                                <td>{{ financialBreakdown.value }}</td>
-                              </tr>
-                            </template>
-                            <tr>
-                              <td><b>Total</b></td>
-                              <td></td>
-                              <td>
-                                {{
-                                  payableAmountStateGetter[premium.uuid]
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                }}
-                                Ksh
-                              </td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
+                              <b>2. Insurance Cover Details:</b>
+                            </v-card-title>
+                            <v-simple-table style="background-color:#F0FFF0;">
+                              <tbody>
+                                <tr>
+                                  <td>
+                                    Cover:
+                                  </td>
+                                  <td>
+                                    <b>{{ this.premium.cover.name }}</b>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    Insurance SubCategory:
+                                  </td>
+                                  <td>
+                                    <b> {{ this.premium.subCategory }}</b>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Company</td>
+                                  <td>
+                                    <b> {{ this.premium.company.name }}</b>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </v-simple-table>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+
+                      <v-row>
+                        <v-col md="8" offset-md="2">
+                          <v-card
+                            style="padding-left: 5%; padding-right: 5%; padding-bottom: 5%;height: 100%;background-color:#FFFAFA;"
+                          >
+                            <v-card-title
+                              class="text-center justify-center"
+                              style="width:100%;"
+                            >
+                              <b>3. Financial Breakdown.</b>
+                            </v-card-title>
+                            <v-simple-table style="background-color:#FFFAFA;">
+                              <thead>
+                                <tr>
+                                  <th style="color: black">Name</th>
+                                  <th style="color: black">Desciption</th>
+                                  <th style="color: black">Cost</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <template
+                                  v-for="(financialBreakdown,
+                                  indexFinancialBreakdown) in financialBreakdownStateGetter[
+                                    premium.uuid
+                                  ]"
+                                >
+                                  <tr
+                                    :key="indexFinancialBreakdown + 'tableRow'"
+                                  >
+                                    <td>{{ financialBreakdown.name }}</td>
+                                    <td>
+                                      {{ financialBreakdown.description }}
+                                    </td>
+                                    <td>{{ financialBreakdown.value }}</td>
+                                  </tr>
+                                </template>
+                                <tr>
+                                  <td><b>Total</b></td>
+                                  <td></td>
+                                  <td>
+                                    {{
+                                      payableAmountStateGetter[premium.uuid]
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                    }}
+                                    Ksh
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </v-simple-table>
+                          </v-card>
+                        </v-col>
+                      </v-row>
                     </div>
 
                     <!-- THE DIV BELOW IS USED TO DEFINE THE PAYMENTS SECTION OF THE INSURANCE COVER BY MPESA:  -->
@@ -475,69 +493,128 @@
                         Complete This Transaction.
                       </h3>
 
-                      <v-btn @click="sendingPaymentRequestToBackEnd(payableAmountStateGetter[premium.uuid],premium.insuranceCoverID)" class="mt-8" outlined x-large color="success">
-                       <span v-if="sendingRequestForPaymentInitialStateGetter">Send MPESA STK PUSH TO :</span> 
-                       <span v-else>RESEND MPESA STK PUSH TO :</span> 
+                      <v-btn
+                        @click="
+                          sendingPaymentRequestToBackEnd(
+                            payableAmountStateGetter[premium.uuid],
+                            premium.insuranceCoverID
+                          )
+                        "
+                        class="mt-8"
+                        outlined
+                        x-large
+                        color="success"
+                      >
+                        <span v-if="sendingRequestForPaymentInitialStateGetter"
+                          >Send MPESA STK PUSH TO :</span
+                        >
+                        <span v-else>RESEND MPESA STK PUSH TO :</span>
                         {{ personalDetailsGetter.phoneNumber }}
                         <v-icon>send</v-icon></v-btn
                       >
 
-
-                      <div style="text-align:center;" v-if="sendingPaymentRequestStatusGetter">
-                      <!-- <orbit-spinner
+                      <div
+                        style="text-align:center;"
+                        v-if="sendingPaymentRequestStatusGetter"
+                      >
+                        <!-- <orbit-spinner
                         :animation-duration="1200"
                         :size="100"
                         color="#29AB87"
                       /> -->
-                       <div key="loader" class="fill-height" style="margin-top: 2%">
-                  <v-row align="center" justify="center">
-                    <h2 style="color: #29ab87" class="text-center" v-if="sendingRequestForPaymentInitialStateGetter">
-                      Mr Insurance Is Sending A request To your Safaricom MPESA Line to complete Payment, Keep Your Phone Close.
-                    </h2>
-                    <h2 style="color: orange" class="text-center" v-else-if="sendingPaymentRequestSuccessfulGetter">
-                      Safaricom Has Succesfuly Sent You An STK PUSH to your phoneNumber, Kindly confirm the detail and continue to payment.
-                    </h2>
-                    <h2 style="color: red" class="text-center" v-else-if="sendingRequestForPaymentNotSuccessfulGetter">
-                        The Request To Your Safaricom Line Has Failed, Kindly Try Again.
-                    </h2>
-                  </v-row>
+                        <div
+                          key="loader"
+                          class="fill-height"
+                          style="margin-top: 2%"
+                        >
+                          <v-row align="center" justify="center">
+                            <h2
+                              style="color: #29ab87"
+                              class="text-center"
+                              v-if="sendingRequestForPaymentInitialStateGetter"
+                            >
+                              Mr Insurance Is Sending A request To your
+                              Safaricom MPESA Line to complete Payment, Keep
+                              Your Phone Close.
+                            </h2>
+                            <h2
+                              style="color: orange"
+                              class="text-center"
+                              v-else-if="sendingPaymentRequestSuccessfulGetter"
+                            >
+                              Safaricom Has Succesfuly Sent You An STK PUSH to
+                              your phoneNumber, Kindly confirm the detail and
+                              continue to payment.
+                            </h2>
+                            <h2
+                              style="color: red"
+                              class="text-center"
+                              v-else-if="
+                                sendingRequestForPaymentNotSuccessfulGetter
+                              "
+                            >
+                              The Request To Your Safaricom Line Has Failed,
+                              Kindly Try Again.
+                            </h2>
+                          </v-row>
 
-                  <v-row align="center" justify="center" v-if="sendingRequestForPaymentInitialStateGetter">
-                    <orbit-spinner
-                      :animation-duration="1200"
-                      :size="155"
-                      color="#29ab87"
-                    />
-                  </v-row>
-                   <v-row align="center" justify="center" v-if="sendingPaymentRequestSuccessfulGetter">
-                    <orbit-spinner
-                      :animation-duration="1200"
-                      :size="155"
-                      color="orange"
-                    />
-                  </v-row>
-                   <v-row align="center" justify="center" v-if="sendingPaymentRequestSuccessfulGetter">
-                    <h3 style="color: orange">Waiting For You To Complete Tranaction.</h3>
-                    <hollow-dots-spinner
-                      :animation-duration="1200"
-                      :dot-size="8"
-                      :dots-num="4"
-                      color="orange"
-                    />
-                  </v-row>
-                  <v-row align="center" justify="center" v-if="sendingRequestForPaymentInitialStateGetter">
-                    <h3 style="color: #29ab87">Just A Second</h3>
-                    <hollow-dots-spinner
-                      :animation-duration="1200"
-                      :dot-size="8"
-                      :dots-num="4"
-                      color="#29ab87"
-                    />
-                  </v-row>
-                </div>
+                          <v-row
+                            align="center"
+                            justify="center"
+                            v-if="sendingRequestForPaymentInitialStateGetter"
+                          >
+                            <orbit-spinner
+                              :animation-duration="1200"
+                              :size="155"
+                              color="#29ab87"
+                            />
+                          </v-row>
+                          <v-row
+                            align="center"
+                            justify="center"
+                            v-if="sendingPaymentRequestSuccessfulGetter"
+                          >
+                            <orbit-spinner
+                              :animation-duration="1200"
+                              :size="155"
+                              color="orange"
+                            />
+                          </v-row>
+                          <v-row
+                            align="center"
+                            justify="center"
+                            v-if="sendingPaymentRequestSuccessfulGetter"
+                          >
+                            <h3 style="color: orange">
+                              Waiting For You To Complete Tranaction.
+                            </h3>
+                            <hollow-dots-spinner
+                              :animation-duration="1200"
+                              :dot-size="8"
+                              :dots-num="4"
+                              color="orange"
+                            />
+                          </v-row>
+                          <v-row
+                            align="center"
+                            justify="center"
+                            v-if="sendingRequestForPaymentInitialStateGetter"
+                          >
+                            <h3 style="color: #29ab87">Just A Second</h3>
+                            <hollow-dots-spinner
+                              :animation-duration="1200"
+                              :dot-size="8"
+                              :dots-num="4"
+                              color="#29ab87"
+                            />
+                          </v-row>
+                        </div>
                       </div>
-                      
-                        <div v-if="paymentProcessedSuccesfullyGetter" class="text-center">
+
+                      <div
+                        v-if="paymentProcessedSuccesfullyGetter"
+                        class="text-center"
+                      >
                         <v-rating
                           v-model="rating"
                           background-color="purple lighten-3"
@@ -545,21 +622,33 @@
                           large
                         ></v-rating>
                       </div>
-                     
                     </div>
                   </transition-group>
                 </div>
               </v-card-text>
               <v-divider></v-divider>
               <v-card-actions>
-                <v-btn color="red darken-1" large text @click="dialog = false" v-if="!visibilityOfPaymentOption">
+                <v-btn
+                  color="red darken-1"
+                  large
+                  text
+                  @click="dialog = false"
+                  v-if="!visibilityOfPaymentOption"
+                >
                   <v-icon>close</v-icon> Close
                 </v-btn>
-                <v-btn v-else large @click="proceedToPayments()" text color="blue darken-1">
+                <v-btn
+                  v-else
+                  large
+                  @click="proceedToPayments()"
+                  text
+                  color="blue darken-1"
+                >
                   <v-icon>arrow_back</v-icon> Back
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn v-if="!visibilityOfPaymentOption"
+                <v-btn
+                  v-if="!visibilityOfPaymentOption"
                   color="green darken-1"
                   large
                   text
@@ -567,7 +656,13 @@
                 >
                   PROCEED TO PAYMENT. <v-icon>arrow_forward_ios</v-icon>
                 </v-btn>
-                 <v-btn color="red darken-1" large text @click="dialog = false" v-else>
+                <v-btn
+                  color="red darken-1"
+                  large
+                  text
+                  @click="dialog = false"
+                  v-else
+                >
                   <v-icon>close</v-icon> Close
                 </v-btn>
               </v-card-actions>
@@ -645,15 +740,15 @@
                     class="text-center ma-4"
                     style="color: blue; font-family: 'Times New Roman'"
                   >
-                    There are No Additional Coverr Related To This Premium.
+                    There are No Additional Covers Related To This Premium.
                   </h2>
                 </template>
                 <template v-else>
-                  <v-row align="center" justify="center">
+                  
                     <template
                       v-if="
                         additionalCoversPremiumStateGetter[premium.uuid] ===
-                        null
+                          null
                       "
                     >
                       <insurance-component-additional-covers-with-null-value
@@ -671,7 +766,7 @@
                           <template
                             v-if="
                               additionalCoversInObject.premiumUUID ===
-                              premium.uuid
+                                premium.uuid
                             "
                           >
                             <template
@@ -681,7 +776,7 @@
                               <template
                                 v-if="
                                   additional.id ===
-                                  additionalCoversInObject.additionalId
+                                    additionalCoversInObject.additionalId
                                 "
                               >
                                 <div
@@ -697,110 +792,58 @@
                                     }}
                                   </h3>
                                 </div>
-                                <table
-                                  :key="index + indexOne + index + 'table'"
+                                <v-row :key="index + indexOne + index + 'table'">
+                                  <v-col md="8" offset-md="2">
+                                     <v-simple-table 
+                                  
                                 >
-                                  <tr
-                                    v-if="
-                                      premium.cover.name === 'Motor Insurance'
-                                    "
-                                  >
-                                    <th>ID</th>
-                                    <th>Rate</th>
-                                    <th>Cost</th>
-                                    <th>Purchase</th>
-                                  </tr>
-                                  <tr v-else>
-                                    <th>ID</th>
-                                    <th>Cover Limit</th>
-                                    <th>Cost</th>
-                                    <th>Purchase</th>
-                                  </tr>
-                                  <template
-                                    v-if="
-                                      premium.cover.name === 'Motor Insurance'
-                                    "
-                                  >
-                                    <template v-if="additional.rate">
-                                      <tr :key="index + 'TableRow'">
-                                        <td>{{ index + 1 }}</td>
-                                        <td>
-                                          {{ additional.rate }}
-                                        </td>
-                                        <td>
-                                          {{
-                                            (additional.rate *
-                                              premium.vehicleCost) /
-                                            100
-                                          }}
-                                        </td>
-                                        <td>
-                                          <v-btn
-                                            @click="
-                                              removingAdditionalCover(
-                                                premium.uuid,
-                                                (additional.rate *
-                                                  premium.vehicleCost) /
-                                                  100,
-                                                additional.id,
-                                                additional.name.toLowerCase()
-                                              )
-                                            "
-                                            small
-                                            outlined
-                                            color="red"
-                                            dark
-                                          >
-                                            Remove
-                                            <v-icon
-                                              >remove_circle</v-icon
-                                            ></v-btn
-                                          >
-                                        </td>
-                                      </tr>
-                                    </template>
-                                  </template>
-                                  <template v-else>
-                                    <template
-                                      v-for="(additionalPremium,
-                                      index) in additional.additional_premia"
+                                  <thead>
+                                    <tr
+                                      v-if="
+                                        premium.cover.name === 'Motor Insurance'
+                                      "
                                     >
-                                      <tr :key="index + 'tableRow'">
-                                        <td>{{ index + 1 }}</td>
-                                        <td>
-                                          {{
-                                            additionalPremium.limit
-                                              .toString()
-                                              .replace(
-                                                /\B(?=(\d{3})+(?!\d))/g,
-                                                ","
-                                              ) + " Ksh"
-                                          }}
-                                        </td>
-                                        <td>
-                                          {{
-                                            additionalPremium.cost
-                                              .toString()
-                                              .replace(
-                                                /\B(?=(\d{3})+(?!\d))/g,
-                                                ","
-                                              ) + " Ksh"
-                                          }}
-                                        </td>
-                                        <template
-                                          v-if="
-                                            additionalPremium.id ===
-                                            additionalCoversInObject.additionalPremiumID
-                                          "
-                                        >
-                                          <td class="text-center">
+                                      <th>ID</th>
+                                      <th>Rate</th>
+                                      <th>Cost</th>
+                                      <th>Purchase</th>
+                                    </tr>
+                                    <tr v-else>
+                                      <th>ID</th>
+                                      <th>Cover Limit</th>
+                                      <th>Cost</th>
+                                      <th>Purchase</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <template
+                                      v-if="
+                                        premium.cover.name === 'Motor Insurance'
+                                      "
+                                    >
+                                      <template v-if="additional.rate">
+                                        <tr :key="index + 'TableRow'">
+                                          <td>{{ index + 1 }}</td>
+                                          <td>
+                                            {{ additional.rate }}
+                                          </td>
+                                          <td>
+                                            {{
+                                              (additional.rate *
+                                                premium.vehicleCost) /
+                                                100
+                                            }}
+                                          </td>
+                                          <td>
                                             <v-btn
                                               @click="
                                                 removingAdditionalCover(
                                                   premium.uuid,
-                                                  additionalPremium.cost,
+                                                  (additional.rate *
+                                                    premium.vehicleCost) /
+                                                    100,
                                                   additional.id,
-                                                  additional.name
+                                                  additional.name.toLowerCase()
                                                 )
                                               "
                                               small
@@ -814,19 +857,80 @@
                                               ></v-btn
                                             >
                                           </td>
-                                        </template>
-                                        <template v-else>
-                                          <p
-                                            class="text-center"
-                                            style="color: blue"
-                                          >
-                                            Not Available
-                                          </p>
-                                        </template>
-                                      </tr>
+                                        </tr>
+                                      </template>
                                     </template>
-                                  </template>
-                                </table>
+                                    <template v-else>
+                                      <template
+                                        v-for="(additionalPremium,
+                                        index) in additional.additional_premia"
+                                      >
+                                        <tr :key="index + 'tableRow'">
+                                          <td>{{ index + 1 }}</td>
+                                          <td>
+                                            {{
+                                              additionalPremium.limit
+                                                .toString()
+                                                .replace(
+                                                  /\B(?=(\d{3})+(?!\d))/g,
+                                                  ","
+                                                ) + " Ksh"
+                                            }}
+                                          </td>
+                                          <td>
+                                            {{
+                                              additionalPremium.cost
+                                                .toString()
+                                                .replace(
+                                                  /\B(?=(\d{3})+(?!\d))/g,
+                                                  ","
+                                                ) + " Ksh"
+                                            }}
+                                          </td>
+                                          <template
+                                            v-if="
+                                              additionalPremium.id ===
+                                                additionalCoversInObject.additionalPremiumID
+                                            "
+                                          >
+                                            <td class="text-center">
+                                              <v-btn
+                                                @click="
+                                                  removingAdditionalCover(
+                                                    premium.uuid,
+                                                    additionalPremium.cost,
+                                                    additional.id,
+                                                    additional.name
+                                                  )
+                                                "
+                                                small
+                                                outlined
+                                                color="red"
+                                                dark
+                                              >
+                                                Remove
+                                                <v-icon
+                                                  >remove_circle</v-icon
+                                                ></v-btn
+                                              >
+                                            </td>
+                                          </template>
+                                          <template v-else>
+                                            <p
+                                              class="text-center"
+                                              style="color: blue"
+                                            >
+                                              Not Available
+                                            </p>
+                                          </template>
+                                        </tr>
+                                      </template>
+                                    </template>
+                                  </tbody>
+                                </v-simple-table>
+                                  </v-col>
+                                </v-row>
+                               
                               </template>
                             </template>
                           </template>
@@ -847,77 +951,36 @@
                               {{ additionalNotSelected.name.toLowerCase() }}
                             </h3>
                           </div>
-                          <table :key="index + 'tableNotSelected'">
-                            <tr v-if="premium.cover.name === 'Motor Insurance'">
-                              <th>ID</th>
-                              <th>Rate</th>
-                              <th>Cost</th>
-                              <th>Purchase</th>
-                            </tr>
-                            <tr v-else>
-                              <th>ID</th>
-                              <th>Cover Limit</th>
-                              <th>Cost</th>
-                              <th>Purchase</th>
-                            </tr>
-
-                            <template
-                              v-if="premium.cover.name === 'Motor Insurance'"
-                            >
-                              <tr>
-                                <td>1</td>
-                                <td>{{ additionalNotSelected.rate }}</td>
-                                <td>
-                                  {{(additionalNotSelected.rate *
+                          <v-row :key="index + 'tableNotSelected'">
+                            <v-col md="8" offset-md="2">
+                              <v-simple-table >
+                            <thead>
+                              <tr
+                                v-if="premium.cover.name === 'Motor Insurance'"
+                              >
+                                <th>ID</th>
+                                <th>Rate</th>
+                                <th>Cost</th>
+                                <th>Purchase</th>
+                              </tr>
+                              <tr v-else>
+                                <th>ID</th>
+                                <th>Cover Limit</th>
+                                <th>Cost</th>
+                                <th>Purchase</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <template
+                                v-if="premium.cover.name === 'Motor Insurance'"
+                              >
+                                <tr>
+                                  <td>1</td>
+                                  <td>{{ additionalNotSelected.rate }}</td>
+                                  <td>
+                                    {{(additionalNotSelected.rate *
                                             premium.vehicleCost) /
                                           100, }}
-                                </td>
-                                <td>
-                                  <v-btn
-                                    small
-                                    outlined
-                                    color="primary"
-                                    dark
-                                    @click="
-                                      addAdditionCover(
-                                        additionalNotSelected.insurance_cover_id,
-                                        additionalNotSelected.id,
-                                        premium.uuid,
-                                        (additionalNotSelected.rate *
-                                          premium.vehicleCost) /
-                                          100,
-                                        additionalNotSelected.name.toLowerCase()
-                                      )
-                                    "
-                                  >
-                                    Add To Cover.
-                                    <v-icon>add_shopping_cart</v-icon>
-                                  </v-btn>
-                                </td>
-                              </tr>
-                            </template>
-                            <template v-else>
-                              <template
-                                v-for="(additionalPremiumNotelected,
-                                index) in additionalNotSelected.additional_premia"
-                              >
-                                <tr :key="index + 'rowNotSelected'">
-                                  <td>{{ index + 1 }}</td>
-                                  <td>
-                                    {{
-                                      additionalPremiumNotelected.limit
-                                        .toString()
-                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                                      " Ksh"
-                                    }}
-                                  </td>
-                                  <td>
-                                    {{
-                                      additionalPremiumNotelected.cost
-                                        .toString()
-                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                                      " Ksh"
-                                    }}
                                   </td>
                                   <td>
                                     <v-btn
@@ -927,10 +990,12 @@
                                       dark
                                       @click="
                                         addAdditionCover(
-                                          additionalPremiumNotelected.id,
+                                          additionalNotSelected.insurance_cover_id,
                                           additionalNotSelected.id,
                                           premium.uuid,
-                                          additionalPremiumNotelected.cost,
+                                          (additionalNotSelected.rate *
+                                            premium.vehicleCost) /
+                                            100,
                                           additionalNotSelected.name.toLowerCase()
                                         )
                                       "
@@ -941,13 +1006,66 @@
                                   </td>
                                 </tr>
                               </template>
-                            </template>
-                          </table>
+                              <template v-else>
+                                <template
+                                  v-for="(additionalPremiumNotelected,
+                                  index) in additionalNotSelected.additional_premia"
+                                >
+                                  <tr :key="index + 'rowNotSelected'">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>
+                                      {{
+                                        additionalPremiumNotelected.limit
+                                          .toString()
+                                          .replace(
+                                            /\B(?=(\d{3})+(?!\d))/g,
+                                            ","
+                                          ) + " Ksh"
+                                      }}
+                                    </td>
+                                    <td>
+                                      {{
+                                        additionalPremiumNotelected.cost
+                                          .toString()
+                                          .replace(
+                                            /\B(?=(\d{3})+(?!\d))/g,
+                                            ","
+                                          ) + " Ksh"
+                                      }}
+                                    </td>
+                                    <td>
+                                      <v-btn
+                                        small
+                                        outlined
+                                        color="primary"
+                                        dark
+                                        @click="
+                                          addAdditionCover(
+                                            additionalPremiumNotelected.id,
+                                            additionalNotSelected.id,
+                                            premium.uuid,
+                                            additionalPremiumNotelected.cost,
+                                            additionalNotSelected.name.toLowerCase()
+                                          )
+                                        "
+                                      >
+                                        Add To Cover.
+                                        <v-icon>add_shopping_cart</v-icon>
+                                      </v-btn>
+                                    </td>
+                                  </tr>
+                                </template>
+                              </template>
+                            </tbody>
+                          </v-simple-table>
+                            </v-col>
+                          </v-row>
+                          
                         </template>
                       </template>
                       <!-- LOOPING THROUGH THE SELECTED ADDITIONAL COVERS. -->
                     </template>
-                  </v-row>
+                  
                 </template>
               </v-card-text>
             </v-card>
@@ -960,31 +1078,36 @@
                     Insurance Cover Benefits
                   </h3>
                   <v-row align="center" justify="center" class="my-5" my-4>
-                    <table>
-                      <tr>
-                        <th>ID</th>
-                        <th>Benefit</th>
-                        <th>Limit</th>
-                      </tr>
-                      <template
-                        v-for="(coverBenefit, index) in this.premium
-                          .coverBenefits"
-                      >
-                        <tr :key="index + 'coverBenefitsTr'">
-                          <td>{{ index + 1 }}</td>
-                          <td>
-                            {{ coverBenefit.name }}
-                          </td>
-                          <td v-if="coverBenefit.type_of_benefit == 1">
-                            {{
-                              coverBenefit.amount
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Ksh"
-                            }}
-                          </td>
+                    <v-simple-table>
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Benefit</th>
+                          <th>Limit</th>
                         </tr>
-                      </template>
-                    </table>
+                      </thead>
+                      <tbody>
+                        <template
+                          v-for="(coverBenefit, index) in this.premium
+                            .coverBenefits"
+                        >
+                          <tr :key="index + 'coverBenefitsTr'">
+                            <td>{{ index + 1 }}</td>
+                            <td>
+                              {{ coverBenefit.name }}
+                            </td>
+                            <td v-if="coverBenefit.type_of_benefit == 1">
+                              {{
+                                coverBenefit.amount
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                  " Ksh"
+                              }}
+                            </td>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </v-simple-table>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -1001,31 +1124,32 @@
                     Conditions Not Covered.
                   </h3>
                   <v-row align="center" justify="center" class="my-5" my-4>
-                    <table>
+                    <v-simple-table>
                       <thead>
                         <tr>
                           <th>ID</th>
                           <th>Benefit</th>
                         </tr>
                       </thead>
-
-                      <template
-                        v-for="(notCovered, index) in premium.notCovered"
-                      >
-                        <tr :key="index + 'notCoveredTr'">
-                          <td>{{ index + 1 }}</td>
-                          <td>
-                            {{ notCovered.name }}
-                          </td>
-                        </tr>
-                      </template>
+                      <tbody>
+                        <template
+                          v-for="(notCovered, index) in premium.notCovered"
+                        >
+                          <tr :key="index + 'notCoveredTr'">
+                            <td>{{ index + 1 }}</td>
+                            <td>
+                              {{ notCovered.name }}
+                            </td>
+                          </tr>
+                        </template>
+                      </tbody>
                       <tfoot>
                         <tr>
                           <th>ID</th>
                           <th>Benefit</th>
                         </tr>
                       </tfoot>
-                    </table>
+                    </v-simple-table>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -1050,7 +1174,7 @@
                     </template>
                     <template v-else>
                       <v-row align="center" justify="center" class="my-5" my-4>
-                        <table>
+                        <v-simple-table>
                           <thead>
                             <tr>
                               <th>ID</th>
@@ -1058,25 +1182,26 @@
                               <th>Waiting Period</th>
                             </tr>
                           </thead>
-
-                          <template
-                            v-for="(waitingPeriod, index) in this.premium
-                              .waitingPeriod"
-                          >
-                            <tr :key="index + 'waitingPeriod'">
-                              <td>{{ index + 1 }}</td>
-                              <td>
-                                {{ waitingPeriod.situation }}
-                              </td>
-                              <td>
-                                {{
-                                  waitingPeriod.period_amount +
-                                  waitingPeriod.period_time
-                                }}
-                              </td>
-                            </tr>
-                          </template>
-                        </table>
+                          <tbody>
+                            <template
+                              v-for="(waitingPeriod, index) in this.premium
+                                .waitingPeriod"
+                            >
+                              <tr :key="index + 'waitingPeriod'">
+                                <td>{{ index + 1 }}</td>
+                                <td>
+                                  {{ waitingPeriod.situation }}
+                                </td>
+                                <td>
+                                  {{
+                                    waitingPeriod.period_amount +
+                                      waitingPeriod.period_time
+                                  }}
+                                </td>
+                              </tr>
+                            </template>
+                          </tbody>
+                        </v-simple-table>
                       </v-row>
                     </template>
                   </template>
@@ -1099,7 +1224,7 @@
 <script>
 import { mapGetters } from "vuex";
 import "animate.css";
-import { OrbitSpinner } from 'epic-spinners';
+import { OrbitSpinner } from "epic-spinners";
 import { HollowDotsSpinner } from "epic-spinners";
 import Pusher from "pusher-js";
 export default {
@@ -1125,21 +1250,19 @@ export default {
       "sendingRequestForPaymentInitialStateGetter",
       "sendingRequestForPaymentNotSuccessfulGetter",
       "paymentDetailsGetterGetter",
-      "paymentProcessedSuccesfullyGetter"
+      "paymentProcessedSuccesfullyGetter",
     ]),
   },
-  components: {    
+  components: {
     OrbitSpinner,
     HollowDotsSpinner,
   },
   methods: {
-    sendingPaymentRequestToBackEnd(cost,insuranceCoverID){
-
-        var obj = {};
-        obj['cost'] = cost;
-        obj['insuranceCoverID'] = insuranceCoverID;
-        this.$store.dispatch("sendingPaymentRequest",obj);        
-
+    sendingPaymentRequestToBackEnd(cost, insuranceCoverID) {
+      var obj = {};
+      obj["cost"] = cost;
+      obj["insuranceCoverID"] = insuranceCoverID;
+      this.$store.dispatch("sendingPaymentRequest", obj);
     },
     removingAdditionalCover(premiumUUID, cost, additionalId, name) {
       var snackBarObj = {};
@@ -1181,7 +1304,7 @@ export default {
       this.$store.dispatch(
         "updatingStatusOfAdditionalCoverSnackbar",
         snackBarObj
-      );      
+      );
       // ! creating the object to hold the additional Cover details.
       var obj = {};
       obj["additionalId"] = additionalId;
@@ -1209,7 +1332,7 @@ export default {
       this.$store.dispatch("updatingTheFinancialBreakDown", addObj);
     },
     checkingOutCover() {
-      this.$store.commit("UPDATING_PAYMENT_PROCESSED_SUCCESSFULLY",false);
+      this.$store.commit("UPDATING_PAYMENT_PROCESSED_SUCCESSFULLY", false);
       this.dialog = true;
       this.visibilityOfPaymentOption = false;
       this.firstNameVModel = this.personalDetailsGetter["firstName"];
@@ -1279,24 +1402,27 @@ export default {
     ],
   }),
   props: ["premium"],
-  
-created() {  
-    const self = this;      
+
+  created() {
+    const self = this;
     var pusher = new Pusher("5654eeba7564603af3b2", {
       cluster: "ap2",
     });
-    
+
     var channel = pusher.subscribe("PremiumPaymentChannel");
-    channel.bind("PaymentEvent", function(data) {         
-      if (self.paymentDetailsGetterGetter['CheckoutRequestID'] === data.content.Body.stkCallback.CheckoutRequestID && 
-          self.paymentDetailsGetterGetter['MerchantRequestID'] === data.content.Body.stkCallback.MerchantRequestID) {
-            
-            self.$store.commit("UPDATING_SENDING_PAYMENTS_REQUEST_STATUS",false);
-            self.$store.commit("UPDATING_PAYMENT_PROCCESSED_SUCCESSFULLY",true);                    
-      }       
+    channel.bind("PaymentEvent", function(data) {
+      if (
+        self.paymentDetailsGetterGetter["CheckoutRequestID"] ===
+          data.content.Body.stkCallback.CheckoutRequestID &&
+        self.paymentDetailsGetterGetter["MerchantRequestID"] ===
+          data.content.Body.stkCallback.MerchantRequestID
+      ) {
+        self.$store.commit("UPDATING_SENDING_PAYMENTS_REQUEST_STATUS", false);
+        self.$store.commit("UPDATING_PAYMENT_PROCCESSED_SUCCESSFULLY", true);
+      }
     });
   },
-  
+
   watch: {},
 };
 </script>
@@ -1308,22 +1434,5 @@ created() {
 }
 .basil--text {
   color: #356859 !important;
-}
-
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 80%;
-}
-
-td,
-th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
 }
 </style>

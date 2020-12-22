@@ -451,7 +451,7 @@
                     <template
                       v-for="(premiumsData, index) in premiumsDataGetter"
                     >
-                      <section-health-premium
+                      <insurance-component-insurance-premium
                         :premium="premiumsData"
                         :key="index + 'premiumsDataGetter'"
                       />
