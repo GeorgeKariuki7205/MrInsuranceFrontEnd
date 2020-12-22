@@ -8,7 +8,7 @@ import  './plugins/base'
 import  './plugins/section'
 import  './plugins/userCore'
 import  './plugins/adminCore'
-import  './plugins/health'
+import  './plugins/insurance'
 import AnimateCSS from 'animate.css';
 Vue.config.productionTip = false
 Vue.use(AnimateCSS);

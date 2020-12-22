@@ -113,11 +113,11 @@
 
           <v-tab class="font-weight-bold" text style="font-size:10px;">
             Make A Claim.
-            <v-icon>mdi-gavel</v-icon>
+            <v-icon>fa-gavel</v-icon>
           </v-tab>
           <v-tab class="font-weight-bold" text style="font-size:10px;">
             Request A Call
-            <v-icon>ring_volume</v-icon>
+            <v-icon>fa-phone-volume</v-icon>
           </v-tab>
           <v-tab
             to="/about"
@@ -125,8 +125,8 @@
             text
             style="font-size:10px;"
           >
-            About
-            <v-icon>group</v-icon>
+            About Us
+            <v-icon>fa-group</v-icon>
           </v-tab>
 
           <v-tab
@@ -136,7 +136,7 @@
             style="font-size:10px;"
           >
             Contact Us
-            <v-icon>phone_enabled</v-icon>
+            <v-icon>fa-phone</v-icon>
           </v-tab>
           <v-tab
             background-color="success"

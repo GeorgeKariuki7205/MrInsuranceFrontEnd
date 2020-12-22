@@ -26,7 +26,7 @@
         </h4>
 
         <template class="mt-4" v-for="(premium, index) in premiumsDataGetter">
-          <health-component-health-premium-card
+          <insurance-component-health-premium-card
             :premium="premium"
             :key="index + 'premium'"
           />

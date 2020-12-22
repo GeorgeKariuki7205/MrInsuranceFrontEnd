@@ -327,7 +327,7 @@
                       }} </span
                     >, I just need the details below,
                   </h1>
-                  <health-component-questions />
+                  <insurance-component-questions />
                 </div>
               </template>
 

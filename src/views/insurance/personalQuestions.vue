@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form2" v-model="form2Validation">
+  <v-form @submit.prevent="movingFromStep2ToStep1()" ref="form2" v-model="form2Validation">
     <h3 class="text-center">Personal Details.</h3>
     <v-row dense>
       <v-col md="2" offset-md="2">

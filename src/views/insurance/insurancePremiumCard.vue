@@ -146,7 +146,7 @@
                     <template
                       v-if="additionalCoversPremiumStateGetter === null"
                     >
-                      <health-component-additional-covers-with-null-value
+                      <insurance-component-additional-covers-with-null-value
                         :premium="premium"
                       />
                     </template>

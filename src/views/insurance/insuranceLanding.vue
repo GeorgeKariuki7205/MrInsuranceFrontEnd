@@ -2,7 +2,7 @@
   <v-app>
     <ucore-app-bar />
     <v-main>
-      <section-health-insurance-initial-page />
+      <insurance-component-insurance-initial-page />
       <section-partners-offering-a-specific-insurance-cover />
       <section-how-it-works />
       <section-keep-in-touch />

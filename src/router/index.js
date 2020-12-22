@@ -3,8 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/UserPages/Landing'
 import About from '../views/UserPages/about'
 import Contact from '../views/UserPages/contactUs'
-import Health from '../views/Health/HealthLanding'
-import HealthSmallScreen from '../views/Health/HealthSmallScreenPremium.vue'
+import Insurance from '../views/insurance/insuranceLanding'
+import InsuranceSmallScreen from '../views/insurance/insuranceSmallScreenPremium.vue'
 Vue.use(VueRouter)
 
   const routes = [
@@ -25,18 +25,18 @@ Vue.use(VueRouter)
   },
   {
     path: '/health',
-    name: 'Health',
-    component: Health
+    name: 'Insurance',
+    component: Insurance
   },
   {
     path: '/insuranceCover',
     name: 'InsuranceCover',
-    component: Health
+    component: Insurance
   },
   {
-    path: '/healthPremiumsMobileView',
-    name: 'HealthSmallScreen',
-    component: HealthSmallScreen
+    path: '/insurancePremiumsMobileView',
+    name: 'InsuranceSmallScreen',
+    component: InsuranceSmallScreen
   },
 ]
 
