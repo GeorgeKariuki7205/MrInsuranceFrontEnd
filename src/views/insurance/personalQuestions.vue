@@ -1,5 +1,9 @@
 <template>
-  <v-form @submit.prevent="movingFromStep2ToStep1()" ref="form2" v-model="form2Validation">
+  <v-form
+    @submit.prevent="movingFromStep2ToStep1()"
+    ref="form2"
+    v-model="form2Validation"
+  >
     <h3 class="text-center">Personal Details.</h3>
     <v-row dense>
       <v-col md="2" offset-md="2">
@@ -84,46 +88,45 @@
 export default {
   methods: {
     movingFromStep2ToStep1() {
-     this.$store.dispatch("nextStepInStepper",1);
+      this.$store.dispatch("nextStepInStepper", 1);
     },
     movingFromStep2ToStep3() {
       if (this.$refs.form2.validate()) {
-        this.$store.dispatch('updatingPersonalDetails', this.personalData)
-        this.$store.dispatch('postingTheDataForCoverSearch')
-        this.$store.dispatch('updatingPremiumDataStatus', false)
-       this.$store.dispatch("nextStepInStepper",3);
+        this.$store.dispatch("updatingPersonalDetails", this.personalData);
+        this.$store.dispatch("postingTheDataForCoverSearch");
+        this.$store.dispatch("updatingPremiumDataStatus", false);
+        this.$store.dispatch("nextStepInStepper", 3);
       }
     },
   },
-      data: () => ({
-      personalData: [],
-      form2Validation: false,
-      // ! the name rules.
-      RequiredDateRules: [(v) => !!v || 'Date is required'],
-      RequiredNumber: [
-        (v) => !!v || 'Number is required',
-        (v) => /^\d+$/.test(v) || 'Number must be valid',
-      ],
-      RequiredPhoneNumber: [
-        (v) => !!v || 'Phone Number is required',
-        (v) =>
-          (v && v.length <= 10) ||
-          'Phone Number must be less than 10 characters',
+  data: () => ({
+    personalData: [],
+    form2Validation: false,
+    // ! the name rules.
+    RequiredDateRules: [(v) => !!v || "Date is required"],
+    RequiredNumber: [
+      (v) => !!v || "Number is required",
+      (v) => /^\d+$/.test(v) || "Number must be valid",
+    ],
+    RequiredPhoneNumber: [
+      (v) => !!v || "Phone Number is required",
+      (v) =>
+        (v && v.length <= 10) || "Phone Number must be less than 10 characters",
 
-        (v) =>
-          /^0((7|1)(?:(?:[0-9][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$/.test(v) ||
-          'Phone Number must be valid',
-      ],
-      emailRules: [
-        (v) => !!v || 'E-mail is required',
-        (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ],
-      nameRules: [
-        (v) => !!v || 'Name is required',
-        (v) => (v && v.length >= 3) || 'Name must be less than 3 characters',
-      ],
-    }),
-}
+      (v) =>
+        /^0((7|1)(?:(?:[0-9][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$/.test(v) ||
+        "Phone Number must be valid",
+    ],
+    emailRules: [
+      (v) => !!v || "E-mail is required",
+      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+    ],
+    nameRules: [
+      (v) => !!v || "Name is required",
+      (v) => (v && v.length >= 3) || "Name must be less than 3 characters",
+    ],
+  }),
+};
 </script>
 
 <style></style>

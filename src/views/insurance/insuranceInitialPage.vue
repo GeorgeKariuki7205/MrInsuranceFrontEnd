@@ -7,9 +7,8 @@
     <!-- THIS SECTIONS IS USED TO DISPLAY THE SUB CATEGORIES. -->
 
     <v-container>
-      <div style="margin-top: -4%; width: 100%;align:center;">        
+      <div style="margin-top: -4%; width: 100%;align:center;">
         <v-row class="hidden-sm-and-down" justify="center">
-          
           <v-col
             v-for="(feature, i) in cover.subCategories"
             :key="i + 'subCategories'"
@@ -141,7 +140,7 @@
                   Hey
                   {{
                     personalDetailsGetter.firstName.charAt(0).toUpperCase() +
-                    personalDetailsGetter.firstName.substr(1).toLowerCase()
+                      personalDetailsGetter.firstName.substr(1).toLowerCase()
                   }}, We did't Get Your Contact Info, Kindly Add Them.
                 </h1>
 
@@ -203,7 +202,7 @@
                     <template
                       v-if="
                         personalQuestions[questionsStartValue].name ==
-                        'contactDetails'
+                          'contactDetails'
                       "
                     >
                       <v-row
@@ -317,7 +316,7 @@
                     Hey
                     {{
                       personalData.firstName.charAt(0).toUpperCase() +
-                      personalData.firstName.substr(1).toLowerCase()
+                        personalData.firstName.substr(1).toLowerCase()
                     }}
                     I can't Wait to get you the best deals for
                     <span style="color: black; text-decoration: underline">
@@ -394,20 +393,22 @@
                         text-align: center;
                       "
                     >
-                    <span
-                    ><v-icon
-                      @click="goBackToCoverSpecificQuestions()"
-                      style="cursor: pointer"
-                      size="65"
-                      >arrow_back_ios</v-icon
-                    ></span
-                  >
+                      <span
+                        ><v-icon
+                          @click="goBackToCoverSpecificQuestions()"
+                          style="cursor: pointer"
+                          size="65"
+                          >arrow_back_ios</v-icon
+                        ></span
+                      >
                       Hey
                       {{
                         personalDetailsGetter.firstName
                           .charAt(0)
                           .toUpperCase() +
-                        personalDetailsGetter.firstName.substr(1).toLowerCase()
+                          personalDetailsGetter.firstName
+                            .substr(1)
+                            .toLowerCase()
                       }},
                       <span style="color: black">{{
                         premiumsDataGetter.length
@@ -422,14 +423,14 @@
                       <span
                         v-if="premiumsDataGetter[0].cover.route_name == 'Motor'"
                       >
-                      of Vehicle of cost :
-                      <span style="color: green; type: bold">
-                       {{
-                              premiumsDataGetter[0].vehicleCost
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")+ "/= Ksh"
-                            }} 
-                            </span>
+                        of Vehicle of cost :
+                        <span style="color: green; type: bold">
+                          {{
+                            premiumsDataGetter[0].vehicleCost
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "/= Ksh"
+                          }}
+                        </span>
                       </span>
                       <span v-else>
                         <span
@@ -442,7 +443,7 @@
                             {{
                               premiumsDataGetter[0].coveredAmount
                                 .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")+ " Ksh"
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Ksh"
                             }}
                           </span>
                         </span>
@@ -492,7 +493,6 @@ export default {
       "payableAmountStateGetter",
       "updatingSubCategoryAndCoverStateGetter",
       "sendingPaymentRequestStatusGetter",
-      
     ]),
   },
   components: {
@@ -501,23 +501,17 @@ export default {
   },
   methods: {
     activateTheSubCategory(subCategory) {
-
       if (this.insuranceCoversRetrieved) {
-        
         this.insuranceCoversRetrieved = !this.insuranceCoversRetrieved;
-        this.showingCoverRelatedQuestions = !this.showingCoverRelatedQuestions;         
+        this.showingCoverRelatedQuestions = !this.showingCoverRelatedQuestions;
         this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategory);
-        this.$store.dispatch("updatingPremiumDataStatus", false);      
+        this.$store.dispatch("updatingPremiumDataStatus", false);
         this.$store.commit("UPDATING_PERSONAL_DETAILS_STATUS", false);
-
-
       } else {
-
-      this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategory);
-      this.$store.dispatch("updatingPremiumDataStatus", false);      
-      this.$store.commit("UPDATING_PERSONAL_DETAILS_STATUS", false);
+        this.$store.dispatch("updatingTheSubCategoryCoverIndex", subCategory);
+        this.$store.dispatch("updatingPremiumDataStatus", false);
+        this.$store.commit("UPDATING_PERSONAL_DETAILS_STATUS", false);
       }
-     
     },
 
     tooglingVisibility() {
@@ -525,10 +519,10 @@ export default {
         if (this.$refs.form2.validate()) {
           this.show = false;
           this.showingCoverRelatedQuestions = true;
-          this.$store.dispatch("updatingPersonalDetails", this.personalData);          
+          this.$store.dispatch("updatingPersonalDetails", this.personalData);
         }
       } else {
-        if (this.$refs.form2.validate()) {          
+        if (this.$refs.form2.validate()) {
           this.questionsStartValue = this.questionsStartValue + 1;
           this.show = !this.show;
           this.$store.dispatch("updatingPersonalDetails", this.personalData);
@@ -536,19 +530,16 @@ export default {
       }
     },
 
-    // ! this is the functon that is called once the go back icn is cicked when the premiums appear. 
+    // ! this is the functon that is called once the go back icn is cicked when the premiums appear.
 
-    goBackToCoverSpecificQuestions(){
-
+    goBackToCoverSpecificQuestions() {
       this.insuranceCoversRetrieved = !this.insuranceCoversRetrieved;
       this.showingCoverRelatedQuestions = !this.showingCoverRelatedQuestions;
-
-
     },
 
     enter() {
-      var showData = this.show;  
-      console.log(showData);    
+      var showData = this.show;
+      console.log(showData);
     },
     leave() {
       if (this.questionsStartValue > 1) {
@@ -561,7 +552,7 @@ export default {
             this.show = false;
             this.showingCoverRelatedQuestions = true;
             this.marginValue =
-              "margin-left: auto; margin-right: auto; margin-top:8%; width: 90%";                        
+              "margin-left: auto; margin-right: auto; margin-top:8%; width: 90%";
           }
         }
       } else {
@@ -646,40 +637,38 @@ export default {
   // ! this sections is used to monitor if there is any change that happens to the change in the categories and subCategories.
 
   watch: {
-
-    updatingSubCategoryAndCoverStateGetter:function(){
-
-      if(this.updatingSubCategoryAndCoverStateGetter){
-
-        if (this.insuranceCoversRetrieved ) {
-          this.insuranceCoversRetrieved =false;
+    updatingSubCategoryAndCoverStateGetter: function() {
+      if (this.updatingSubCategoryAndCoverStateGetter) {
+        if (this.insuranceCoversRetrieved) {
+          this.insuranceCoversRetrieved = false;
           this.showingCoverRelatedQuestions = true;
 
-        this.$store.dispatch("updatatingupdatingSubCategoryAndCoverState",false);
+          this.$store.dispatch(
+            "updatatingupdatingSubCategoryAndCoverState",
+            false
+          );
         }
-        
+
         // if (this.show) {
         //   this.show = false;
         // }
-        
-
       }
     },
 
-    navigationCoverGetter: function () {
+    navigationCoverGetter: function() {
       this.cover = this.navigationStateGetter[this.navigationCoverGetter];
       this.questions = this.navigationStateGetter[
         this.navigationCoverGetter
       ].subCategories[this.navigationSubCategory].questions;
       this.subCategory = this.navigationSubCategory;
     },
-    navigationSubCategory: function () {
+    navigationSubCategory: function() {
       this.questions = this.navigationStateGetter[
         this.navigationCoverGetter
       ].subCategories[this.navigationSubCategory].questions;
       this.subCategory = this.navigationSubCategory;
     },
-    premiumsDataStatusGetter: function () {
+    premiumsDataStatusGetter: function() {
       if (this.premiumsDataStatusGetter === true) {
         // ! changing the value of the loading to false.
         this.showingCoverRelatedQuestions = false;

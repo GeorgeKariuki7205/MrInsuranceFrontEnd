@@ -2,241 +2,240 @@
   <v-container
     class="text-center"
     style="margin-left: auto; margin-right: auto"
-  >          
-      <v-form
-        ref="form"
-        style="margin-left: auto; margin-right: auto"
-        v-model="valid"
-        @submit.prevent="coverSpecificQuestionsValidation()"
-      >
-        <br />
+  >
+    <v-form
+      ref="form"
+      style="margin-left: auto; margin-right: auto"
+      v-model="valid"
+      @submit.prevent="coverSpecificQuestionsValidation()"
+    >
+      <br />
 
-        <v-row dense align="center" justify="center">
-          <v-col md="4" offset-md="1" v-if="cover.id === 1">
-            <h5 class="text-center">
-              <v-icon color="red" x-small>fa-asterisk</v-icon> 1. Cover Amount.
-              {{ cover.id }}
-            </h5>
-            <v-select
-              :items="items"
-              label="Cover Amount."
-              outlined
-              required
-              dense
-              prepend-inner-icon="monetization_on"
-              :rules="RequiredNumber"
-              v-model="inputData['cover_amount']"
-            ></v-select>
-          </v-col>
-          <template v-for="(feature, i) in questions">
-            <template v-if="questions[i].type == 'date'">
-              <v-col
-                cols="6"
-                md="4"
-                offset-md="1"
-                :key="i + 'dateQusetionLargeScreen'"
+      <v-row dense align="center" justify="center">
+        <v-col md="4" offset-md="1" v-if="cover.id === 1">
+          <h5 class="text-center">
+            <v-icon color="red" x-small>fa-asterisk</v-icon> 1. Cover Amount.
+            {{ cover.id }}
+          </h5>
+          <v-select
+            :items="items"
+            label="Cover Amount."
+            outlined
+            required
+            dense
+            prepend-inner-icon="monetization_on"
+            :rules="RequiredNumber"
+            v-model="inputData['cover_amount']"
+          ></v-select>
+        </v-col>
+        <template v-for="(feature, i) in questions">
+          <template v-if="questions[i].type == 'date'">
+            <v-col
+              cols="6"
+              md="4"
+              offset-md="1"
+              :key="i + 'dateQusetionLargeScreen'"
+            >
+              <h5
+                v-if="questions[i].required == 1"
+                class="text-center"
+                :key="i + 'checkBoxQusetionLargeScreen'"
               >
-                <h5
-                  v-if="questions[i].required == 1"
-                  class="text-center"
-                  :key="i + 'checkBoxQusetionLargeScreen'"
-                >
-                  <v-icon color="red" x-small>fa-asterisk</v-icon>
-                  {{ i + 2 + "." }} {{ questions[i].question }}
-                </h5>
-                <h5
-                  v-else
-                  class="text-center"
-                  :key="i + 'checkBoxQusetionLargeScreen'"
-                >
-                  {{ i + 2 + "." }} {{ questions[i].question }}
-                </h5>
-
-                <!-- ! CREATING A NEW WAY TO IMPLETEMT THE DATE. -->
-
-                <v-row v-if="questions[i].required == 1">
-                  <v-col>
-                    <v-text-field
-                      label="Day"
-                      maxlength="2"
-                      placeholder="DD"
-                      outlined
-                      dense
-                      required
-                      v-model="inputData[questions[i].name + 'day']"
-                      :rules="dayRules"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    ><v-text-field
-                      label="Month"
-                      maxlength="2"
-                      placeholder="MM"
-                      outlined
-                      dense
-                      required
-                      :rules="monthRules"
-                      v-model="inputData[questions[i].name + 'month']"
-                    ></v-text-field
-                  ></v-col>
-                  <v-col
-                    ><v-text-field
-                      label="Year"
-                      maxlength="4"
-                      placeholder="YYYY"
-                      :rules="yearRules"
-                      outlined
-                      dense
-                      required
-                      v-model="inputData[questions[i].name + 'year']"
-                    ></v-text-field
-                  ></v-col>
-                </v-row>
-                <v-row v-else>
-                  <v-col
-                    ><v-text-field
-                      label="Day"
-                      maxlength="2"
-                      placeholder="DD"
-                      dense
-                      outlined
-                      v-model="inputData[questions[i].name + 'day']"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    ><v-text-field
-                      label="Month"
-                      maxlength="2"
-                      placeholder="MM"
-                      outlined
-                      dense
-                      v-model="inputData[questions[i].name + 'month']"
-                    ></v-text-field
-                  ></v-col>
-                  <v-col
-                    ><v-text-field
-                      label="Year"
-                      maxlength="4"
-                      placeholder="YYYY"
-                      outlined
-                      dense
-                      v-model="inputData[questions[i].name + 'year']"
-                    ></v-text-field
-                  ></v-col>
-                </v-row>
-              </v-col>
-            </template>
-            <template v-else-if="questions[i].type === 'number'">
-              <v-col
-                class="6"
-                md="4"
-                offset-md="1"
-                :key="i + 'numberQuestionRow'"
+                <v-icon color="red" x-small>fa-asterisk</v-icon>
+                {{ i + 2 + "." }} {{ questions[i].question }}
+              </h5>
+              <h5
+                v-else
+                class="text-center"
+                :key="i + 'checkBoxQusetionLargeScreen'"
               >
-                <h5
-                  v-if="questions[i].required == 1"
-                  class="text-center"
-                  :key="i + 'checkBoxQusetionLargeScreen'"
-                >
-                  <v-icon color="red" x-small>fa-asterisk</v-icon>
-                  {{ i + 2 + "." }} {{ questions[i].question }}
-                </h5>
+                {{ i + 2 + "." }} {{ questions[i].question }}
+              </h5>
 
-                <h5
-                  v-else
-                  class="text-center"
-                  :key="i + 'checkBoxQusetionLargeScreen'"
-                >
-                  {{ i + 2 + "." }} {{ questions[i].question }}
-                </h5>
-                <v-text-field
-                  v-if="questions[i].required == 1"
-                  type="number"
-                  single-line
-                  dense
-                  outlined
-                  value="0"
-                  allowDecimalPadding                  
-                  :rules="RequiredNumber"
-                  v-model="inputData[questions[i].name]"
-                ></v-text-field>
-                <v-text-field
-                  v-else
-                  type="number"
-                  dense
-                  value="0"
-                  outlined
-                  :rules="RequiredNumberOnly"
-                  v-model="inputData[questions[i].name]"
-                ></v-text-field>
-              </v-col>
-            </template>
-            <template v-else-if="questions[i].type === 'select'">
-              <v-col
-                class="6"
-                md="4"
-                offset-md="1"
-                :key="i + 'numberQuestionRow'"
-              >
-                <h5
-                  v-if="questions[i].required == 1"
-                  class="text-center"
-                  :key="i + 'checkBoxQusetionLargeScreen'"
-                >
-                  <v-icon color="red" x-small>fa-asterisk</v-icon>
-                  {{ i + 2 + "." }} {{ questions[i].question }}
-                </h5>
+              <!-- ! CREATING A NEW WAY TO IMPLETEMT THE DATE. -->
 
-                <h5
-                  v-else
-                  class="text-center"
-                  :key="i + 'checkBoxQusetionLargeScreen'"
-                >
-                  {{ i + 2 + "." }} {{ questions[i].question }}
-                </h5>
-                <v-select
-                  v-if="questions[i].required == 1"
-                  :key="i + 'numberQuestionRow'"
-                  :items="questions[i].selectValues"
-                  item-text="name"
-                  item-value="id"
-                  label="Select"
-                  outlined
-                  dense
-                  :rules="RequiredSelect"
-                  v-model="inputData[questions[i].name]"
-                ></v-select>
-                
-                <v-select
-                  v-else
-                  :key="i + 'numberQuestionRow'"
-                  :items="questions[i].selectValues"
-                  item-text="name"
-                  item-value="id"
-                  label="Select"
-                  outlined
-                  dense
-                  v-model="inputData[questions[i].name]"
-                ></v-select>                
-              </v-col>
-            </template>
+              <v-row v-if="questions[i].required == 1">
+                <v-col>
+                  <v-text-field
+                    label="Day"
+                    maxlength="2"
+                    placeholder="DD"
+                    outlined
+                    dense
+                    required
+                    v-model="inputData[questions[i].name + 'day']"
+                    :rules="dayRules"
+                  ></v-text-field>
+                </v-col>
+                <v-col
+                  ><v-text-field
+                    label="Month"
+                    maxlength="2"
+                    placeholder="MM"
+                    outlined
+                    dense
+                    required
+                    :rules="monthRules"
+                    v-model="inputData[questions[i].name + 'month']"
+                  ></v-text-field
+                ></v-col>
+                <v-col
+                  ><v-text-field
+                    label="Year"
+                    maxlength="4"
+                    placeholder="YYYY"
+                    :rules="yearRules"
+                    outlined
+                    dense
+                    required
+                    v-model="inputData[questions[i].name + 'year']"
+                  ></v-text-field
+                ></v-col>
+              </v-row>
+              <v-row v-else>
+                <v-col
+                  ><v-text-field
+                    label="Day"
+                    maxlength="2"
+                    placeholder="DD"
+                    dense
+                    outlined
+                    v-model="inputData[questions[i].name + 'day']"
+                  ></v-text-field>
+                </v-col>
+                <v-col
+                  ><v-text-field
+                    label="Month"
+                    maxlength="2"
+                    placeholder="MM"
+                    outlined
+                    dense
+                    v-model="inputData[questions[i].name + 'month']"
+                  ></v-text-field
+                ></v-col>
+                <v-col
+                  ><v-text-field
+                    label="Year"
+                    maxlength="4"
+                    placeholder="YYYY"
+                    outlined
+                    dense
+                    v-model="inputData[questions[i].name + 'year']"
+                  ></v-text-field
+                ></v-col>
+              </v-row>
+            </v-col>
           </template>
-        </v-row>
-        <v-btn
-          type="submit"
-          rounded
-          color="error"
-          @click.prevent="coverSpecificQuestionsValidation()"
-          dark
-          x-large
-        >
-          <span>
-            Get Me Quotes .
-            <v-icon color="yellow">fa-running</v-icon>
-          </span>
-        </v-btn>
-      </v-form>
-    
+          <template v-else-if="questions[i].type === 'number'">
+            <v-col
+              class="6"
+              md="4"
+              offset-md="1"
+              :key="i + 'numberQuestionRow'"
+            >
+              <h5
+                v-if="questions[i].required == 1"
+                class="text-center"
+                :key="i + 'checkBoxQusetionLargeScreen'"
+              >
+                <v-icon color="red" x-small>fa-asterisk</v-icon>
+                {{ i + 2 + "." }} {{ questions[i].question }}
+              </h5>
+
+              <h5
+                v-else
+                class="text-center"
+                :key="i + 'checkBoxQusetionLargeScreen'"
+              >
+                {{ i + 2 + "." }} {{ questions[i].question }}
+              </h5>
+              <v-text-field
+                v-if="questions[i].required == 1"
+                type="number"
+                single-line
+                dense
+                outlined
+                value="0"
+                allowDecimalPadding
+                :rules="RequiredNumber"
+                v-model="inputData[questions[i].name]"
+              ></v-text-field>
+              <v-text-field
+                v-else
+                type="number"
+                dense
+                value="0"
+                outlined
+                :rules="RequiredNumberOnly"
+                v-model="inputData[questions[i].name]"
+              ></v-text-field>
+            </v-col>
+          </template>
+          <template v-else-if="questions[i].type === 'select'">
+            <v-col
+              class="6"
+              md="4"
+              offset-md="1"
+              :key="i + 'numberQuestionRow'"
+            >
+              <h5
+                v-if="questions[i].required == 1"
+                class="text-center"
+                :key="i + 'checkBoxQusetionLargeScreen'"
+              >
+                <v-icon color="red" x-small>fa-asterisk</v-icon>
+                {{ i + 2 + "." }} {{ questions[i].question }}
+              </h5>
+
+              <h5
+                v-else
+                class="text-center"
+                :key="i + 'checkBoxQusetionLargeScreen'"
+              >
+                {{ i + 2 + "." }} {{ questions[i].question }}
+              </h5>
+              <v-select
+                v-if="questions[i].required == 1"
+                :key="i + 'numberQuestionRow'"
+                :items="questions[i].selectValues"
+                item-text="name"
+                item-value="id"
+                label="Select"
+                outlined
+                dense
+                :rules="RequiredSelect"
+                v-model="inputData[questions[i].name]"
+              ></v-select>
+
+              <v-select
+                v-else
+                :key="i + 'numberQuestionRow'"
+                :items="questions[i].selectValues"
+                item-text="name"
+                item-value="id"
+                label="Select"
+                outlined
+                dense
+                v-model="inputData[questions[i].name]"
+              ></v-select>
+            </v-col>
+          </template>
+        </template>
+      </v-row>
+      <v-btn
+        type="submit"
+        rounded
+        color="error"
+        @click.prevent="coverSpecificQuestionsValidation()"
+        dark
+        x-large
+      >
+        <span>
+          Get Me Quotes .
+          <v-icon color="yellow">fa-running</v-icon>
+        </span>
+      </v-btn>
+    </v-form>
   </v-container>
 </template>
 
@@ -388,16 +387,16 @@ export default {
 
   // ! watching the change in the ubCategory.
   watch: {
-    navigationSubCategory: function () {
+    navigationSubCategory: function() {
       console.log("I have changed the navigationSubCategory.");
       this.questions = this.navigationStateGetter[
         this.navigationCoverGetter
       ].subCategories[this.navigationSubCategory].questions;
       this.subCategory = this.navigationSubCategory;
     },
-    navigationCoverGetter: function () {
+    navigationCoverGetter: function() {
       this.cover = this.navigationStateGetter[this.navigationCoverGetter];
-       this.questions = this.navigationStateGetter[
+      this.questions = this.navigationStateGetter[
         this.navigationCoverGetter
       ].subCategories[this.navigationSubCategory].questions;
       this.subCategory = this.navigationSubCategory;

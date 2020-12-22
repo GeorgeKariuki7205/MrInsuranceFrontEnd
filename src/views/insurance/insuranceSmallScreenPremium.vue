@@ -4,7 +4,7 @@
       <v-btn @click="goback" text color="primary">
         <v-icon>arrow_back</v-icon>
         Go Back.
-      </v-btn>      
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -37,7 +37,7 @@
       <section-how-it-works />
       <section-keep-in-touch />
       <section-newsletter />
-      <ucore-settings/>
+      <ucore-settings />
       <section-info />
     </v-main>
     <ucore-footer />
@@ -94,6 +94,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>
