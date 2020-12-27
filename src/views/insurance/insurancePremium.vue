@@ -474,10 +474,10 @@
                       class="ma-4 text-center"
                       style="text-align: center"
                     >
+                    <div v-if="!paymentProcessedSuccesfullyGetter">
                       <h2 style="color: black" class="text-center">
                         Payments In This Platform Are Processed Via MPESA.
-                      </h2>
-                      <h2></h2>
+                      </h2>                      
                       <h2 style="color: blue">
                         MPESA DETAILS: AMOUNT:
                         {{
@@ -610,9 +610,9 @@
                           </v-row>
                         </div>
                       </div>
-
+</div>
                       <div
-                        v-if="paymentProcessedSuccesfullyGetter"
+                        v-else
                         class="text-center"
                       >
                         <v-rating

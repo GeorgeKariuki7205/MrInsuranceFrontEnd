@@ -5,6 +5,8 @@ import About from '../views/UserPages/about'
 import Contact from '../views/UserPages/contactUs'
 import Insurance from '../views/insurance/insuranceLanding'
 import InsuranceSmallScreen from '../views/insurance/insuranceSmallScreenPremium.vue'
+import Login from '../views/UserPages/login.vue'
+import ActivatingAccount from '../views/UserPages/activatingAccount.vue'
 Vue.use(VueRouter)
 
   const routes = [
@@ -23,6 +25,17 @@ Vue.use(VueRouter)
     name: 'Contact',
     component: Contact
   },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/activatingAccount/:uuid',
+    name: 'ActivatingAccount',
+    component: ActivatingAccount,
+    props:true,
+  },  
   {
     path: '/health',
     name: 'Insurance',
