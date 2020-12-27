@@ -445,19 +445,23 @@
                                     <td>
                                       {{ financialBreakdown.description }}
                                     </td>
-                                    <td>{{ financialBreakdown.value }}</td>
+                                    <td>
+                                      <b> {{ financialBreakdown.value }}</b>
+                                    </td>
                                   </tr>
                                 </template>
                                 <tr>
                                   <td><b>Total</b></td>
                                   <td></td>
                                   <td>
-                                    {{
-                                      payableAmountStateGetter[premium.uuid]
-                                        .toString()
-                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                    }}
-                                    Ksh
+                                    <b style="color:blue;">
+                                      {{
+                                        payableAmountStateGetter[premium.uuid]
+                                          .toString()
+                                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                      }}
+                                      Ksh</b
+                                    >
                                   </td>
                                 </tr>
                               </tbody>
@@ -474,147 +478,149 @@
                       class="ma-4 text-center"
                       style="text-align: center"
                     >
-                    <div v-if="!paymentProcessedSuccesfullyGetter">
-                      <h2 style="color: black" class="text-center">
-                        Payments In This Platform Are Processed Via MPESA.
-                      </h2>                      
-                      <h2 style="color: blue">
-                        MPESA DETAILS: AMOUNT:
-                        {{
-                          payableAmountStateGetter[premium.uuid]
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        }}
-                        Ksh
-                      </h2>
-                      <h3 style="color: black" class="text-center">
-                        Kindly Make Sure Your Phone With A Safaricom Line Is
-                        Next To You, We will be sending an STK Push Request To
-                        Complete This Transaction.
-                      </h3>
+                      <div v-if="!paymentProcessedSuccesfullyGetter">
+                        <h2 style="color: black" class="text-center">
+                          Payments In This Platform Are Processed Via MPESA.
+                        </h2>
+                        <h2 style="color: blue">
+                          MPESA DETAILS: AMOUNT:
+                          {{
+                            payableAmountStateGetter[premium.uuid]
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          }}
+                          Ksh
+                        </h2>
+                        <h3 style="color: black" class="text-center">
+                          Kindly Make Sure Your Phone With A Safaricom Line Is
+                          Next To You, We will be sending an STK Push Request To
+                          Complete This Transaction.
+                        </h3>
 
-                      <v-btn
-                        @click="
-                          sendingPaymentRequestToBackEnd(
-                            payableAmountStateGetter[premium.uuid],
-                            premium.insuranceCoverID
-                          )
-                        "
-                        class="mt-8"
-                        outlined
-                        x-large
-                        color="success"
-                      >
-                        <span v-if="sendingRequestForPaymentInitialStateGetter"
-                          >Send MPESA STK PUSH TO :</span
+                        <v-btn
+                          @click="
+                            sendingPaymentRequestToBackEnd(
+                              payableAmountStateGetter[premium.uuid],
+                              premium.insuranceCoverID
+                            )
+                          "
+                          class="mt-8"
+                          outlined
+                          x-large
+                          color="success"
                         >
-                        <span v-else>RESEND MPESA STK PUSH TO :</span>
-                        {{ personalDetailsGetter.phoneNumber }}
-                        <v-icon>send</v-icon></v-btn
-                      >
+                          <span
+                            v-if="sendingRequestForPaymentInitialStateGetter"
+                            >Send MPESA STK PUSH TO :</span
+                          >
+                          <span v-else>RESEND MPESA STK PUSH TO :</span>
+                          {{ personalDetailsGetter.phoneNumber }}
+                          <v-icon>send</v-icon></v-btn
+                        >
 
-                      <div
-                        style="text-align:center;"
-                        v-if="sendingPaymentRequestStatusGetter"
-                      >
-                        <!-- <orbit-spinner
+                        <div
+                          style="text-align:center;"
+                          v-if="sendingPaymentRequestStatusGetter"
+                        >
+                          <!-- <orbit-spinner
                         :animation-duration="1200"
                         :size="100"
                         color="#29AB87"
                       /> -->
-                        <div
-                          key="loader"
-                          class="fill-height"
-                          style="margin-top: 2%"
-                        >
-                          <v-row align="center" justify="center">
-                            <h2
-                              style="color: #29ab87"
-                              class="text-center"
+                          <div
+                            key="loader"
+                            class="fill-height"
+                            style="margin-top: 2%"
+                          >
+                            <v-row align="center" justify="center">
+                              <h2
+                                style="color: #29ab87"
+                                class="text-center"
+                                v-if="
+                                  sendingRequestForPaymentInitialStateGetter
+                                "
+                              >
+                                Mr Insurance Is Sending A request To your
+                                Safaricom MPESA Line to complete Payment, Keep
+                                Your Phone Close.
+                              </h2>
+                              <h2
+                                style="color: orange"
+                                class="text-center"
+                                v-else-if="
+                                  sendingPaymentRequestSuccessfulGetter
+                                "
+                              >
+                                Safaricom Has Succesfuly Sent You An STK PUSH to
+                                your phoneNumber, Kindly confirm the detail and
+                                continue to payment.
+                              </h2>
+                              <h2
+                                style="color: red"
+                                class="text-center"
+                                v-else-if="
+                                  sendingRequestForPaymentNotSuccessfulGetter
+                                "
+                              >
+                                The Request To Your Safaricom Line Has Failed,
+                                Kindly Try Again.
+                              </h2>
+                            </v-row>
+
+                            <v-row
+                              align="center"
+                              justify="center"
                               v-if="sendingRequestForPaymentInitialStateGetter"
                             >
-                              Mr Insurance Is Sending A request To your
-                              Safaricom MPESA Line to complete Payment, Keep
-                              Your Phone Close.
-                            </h2>
-                            <h2
-                              style="color: orange"
-                              class="text-center"
-                              v-else-if="sendingPaymentRequestSuccessfulGetter"
+                              <orbit-spinner
+                                :animation-duration="1200"
+                                :size="155"
+                                color="#29ab87"
+                              />
+                            </v-row>
+                            <v-row
+                              align="center"
+                              justify="center"
+                              v-if="sendingPaymentRequestSuccessfulGetter"
                             >
-                              Safaricom Has Succesfuly Sent You An STK PUSH to
-                              your phoneNumber, Kindly confirm the detail and
-                              continue to payment.
-                            </h2>
-                            <h2
-                              style="color: red"
-                              class="text-center"
-                              v-else-if="
-                                sendingRequestForPaymentNotSuccessfulGetter
-                              "
+                              <orbit-spinner
+                                :animation-duration="1200"
+                                :size="155"
+                                color="orange"
+                              />
+                            </v-row>
+                            <v-row
+                              align="center"
+                              justify="center"
+                              v-if="sendingPaymentRequestSuccessfulGetter"
                             >
-                              The Request To Your Safaricom Line Has Failed,
-                              Kindly Try Again.
-                            </h2>
-                          </v-row>
-
-                          <v-row
-                            align="center"
-                            justify="center"
-                            v-if="sendingRequestForPaymentInitialStateGetter"
-                          >
-                            <orbit-spinner
-                              :animation-duration="1200"
-                              :size="155"
-                              color="#29ab87"
-                            />
-                          </v-row>
-                          <v-row
-                            align="center"
-                            justify="center"
-                            v-if="sendingPaymentRequestSuccessfulGetter"
-                          >
-                            <orbit-spinner
-                              :animation-duration="1200"
-                              :size="155"
-                              color="orange"
-                            />
-                          </v-row>
-                          <v-row
-                            align="center"
-                            justify="center"
-                            v-if="sendingPaymentRequestSuccessfulGetter"
-                          >
-                            <h3 style="color: orange">
-                              Waiting For You To Complete Tranaction.
-                            </h3>
-                            <hollow-dots-spinner
-                              :animation-duration="1200"
-                              :dot-size="8"
-                              :dots-num="4"
-                              color="orange"
-                            />
-                          </v-row>
-                          <v-row
-                            align="center"
-                            justify="center"
-                            v-if="sendingRequestForPaymentInitialStateGetter"
-                          >
-                            <h3 style="color: #29ab87">Just A Second</h3>
-                            <hollow-dots-spinner
-                              :animation-duration="1200"
-                              :dot-size="8"
-                              :dots-num="4"
-                              color="#29ab87"
-                            />
-                          </v-row>
+                              <h3 style="color: orange">
+                                Waiting For You To Complete Tranaction.
+                              </h3>
+                              <hollow-dots-spinner
+                                :animation-duration="1200"
+                                :dot-size="8"
+                                :dots-num="4"
+                                color="orange"
+                              />
+                            </v-row>
+                            <v-row
+                              align="center"
+                              justify="center"
+                              v-if="sendingRequestForPaymentInitialStateGetter"
+                            >
+                              <h3 style="color: #29ab87">Just A Second</h3>
+                              <hollow-dots-spinner
+                                :animation-duration="1200"
+                                :dot-size="8"
+                                :dots-num="4"
+                                color="#29ab87"
+                              />
+                            </v-row>
+                          </div>
                         </div>
                       </div>
-</div>
-                      <div
-                        v-else
-                        class="text-center"
-                      >
+                      <div v-else class="text-center">
                         <v-rating
                           v-model="rating"
                           background-color="purple lighten-3"
