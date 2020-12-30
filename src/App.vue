@@ -39,6 +39,7 @@
 import { AtomSpinner } from "epic-spinners";
 import { HollowDotsSpinner } from "epic-spinners";
 import { mapGetters } from "vuex";
+import User from '../src/Classes/User'
 import "animate.css";
 export default {
   name: "App",
@@ -52,6 +53,9 @@ export default {
   },
   created() {
     // ! immedietly the application is run, get all the navigation components
+    // const UserInstance = new User();
+    User.sampleFunction();
+    console.log(localStorage.getItem('name') + '  This is the name.');
     this.$store.dispatch("getAllNavigationComponents");
   },
   data: () => ({

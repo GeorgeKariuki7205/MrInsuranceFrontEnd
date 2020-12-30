@@ -139,6 +139,7 @@
             <v-icon>fa-phone</v-icon>
           </v-tab>
           <v-tab
+            to="/login"
             background-color="success"
             class="font-weight-bold"
             text
