@@ -1,6 +1,8 @@
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
-
+import {
+  v4 as uuidv4
+} from "uuid";
+// import router from "../../../router"
 const state = {
   navigationState: null,
   navigationView: false,
@@ -69,8 +71,21 @@ const state = {
 
   // ! state for the VisitorId
   visitorIdState: null,
+
+  // !personal Details for activating account.
+  activatingAccountPersonalDetailsState: null,
+
+  // ! status of activating account.  
+  activatingAccountState: false,
+
 };
 const mutations = {
+  UPDATING_ACTIVATING_ACCOUNT_STATE(state, payload){
+    state.activatingAccountState = payload;
+  },
+  UPDATING_ACTIVATING_ACCOUNT_PERSONAL_DETAILS(state, payload) {
+    state.activatingAccountPersonalDetailsState = payload;
+  },
   UPDATING_VISITOR_ID_STATE(state, payload) {
     state.visitorIdState = payload;
   },
@@ -144,13 +159,48 @@ const mutations = {
   },
 };
 const actions = {
-  getAllNavigationComponents({ commit }) {
+  getAllNavigationComponents({
+    commit
+  }, obj) {
     axios
       .get("https://mrinsuranceapi.georgekprojects.tk/api/navigationContent")
       .then((response) => {
         if (response.status === 200) {
           commit("UPDATING_THE_STATE_TO_ADD_NAVIGATION_ITEMS", response.data);
-          commit("UPDATING_THE_STATE_OF_THE_NAVIGATION_VIEW", true);
+          if (obj.status) {
+            axios
+              .post(
+                "https://mrinsuranceapi.georgekprojects.tk/api/getPersonalData",
+                obj, {
+                  headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    // 'Authorization':'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbXJpbnN1cmFuY2VhcGkuZ2Vvcmdla3Byb2plY3RzLnRrXC9hcGlcL2xvZ2luIiwiaWF0IjoxNjA5NDgxNjg0LCJleHAiOjE2MDk0ODUyODQsIm5iZiI6MTYwOTQ4MTY4NCwianRpIjoiOGlRTnNsZHREc3NvbEdCTyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wiKHMnFYv4UgAI_2Ata1unBlTqGJSOsF1ofKKRuIaZE'
+                  },
+                  body: {},
+                }
+              )
+              .then((response) => {
+                if (response.status === 200) {
+                  console.log("This is the data response");
+                  console.log(response.data);
+
+                  //!  updating status.
+                  commit("UPDATING_ACTIVATING_ACCOUNT_PERSONAL_DETAILS",response.data);
+                  commit("UPDATING_THE_STATE_OF_THE_NAVIGATION_VIEW", true);
+                } else {
+                  console.log("We have an error, first");
+                  console.log(response.status);
+                  console.log(response);
+                }
+              })
+              .catch((error) => {
+                console.log("We have an error.");
+                console.log(error);
+              });
+          } else {
+            commit("UPDATING_THE_STATE_OF_THE_NAVIGATION_VIEW", true);
+          }
         }
         console.log(response);
       })
@@ -158,24 +208,36 @@ const actions = {
         console.log(error);
       });
   },
-  updatingTheCoverIndex({ commit }, index) {
+  updatingTheCoverIndex({
+    commit
+  }, index) {
     commit("UPDATING_THE_COVER_INDEX", index);
   },
 
-  updatingTheSubCategoryCoverIndex({ commit }, index) {
+  updatingTheSubCategoryCoverIndex({
+    commit
+  }, index) {
     commit("UPDATING_THE_SUB_COVER_INDEX", index);
   },
-  updatatingupdatingSubCategoryAndCoverState({ commit }, data) {
+  updatatingupdatingSubCategoryAndCoverState({
+    commit
+  }, data) {
     commit("UPDATING_THE_STATE_OF_COVER_AND_SUB_CATEGORY", data);
   },
-  updatingTheInsuranceCoverDetails({ commit }, data) {
+  updatingTheInsuranceCoverDetails({
+    commit
+  }, data) {
     commit("UPDATING_THE_INSURANCE_COVER_DETAILS", data);
   },
-  updatingPersonalDetails({ commit }, data) {
+  updatingPersonalDetails({
+    commit
+  }, data) {
     commit("UPDATING_PERSONAL_DETAILS", data);
     commit("UPDATING_PERSONAL_DETAILS_STATUS", true);
   },
-  postingTheDataForCoverSearch({ commit }) {
+  postingTheDataForCoverSearch({
+    commit
+  }) {
     // ! creating an object to hold the posted data.
 
     var coverDetails = {};
@@ -238,8 +300,8 @@ const actions = {
                 principal_memberDetails["description"] = " ' ' ";
                 principal_memberDetails["value"] =
                   element.financialBreakDown.principal_member
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
                 principal_memberDetails["uuid"] = "Principal Member";
                 principal_memberDetails["additionId"] = "Principal Member";
 
@@ -252,8 +314,8 @@ const actions = {
                   spouse_details["name"] = "Spouse";
                   spouse_details["value"] =
                     element.financialBreakDown.spouse
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
                   spouse_details["description"] = " ' ' ";
                   spouse_details["uuid"] = "Spouse";
                   spouse_details["additionId"] = "Spouse";
@@ -270,17 +332,17 @@ const actions = {
                       element.financialBreakDown.dependents.dependant *
                       parseInt(
                         element.financialBreakDown.dependents
-                          .number_of_dependents
+                        .number_of_dependents
                       )
                     )
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "Ksh";
                   dependents_details["description"] =
                     element.financialBreakDown.dependents.number_of_dependents +
                     " Dependents Each  " +
                     element.financialBreakDown.dependents.dependant
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
                     "Ksh";
                   healthFinancialBreakDown["dependents"] = dependents_details;
                 }
@@ -301,8 +363,8 @@ const actions = {
                 motor_insurance_details["name"] = element.subCategory;
                 motor_insurance_details["value"] =
                   element.amountPayable
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Ksh";
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Ksh";
                 motor_insurance_details["description"] = " ";
                 financial_break_down_array[
                   element.subCategory
@@ -341,13 +403,17 @@ const actions = {
         console.log(error);
       });
   },
-  updatingPremiumDataStatus({ commit }, data) {
+  updatingPremiumDataStatus({
+    commit
+  }, data) {
     commit("UPDATING_PREMIUM_DETAILS_STATUS", data);
   },
 
   // !  this function is used to update the state of the financial Breakdown.
 
-  updatingFinancialBreakdown({ commit }, data) {
+  updatingFinancialBreakdown({
+    commit
+  }, data) {
     commit("UPDATING_THE_FINANCIAL_BREAKDOWN", data);
     // console.log("This is the second Input Of The application: ");
     // console.log(second);
@@ -357,7 +423,9 @@ const actions = {
 
   // ! creating the function that will be used to update the financial breakdown of the premiums.
 
-  updatingTheFinancialBreakDown({ commit }, obj) {
+  updatingTheFinancialBreakDown({
+    commit
+  }, obj) {
     var activity = obj.activity;
     var financialBreakDownStateDefined =
       state.financialBreakdownState[obj.uuid];
@@ -384,7 +452,9 @@ const actions = {
   },
 
   // ! function to implement the functionality to add covers and disable the premiums that have been activated.
-  activatingAdditionalCovers({ dispatch }, data) {
+  activatingAdditionalCovers({
+    dispatch
+  }, data) {
     // console.log("THIS IS THE state.additionalCoversPremiumState[data.premiumUUID]:  ");
     // console.log(state.additionalCoversPremiumState[data.premiumUUID]);
     //! creating the additional cover Details state.
@@ -421,7 +491,9 @@ const actions = {
   },
   // ! function to update the amounts payable.
 
-  updatePayableAmount({ commit }, data) {
+  updatePayableAmount({
+    commit
+  }, data) {
     var newPayableAmount = {};
 
     for (const payableAmount in state.payableAmountState) {
@@ -441,7 +513,9 @@ const actions = {
     commit("UPDATING_THE_PAYABLE_AMOUNT", newPayableAmount);
   },
 
-  updateTheAdditionalCover({ dispatch }, obj) {
+  updateTheAdditionalCover({
+    dispatch
+  }, obj) {
     //* updateTheAdditionalCover({commit}){
     var premiumUUIDValue = obj.premium;
     var stateDefined = state.additionalCoversPremiumState[obj.premium];
@@ -570,20 +644,28 @@ const actions = {
   },
 
   // ! this action is used to implement the addition of the snackbar .
-  updatingStatusOfAdditionalCoverSnackbar({ commit }, obj) {
+  updatingStatusOfAdditionalCoverSnackbar({
+    commit
+  }, obj) {
     commit("UPDATING_THE_ADDITIONAL_SNACKBAR_STATE_DATA", obj);
   },
 
   // ! this action is used to implement the addition of the snackbar .
-  updatingStatusOfRemovalCoverSnackbar({ commit }, obj) {
+  updatingStatusOfRemovalCoverSnackbar({
+    commit
+  }, obj) {
     commit("UPDATING_THE_REMOVAL_SNACKBAR_STATE_DATA", obj);
   },
 
   // ! this is the action that is used to set the value of editingPersonalDetailsOnPurchasingModal to true.
-  editingPersonalDetailsOnPurchasingModalSetTrueAction({ commit }) {
+  editingPersonalDetailsOnPurchasingModalSetTrueAction({
+    commit
+  }) {
     commit("UPDATING_EDITING_PERONAL_DETAILS_ON_PURCHASE", true);
   },
-  sendingPaymentRequest({ commit }, objectRecieved) {
+  sendingPaymentRequest({
+    commit
+  }, objectRecieved) {
     commit("UPDATING_THE_TEST_VALUE", "test3");
 
     state.sendingPaymentRequestSuccessful = false;
@@ -671,6 +753,14 @@ const actions = {
         console.log(error);
       });
   },
+
+
+  // ! activating account. 
+  activateAccount(data){
+    console.log(data);
+
+
+  }
 };
 const getters = {
   navigationStateGetter: (state) => state.navigationState,
@@ -684,28 +774,21 @@ const getters = {
   premiumsDataStatusGetter: (state) => state.premiumsDataStatus,
   payableAmountStateGetter: (state) => state.payableAmountState,
   financialBreakdownStateGetter: (state) => state.financialBreakdownState,
-  additionalCoversPremiumStateGetter: (state) =>
-    state.additionalCoversPremiumState,
+  additionalCoversPremiumStateGetter: (state) => state.additionalCoversPremiumState,
   nextStepInStepperStateGetter: (state) => state.nextStepInStepper,
-  insurancePremiumAdditionalCoversGetter: (state) =>
-    state.insurancePremiumAdditionalCovers,
+  insurancePremiumAdditionalCoversGetter: (state) => state.insurancePremiumAdditionalCovers,
   additionalCoverSnackBarGetter: (state) => state.additionalCoverSnackBar,
   removingCoverSnackBarGetter: (state) => state.removingCoverSnackBar,
-  editingPersonalDetailsOnPurchasingModalGetter: (state) =>
-    state.editingPersonalDetailsOnPurchasingModal,
-  updatingSubCategoryAndCoverStateGetter: (state) =>
-    state.updatingSubCategoryAndCoverState,
-  sendingPaymentRequestStatusGetter: (state) =>
-    state.sendingPaymentRequestStatus,
-  sendingPaymentRequestSuccessfulGetter: (state) =>
-    state.sendingPaymentRequestSuccessful,
-  sendingRequestForPaymentInitialStateGetter: (state) =>
-    state.sendingRequestForPaymentInitialState,
-  sendingRequestForPaymentNotSuccessfulGetter: (state) =>
-    state.sendingRequestForPaymentNotSuccessful,
+  editingPersonalDetailsOnPurchasingModalGetter: (state) => state.editingPersonalDetailsOnPurchasingModal,
+  updatingSubCategoryAndCoverStateGetter: (state) => state.updatingSubCategoryAndCoverState,
+  sendingPaymentRequestStatusGetter: (state) => state.sendingPaymentRequestStatus,
+  sendingPaymentRequestSuccessfulGetter: (state) => state.sendingPaymentRequestSuccessful,
+  sendingRequestForPaymentInitialStateGetter: (state) => state.sendingRequestForPaymentInitialState,
+  sendingRequestForPaymentNotSuccessfulGetter: (state) => state.sendingRequestForPaymentNotSuccessful,
   paymentDetailsGetterGetter: (state) => state.paymentDetailsGetter,
-  paymentProcessedSuccesfullyGetter: (state) =>
-    state.paymentProcessedSuccesfully,
+  paymentProcessedSuccesfullyGetter: (state) => state.paymentProcessedSuccesfully,
+  activatingAccountPersonalDetailsStateGetters: (state) => state.activatingAccountPersonalDetailsState,
+  activatingAccountStateGetter: (state) =>state.activatingAccountState,
 };
 
 const NavigationModule = {

@@ -19,7 +19,13 @@
             >
               <base-subheading
                 class="text-center"
-                title="Activate Account."
+                :title="
+                  'Hello, ' +
+                    this.activatingAccountPersonalDetailsStateGetters[
+                      'personalData'
+                    ][0]['first_name'] +
+                    ' Kindly Activate Account  .'
+                "
                 style="margin-top:-2%;margin-bottom:-2%;"
               />
 
@@ -47,25 +53,28 @@
                   class="text-center"
                   >Sign in to start your session</span
                 >
-                <v-form ref="form2" v-model="form2Validation">
+                <v-form
+                  ref="form2"
+                  v-model="form2Validation"                  
+                >
                   <v-text-field
                     prepend-icon="mdi-key"
                     v-model="personalData['password']"
-                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="[rules.required]"
-                    :type="show1 ? 'text' : 'password'"
+                    :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="[rules.required, rules.passwordLength]"
+                    :type="show ? 'text' : 'password'"
                     name="input-10-1"
                     label="Password"
                     hint="At least 8 characters"
                     counter
-                    @click:append="show1 = !show1"
+                    @click:append="show = !show"
                   ></v-text-field>
 
                   <v-text-field
                     prepend-icon="mdi-key"
-                    v-model="personalData['password']"
+                    v-model="personalData['retypePassword']"
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="[rules.required]"
+                    :rules="[rules.required, rules.confirmationOfPassword]"
                     :type="show1 ? 'text' : 'password'"
                     name="input-10-1"
                     label="Re-type Password"
@@ -73,12 +82,25 @@
                     counter
                     @click:append="show1 = !show1"
                   ></v-text-field>
-                  <v-btn large color="success" dark rounded>
+                  <v-btn
+                    large                    
+                    @click="activatingAccount"
+                    color="success"
+                    dark
+                    rounded
+                    class="mt-4"
+                    style="margin-top:5%;"
+                  >
                     <span
                       ><v-icon dark>
                         mdi-lock-open
                       </v-icon>
-                      Activate Account.
+                      <span v-if="!activatingAccountStateGetter">Activate Account.</span>
+                      <span v-else> <v-progress-circular
+                    :width="3"      
+                    indeterminate
+                  ></v-progress-circular> Activating. </span>
+                      
                     </span>
                   </v-btn>
                 </v-form>
@@ -91,9 +113,6 @@
       <section-all-covers />
       <section-how-it-works />
       <section-contact-us />
-      <!-- <section-keep-in-touch/> -->
-      <!-- <section-newsletter/> -->
-      <!-- <section-pro-features/> -->
       <ucore-settings />
       <section-info />
     </v-main>
@@ -102,9 +121,15 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "ActivatingAccount",
-  created(){
+  created() {
+    console.log(
+      this.activatingAccountPersonalDetailsStateGetters["personalData"][0][
+        "first_name"
+      ]
+    );
     if (this.uuid !== null) {
       console.log("This is the UUID.");
       console.log(this.uuid);
@@ -112,14 +137,14 @@ export default {
       // ! posting the uuid to get the details of the user.
     }
   },
-  props:['uuid'],
+  props: ["uuid"],
   methods: {
     activatingAccount() {
       if (this.$refs.form2.validate()) {
-        // post data
-        this.$store.commit("UPDATING_SUCCESSFUL_LOGIN", null);
-        this.$store.commit("UPDATING_LOGIN_STATUS", true);
-        this.$store.dispatch("postLogInData", this.personalData);
+        if (this.personalData.password == this.personalData.retypePassword) {
+          console.log("Activate acc0unt now.");
+          this.$store.commit("UPDATING_ACTIVATING_ACCOUNT_STATE",true);
+        }
       }
     },
   },
@@ -128,15 +153,15 @@ export default {
       useruuid: this.uuid,
       form2Validation: false,
       show1: false,
-      show2: true,
-      show3: false,
-      show4: false,
+      show: false,
       password: "",
       personalData: [],
       rules: {
         required: (value) => !!value || "Required.",
-        emailFormat: (ve) => /.+@.+\..+/.test(ve) || "E-mail must be valid",
-        emailMatch: () => `The email and password you entered don't match`,
+        passwordLength: (value) =>
+          value.length > 8 || "Password Must be more than 8 Characters.",
+        confirmationOfPassword: (value) =>
+          value === this.personalData.password || "Pasword Donot Match.",
       },
     };
   },
@@ -150,6 +175,7 @@ export default {
 
       return `calc(${height} - ${this.$vuetify.application.top}px)`;
     },
+    ...mapGetters(["activatingAccountPersonalDetailsStateGetters","activatingAccountStateGetter"]),
   },
 };
 </script>
