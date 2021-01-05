@@ -53,15 +53,12 @@
                   class="text-center"
                   >Sign in to start your session</span
                 >
-                <v-form
-                  ref="form2"
-                  v-model="form2Validation"                  
-                >
+                <v-form ref="form2" v-model="form2Validation">
                   <v-text-field
                     prepend-icon="mdi-key"
                     v-model="personalData['password']"
                     :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="[rules.required, rules.passwordLength]"
+                    :rules="passwordRules"
                     :type="show ? 'text' : 'password'"
                     name="input-10-1"
                     label="Password"
@@ -74,34 +71,50 @@
                     prepend-icon="mdi-key"
                     v-model="personalData['retypePassword']"
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :rules="[rules.required, rules.confirmationOfPassword]"
+                    :rules="retypePassword"
                     :type="show1 ? 'text' : 'password'"
-                    name="input-10-1"
+                    name="input-10-2"
                     label="Re-type Password"
                     hint="At least 8 characters"
                     counter
                     @click:append="show1 = !show1"
                   ></v-text-field>
                   <v-btn
-                    large                    
-                    @click="activatingAccount"
+                    large
+                    @click="activatingAccount()"
                     color="success"
                     dark
                     rounded
                     class="mt-4"
                     style="margin-top:5%;"
                   >
-                    <span
-                      ><v-icon dark>
-                        mdi-lock-open
-                      </v-icon>
-                      <span v-if="!activatingAccountStateGetter">Activate Account.</span>
-                      <span v-else> <v-progress-circular
-                    :width="3"      
-                    indeterminate
-                  ></v-progress-circular> Activating. </span>
-                      
+                    <span>
+                      <span v-if="!activatingAccountStateGetter"
+                        > <v-icon dark>
+                          mdi-lock-open
+                        </v-icon> 
+                        <span class="font-weight-light text-capitalize"> Activate Account. </span> 
+                        </span
+                      >
+                      <span v-else>
+                        <v-progress-circular
+                          :width="1"
+                          :size="25"
+                          indeterminate
+                        ></v-progress-circular>
+
+                        <span class="font-weight-light text-capitalize">
+                          Activating
+                        </span>
+                      </span>
                     </span>
+                    <hollow-dots-spinner
+                      v-if="activatingAccountStateGetter"
+                      :animation-duration="1000"
+                      :dot-size="6"
+                      :dots-num="3"
+                      color="white"
+                    />
                   </v-btn>
                 </v-form>
               </v-card>
@@ -122,8 +135,12 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { HollowDotsSpinner } from "epic-spinners";
 export default {
   name: "ActivatingAccount",
+  components: {
+    HollowDotsSpinner,
+  },
   created() {
     console.log(
       this.activatingAccountPersonalDetailsStateGetters["personalData"][0][
@@ -135,16 +152,38 @@ export default {
       console.log(this.uuid);
 
       // ! posting the uuid to get the details of the user.
+
+      // ! immedietly the application is run, get all the navigation components
+    // const UserInstance = new User();
+    // User.sampleFunction();
+    var obj = {};    
+    // console.log(localStorage.getItem('name') + '  This is the name.');    
+    if (this.$route.name ==='ActivatingAccount') {
+      obj['status'] = true;
+      obj['uuid'] = this.$route.params.uuid;
+      this.$store.dispatch("getAllNavigationComponents",obj);
+      // console.log("This is the param.",this.$route.params);
+    } else {
+      this.$store.dispatch("getAllNavigationComponents",false);
+    }
+    
     }
   },
   props: ["uuid"],
   methods: {
     activatingAccount() {
       if (this.$refs.form2.validate()) {
-        if (this.personalData.password == this.personalData.retypePassword) {
-          console.log("Activate acc0unt now.");
-          this.$store.commit("UPDATING_ACTIVATING_ACCOUNT_STATE",true);
-        }
+          console.log(this.activatingAccountPersonalDetailsStateGetters);
+          console.log("this is the UUID: "+ this.uuid);
+          this.$store.commit("UPDATING_ACTIVATING_ACCOUNT_STATE", true);
+
+          var obj = {};
+          obj['uuid'] = this.uuid;
+          obj['newPassword'] = this.personalData.password;
+
+          // ! calling method to post data to activate account.  
+          this.$store.dispatch("activateAccount",obj);
+        
       }
     },
   },
@@ -156,13 +195,15 @@ export default {
       show: false,
       password: "",
       personalData: [],
-      rules: {
-        required: (value) => !!value || "Required.",
-        passwordLength: (value) =>
-          value.length > 8 || "Password Must be more than 8 Characters.",
-        confirmationOfPassword: (value) =>
-          value === this.personalData.password || "Pasword Donot Match.",
-      },
+      passwordRules: [
+      (v) => !!v || "Password is required",
+      (v) => (v && v.length >= 8) || "Password Must be more than 8 Chacters.",
+    ],
+    retypePassword:[
+      (v) => !!v || "Password is required",
+      (v) => (v && v === this.personalData.password) || "Password Must be similar to typed password.",
+    ],
+      
     };
   },
   provide: {
@@ -175,7 +216,10 @@ export default {
 
       return `calc(${height} - ${this.$vuetify.application.top}px)`;
     },
-    ...mapGetters(["activatingAccountPersonalDetailsStateGetters","activatingAccountStateGetter"]),
+    ...mapGetters([
+      "activatingAccountPersonalDetailsStateGetters",
+      "activatingAccountStateGetter",
+    ]),
   },
 };
 </script>

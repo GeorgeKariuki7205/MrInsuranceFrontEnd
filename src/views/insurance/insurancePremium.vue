@@ -522,11 +522,7 @@
                           style="text-align:center;"
                           v-if="sendingPaymentRequestStatusGetter"
                         >
-                          <!-- <orbit-spinner
-                        :animation-duration="1200"
-                        :size="100"
-                        color="#29AB87"
-                      /> -->
+                          
                           <div
                             key="loader"
                             class="fill-height"
@@ -620,13 +616,185 @@
                           </div>
                         </div>
                       </div>
-                      <div v-else class="text-center">
-                        <v-rating
-                          v-model="rating"
-                          background-color="purple lighten-3"
-                          color="purple"
-                          large
-                        ></v-rating>
+                      <div v-else >
+                        <!-- {{gettingPremiumDetailsAfterSuccessfulPaymentProccessingStatusGetter}}
+                        {{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter}} -->
+                        <div class="text-center" v-if="!gettingPremiumDetailsAfterSuccessfulPaymentProccessingStatusGetter">
+                          <h2 style="color: orange" class="text-center">
+                            Hey
+                            {{
+                              personalDetailsGetter.firstName
+                                .charAt(0)
+                                .toUpperCase() +
+                                personalDetailsGetter.firstName
+                                  .substr(1)
+                                  .toLowerCase()
+                            }}, Your payment has been processed succesfully,
+                            <v-icon color="orange">fa-smile-beam</v-icon>
+                          </h2>
+                          <v-row align="center" justify="center">
+                            <orbit-spinner
+                              :animation-duration="1200"
+                              :size="155"
+                              color="orange"
+                            />
+                          </v-row>
+
+                          <v-row align="center" justify="center">
+                            <h3 style="color: orange">
+                              Just a second as we finalise things at our end.
+                              Thanks for trusting us as your insurance partner.
+                            </h3>                           
+                          </v-row>
+                          <v-row align="center" justify="center">
+                            <h3 style="color: orange">
+                              Thank you for trusting us as your insurance partner.
+                            </h3>
+                          </v-row>
+                          <v-row align="center" justify="center"> 
+                            <hollow-dots-spinner
+                              :animation-duration="1200"
+                              :dot-size="8"
+                              :dots-num="4"
+                              color="orange"
+                            /></v-row>
+                        </div>
+                        <div v-else >
+                          <h1 style="color:black;">Hey  {{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.personalDetails.name}}, The following are the Details of the insurance premium purchased and the next steps to follow.</h1>                            
+                          <h2 class="font-weight-black mt-5" style="color:blue;">Premium Details</h2>
+                           <v-simple-table style="text-align:left">
+                              <template v-slot:default>                               
+                                <tbody>
+                                  <tr>
+                                    <td>1.</td>
+                                    <td>Insurance Cover: </td>
+                                    <td class="font-weight-black">{{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.premiumDetails.insuranceCover}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>2.</td>
+                                    <td>Company:</td>
+                                    <td class="font-weight-black">{{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.premiumDetails.company}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>3.</td>
+                                    <td>Cover</td>
+                                    <td class="font-weight-black">{{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.premiumDetails.cover}}</td>
+                                  </tr>
+                                   <tr>
+                                     <td>4.</td>
+                                    <td>Sub Category:</td>
+                                    <td class="font-weight-black">{{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.premiumDetails.sub_category}}</td>
+                                  </tr>
+                                </tbody>
+                              </template>
+                            </v-simple-table>
+
+                            <h2 class="font-weight-black" style="color:blue;" >Personal Details.</h2>
+                             <v-simple-table style="text-align:left">
+                              <template v-slot:default>                               
+                                <tbody>
+                                  <tr>
+                                    <td>1.</td>
+                                    <td>Name :</td>
+                                    <td class="font-weight-black">{{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.personalDetails.name}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>2.</td>
+                                    <td>Email :</td>
+                                    <td class="font-weight-black">{{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.personalDetails.email}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>3.</td>
+                                    <td>Phone Number :</td>
+                                    <td class="font-weight-black">{{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.personalDetails.phone_number}}</td>
+                                  </tr>
+                                </tbody>
+                              </template>
+                            </v-simple-table>
+
+                            <h2 class="font-weight-black" style="color:blue;">Premium Details.</h2>
+                             <v-simple-table style="text-align:left">
+                              <template v-slot:default>                            
+                                <tbody>
+                                  <tr>
+                                    <td>1.</td>
+                                    <td>Amount Paid :</td>
+                                    <td class="font-weight-black">{{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.purchaseDetails.amount_paid}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>2.</td>
+                                    <td>Invoice Id :</td>
+                                    <td class="font-weight-black">{{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.purchaseDetails.purchase_invoice_id}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>3.</td>
+                                    <td>Percentage Paid :</td>
+                                    <td class="font-weight-black">{{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.purchaseDetails.percentage_of_payment}}</td>
+                                  </tr>
+                                    <tr>
+                                      <td>4.</td>
+                                    <td>Date Of Payment :</td>
+                                    <td class="font-weight-black">{{gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.purchaseDetails.date_of_payment}}</td>
+                                  </tr>
+                                </tbody>
+                              </template>
+                            </v-simple-table>
+
+                            <h2 class="font-weight-black" style="color:blue;">Documents Needed.</h2>
+                             <v-simple-table style="text-align:left">
+                              <template v-slot:default>                               
+                                <tbody>
+                                  <template v-for="(index,item) in gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.documentsneeded">
+                                  <tr  :key="index">
+                                    <td class="font-weight-black">{{item+1}}</td>
+                                    <td >{{index}}</td>                                    
+                                  </tr> 
+                                  </template>
+                                                                   
+                                </tbody>
+                              </template>
+                            </v-simple-table>
+
+
+                            <h2 class="ma-3" style="text-decoration:bold;color:black;" >The following are the next steps needed to complete the transaction successfully, </h2>
+                            <template v-if="gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.clientUUID !== null">
+                              <h3 class="ma-3" style="text-decoration:bold; text-align:left;color:black;" >
+                              1. Activate your account, then LogIn, use this link to activate your account:  <br>                              
+                            </h3>
+                            <router-link :to="'/activatingAccount/'+gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.clientUUID">
+                            <v-btn
+                                class="ma-2"
+                                outlined
+                                color="green"
+                              >
+                                Activate Account
+                              </v-btn>
+                            </router-link>
+                            </template>
+                           
+                           <template v-else>
+                            <h3 class="ma-3" style="text-decoration:bold; text-align:left;color:black;" > 
+                              1. LogIn to your account. Use the link <br>
+                              
+                            </h3>
+                            <router-link style="text-align:center" to="/login">
+                            <v-btn
+                                class="ma-2"
+                                outlined
+                                color="green"
+                              >
+                                LogIn
+                              </v-btn>
+                            </router-link>
+                           </template>
+                           
+                            <h3 class="ma-3" style="text-decoration:bold;text-align:left;color:black;">2.Upload Neccessary Documents:</h3>
+                            <h4 class="ma-3" style="text-align:left;color:black">Upload Scanned Copies Of: </h4>
+                            <h5 class="ma-3" style="text-align:left;color:black" v-for="(index,item) in gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter.documentsneeded" :key="index">{{item+1  +'  ' +index}}</h5>
+
+                            <h3 class="ma-3" style="text-decoration:bold;text-align:left;color:black;">3. Update Your Cntact Details To Send your Contract to after logIn </h3>
+
+                        </div>
                       </div>
                     </div>
                   </transition-group>
@@ -1256,6 +1424,8 @@ export default {
       "sendingRequestForPaymentNotSuccessfulGetter",
       "paymentDetailsGetterGetter",
       "paymentProcessedSuccesfullyGetter",
+      "gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter",
+      "gettingPremiumDetailsAfterSuccessfulPaymentProccessingStatusGetter",
     ]),
   },
   components: {
@@ -1424,6 +1594,11 @@ export default {
       ) {
         self.$store.commit("UPDATING_SENDING_PAYMENTS_REQUEST_STATUS", false);
         self.$store.commit("UPDATING_PAYMENT_PROCCESSED_SUCCESSFULLY", true);
+
+        // ! sending the request to get details on payment and the insurance details to display. 
+        console.log("This is the RECUEPT NUMBER: ");
+        console.log(data.content.Body.stkCallback.CallbackMetadata.Item[1].Value);
+        self.$store.dispatch("getDetailsForInsurancePremiumAfterSuccessfullPayment",data.content.Body.stkCallback.CallbackMetadata.Item[1].Value);
       }
     });
   },

@@ -56,12 +56,12 @@ export default {
     // const UserInstance = new User();
     // User.sampleFunction();
     var obj = {};    
-    console.log(localStorage.getItem('name') + '  This is the name.');    
+    // console.log(localStorage.getItem('name') + '  This is the name.');    
     if (this.$route.name ==='ActivatingAccount') {
       obj['status'] = true;
       obj['uuid'] = this.$route.params.uuid;
       this.$store.dispatch("getAllNavigationComponents",obj);
-      console.log("This is the param.",this.$route.params);
+      // console.log("This is the param.",this.$route.params);
     } else {
       this.$store.dispatch("getAllNavigationComponents",false);
     }

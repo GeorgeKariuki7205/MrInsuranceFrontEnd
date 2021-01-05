@@ -78,8 +78,22 @@ const state = {
   // ! status of activating account.  
   activatingAccountState: false,
 
+  // ! getting premium detaisls.  
+
+  gettingPremiumDetailsAfterSuccessfulPaymentProccessing: null,
+
+  // satatus 
+  gettingPremiumDetailsAfterSuccessfulPaymentProccessingStatus: false,
+
 };
 const mutations = {
+  UPDATING_GETTING_PREMIUM_DETAILS_AFTER_SUCCESSFUL_PAYMENT_PROCCESSING(state, payload){
+
+    state.gettingPremiumDetailsAfterSuccessfulPaymentProccessing = payload;    
+  },
+  UPDATING_GETTING_PREMIUM_DETAILS_AFTER_SUCCESSFUL_PAYMENT_PROCCESSING_STATUS(state, payload){
+    state.gettingPremiumDetailsAfterSuccessfulPaymentProccessingStatus = payload;
+  },
   UPDATING_ACTIVATING_ACCOUNT_STATE(state, payload){
     state.activatingAccountState = payload;
   },
@@ -213,7 +227,6 @@ const actions = {
   }, index) {
     commit("UPDATING_THE_COVER_INDEX", index);
   },
-
   updatingTheSubCategoryCoverIndex({
     commit
   }, index) {
@@ -756,11 +769,81 @@ const actions = {
 
 
   // ! activating account. 
-  activateAccount(data){
-    console.log(data);
+  activateAccount({commit},data){
+    commit("UPDATING_THE_TEST_VALUE",'test');
+    console.log(data.uuid);
+    console.log("This is the data that is being sent.");
+    axios
+    .post(
+      "https://mrinsuranceapi.georgekprojects.tk/api/activateAccount",
+      data,
+       {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          // 'Authorization':'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbXJpbnN1cmFuY2VhcGkuZ2Vvcmdla3Byb2plY3RzLnRrXC9hcGlcL2xvZ2luIiwiaWF0IjoxNjA5NDgxNjg0LCJleHAiOjE2MDk0ODUyODQsIm5iZiI6MTYwOTQ4MTY4NCwianRpIjoiOGlRTnNsZHREc3NvbEdCTyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wiKHMnFYv4UgAI_2Ata1unBlTqGJSOsF1ofKKRuIaZE'
+        },
+        body: {},
+      }
+    )
+    .then((response) => {
+      if (response.status === 200) {
+        console.log(response.data);
+      } else {
+        console.log("We have an error, first");
+        console.log(response.status);
+        console.log(response);
+      }
+    })
+    .catch((error) => {
+      console.log("We have an error.");
+      console.log(error);
+    });
+
+
+  },
+
+  // ! this action is used to send a request via axios to get the details of an insurance premium paid for. 
+
+  getDetailsForInsurancePremiumAfterSuccessfullPayment({commit},MpesaReceiptNumber){
+    commit("UPDATING_THE_TEST_VALUE",'test');
+    var obj = {};
+    obj['MpesaReceiptNumber'] = MpesaReceiptNumber;
+    axios
+    .post(
+      "https://mrinsuranceapi.georgekprojects.tk/api/getDetailsForInsurancePremiumAfterSuccessfullPayment",
+      obj, {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          // 'Authorization':'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbXJpbnN1cmFuY2VhcGkuZ2Vvcmdla3Byb2plY3RzLnRrXC9hcGlcL2xvZ2luIiwiaWF0IjoxNjA5NDgxNjg0LCJleHAiOjE2MDk0ODUyODQsIm5iZiI6MTYwOTQ4MTY4NCwianRpIjoiOGlRTnNsZHREc3NvbEdCTyIsInN1YiI6MSwicHJ2IjoiODdlMGFmMWVmOWZkMTU4MTJmZGVjOTcxNTNhMTRlMGIwNDc1NDZhYSJ9.wiKHMnFYv4UgAI_2Ata1unBlTqGJSOsF1ofKKRuIaZE'
+        },
+        body: {},
+      }
+    )
+    .then((response) => {
+      if (response.status === 200) {
+
+
+        commit("UPDATING_GETTING_PREMIUM_DETAILS_AFTER_SUCCESSFUL_PAYMENT_PROCCESSING_STATUS",true);
+        commit("UPDATING_GETTING_PREMIUM_DETAILS_AFTER_SUCCESSFUL_PAYMENT_PROCCESSING",response.data);
+        console.log("This is the result.");
+        console.log(response.data);
+        
+      } else {
+        console.log("We have an error, first");
+        console.log(response.status);
+        console.log(response);
+      }
+    })
+    .catch((error) => {
+      console.log("We have an error.");
+      console.log(error);
+    });
 
 
   }
+
 };
 const getters = {
   navigationStateGetter: (state) => state.navigationState,
@@ -789,6 +872,8 @@ const getters = {
   paymentProcessedSuccesfullyGetter: (state) => state.paymentProcessedSuccesfully,
   activatingAccountPersonalDetailsStateGetters: (state) => state.activatingAccountPersonalDetailsState,
   activatingAccountStateGetter: (state) =>state.activatingAccountState,
+  gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter: (state) => state.gettingPremiumDetailsAfterSuccessfulPaymentProccessing,
+  gettingPremiumDetailsAfterSuccessfulPaymentProccessingStatusGetter: (state) => state.gettingPremiumDetailsAfterSuccessfulPaymentProccessingStatus,
 };
 
 const NavigationModule = {
