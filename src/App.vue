@@ -39,7 +39,6 @@
 import { AtomSpinner } from "epic-spinners";
 import { HollowDotsSpinner } from "epic-spinners";
 import { mapGetters } from "vuex";
-// import User from '../src/Classes/User'
 import "animate.css";
 export default {
   name: "App",
@@ -53,15 +52,12 @@ export default {
   },
   created() {
     // ! immedietly the application is run, get all the navigation components
-    // const UserInstance = new User();
-    // User.sampleFunction();
-    var obj = {};    
-    // console.log(localStorage.getItem('name') + '  This is the name.');    
+    
+    var obj = {};         
     if (this.$route.name ==='ActivatingAccount') {
       obj['status'] = true;
       obj['uuid'] = this.$route.params.uuid;
-      this.$store.dispatch("getAllNavigationComponents",obj);
-      // console.log("This is the param.",this.$route.params);
+      this.$store.dispatch("getAllNavigationComponents",obj);      
     } else {
       this.$store.dispatch("getAllNavigationComponents",false);
     }

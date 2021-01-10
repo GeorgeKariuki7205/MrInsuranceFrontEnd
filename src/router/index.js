@@ -7,6 +7,7 @@ import Insurance from "../views/insurance/insuranceLanding";
 import InsuranceSmallScreen from "../views/insurance/insuranceSmallScreenPremium.vue";
 import Login from "../views/UserPages/login.vue";
 import ActivatingAccount from "../views/UserPages/activatingAccount.vue";
+import Account from "../views/UserPages/userAccount.vue"
 Vue.use(VueRouter);
 
 const routes = [
@@ -50,6 +51,11 @@ const routes = [
     path: "/insurancePremiumsMobileView",
     name: "InsuranceSmallScreen",
     component: InsuranceSmallScreen,
+  },
+  {
+    path: "/account",
+    name: "Account",
+    component: Account,
   },
 ];
 

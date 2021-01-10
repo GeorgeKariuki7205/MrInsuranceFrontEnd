@@ -1,8 +1,22 @@
-class User{
+class User {
+  updateNameDetailsOfUserAfterLogIn(fullName, firstName, lastName) {
+    localStorage.setItem("name", fullName);
+    localStorage.setItem("firstName", firstName);
+    localStorage.setItem("lastName", lastName);
+  }
 
-    sampleFunction(){
-        console.log("This is the sample Class for User.");
-        localStorage.setItem('name','George Kariuki');
-    }
+  updateTokenDetailsAfterLogIn(token) {
+    localStorage.setItem("authenticationToken", token);
+  }
+  updateLogInStatusAfterLogIn() {
+    localStorage.setItem("loggedInStatus", true);
+  }
+
+  updateEmailAddressAfterogIn(emailAddress) {
+    localStorage.setItem("emailAddress", emailAddress);
+  }
+  updatePhoneNumberAfterLogIn(phoneNumber) {
+    localStorage.setItem("phoneNumber", phoneNumber);
+  }
 }
-export default User = new User();
+export default new User();

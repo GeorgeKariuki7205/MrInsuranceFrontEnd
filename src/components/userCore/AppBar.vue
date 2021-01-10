@@ -138,7 +138,8 @@
             Contact Us
             <v-icon>fa-phone</v-icon>
           </v-tab>
-          <v-tab
+          <template v-if="logInStatusStateGetter">
+             <v-tab 
             to="/login"
             background-color="success"
             class="font-weight-bold"
@@ -148,6 +149,19 @@
             LogIn
             <v-icon>fa-sign-in-alt</v-icon>
           </v-tab>
+          </template >
+          <template else>
+             <v-tab 
+            to="/account"
+            background-color="success"
+            class="font-weight-bold"
+            text
+            style="font-size:10px;"
+          >
+           <span> My Account  <v-icon right>fa-caret-down</v-icon></span>
+            <v-icon>fa-user-circle</v-icon>
+          </v-tab>
+         </template>
         </v-tabs>
       </div>
     </v-app-bar>
@@ -169,7 +183,7 @@ export default {
     HomeDrawer: () => import("./Drawer"),
   },
   computed: {
-    ...mapGetters(["navigationStateGetter", "navigationCoverGetter"]),
+    ...mapGetters(["navigationStateGetter", "navigationCoverGetter","logInStatusStateGetter"]),
   },
   methods: {
     clickedSubCategory(subCategoryId, coverIndex) {

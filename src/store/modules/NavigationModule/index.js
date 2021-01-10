@@ -2,8 +2,12 @@ import axios from "axios";
 import {
   v4 as uuidv4
 } from "uuid";
-// import router from "../../../router"
+import router from "../../../router"
+import User from "../../../Classes/User/index"
+
 const state = {
+  userPurchases: null,
+  logInStatus: false,
   navigationState: null,
   navigationView: false,
   cover: 0,
@@ -87,6 +91,10 @@ const state = {
 
 };
 const mutations = {
+  
+  UPDATING_USER_PURCHASES(state,payload){
+    state.userPurchases = payload;
+  },
   UPDATING_GETTING_PREMIUM_DETAILS_AFTER_SUCCESSFUL_PAYMENT_PROCCESSING(state, payload){
 
     state.gettingPremiumDetailsAfterSuccessfulPaymentProccessing = payload;    
@@ -789,6 +797,19 @@ const actions = {
     .then((response) => {
       if (response.status === 200) {
         console.log(response.data);
+        commit("UPDATING_ACTIVATING_ACCOUNT_STATE",false);
+
+        // ! setting the data in the local storage.  
+        User.updateNameDetailsOfUserAfterLogIn(response.data.personalDetails[0].first_name+' '+response.data.personalDetails[0].second_name,response.data.personalDetails[0].first_name,response.data.personalDetails[0].second_name);
+        User.updateTokenDetailsAfterLogIn(response.data.tokenDetails.original.access_token);
+        User.updateLogInStatusAfterLogIn();
+        User.updateEmailAddressAfterogIn(response.data.personalDetails[0].email);
+        User.updatePhoneNumberAfterLogIn(response.data.personalDetails[0].phone_number);
+        commit("UPDATING_USER_PURCHASES",response.data.purchases);
+        router.push({          
+          name: "Account",
+        });
+
       } else {
         console.log("We have an error, first");
         console.log(response.status);
@@ -872,6 +893,8 @@ const getters = {
   paymentProcessedSuccesfullyGetter: (state) => state.paymentProcessedSuccesfully,
   activatingAccountPersonalDetailsStateGetters: (state) => state.activatingAccountPersonalDetailsState,
   activatingAccountStateGetter: (state) =>state.activatingAccountState,
+  logInStatusStateGetter: (state) =>state.logInStatus,  
+  userPurchasesStateGetter: (state) =>state.userPurchases,    
   gettingPremiumDetailsAfterSuccessfulPaymentProccessingGetter: (state) => state.gettingPremiumDetailsAfterSuccessfulPaymentProccessing,
   gettingPremiumDetailsAfterSuccessfulPaymentProccessingStatusGetter: (state) => state.gettingPremiumDetailsAfterSuccessfulPaymentProccessingStatus,
 };

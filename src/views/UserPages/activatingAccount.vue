@@ -89,13 +89,14 @@
                     style="margin-top:5%;"
                   >
                     <span>
-                      <span v-if="!activatingAccountStateGetter"
-                        > <v-icon dark>
+                      <span v-if="!activatingAccountStateGetter">
+                        <v-icon dark>
                           mdi-lock-open
-                        </v-icon> 
-                        <span class="font-weight-light text-capitalize"> Activate Account. </span> 
-                        </span
-                      >
+                        </v-icon>
+                        <span class="font-weight-light text-capitalize">
+                          Activate Account.
+                        </span>
+                      </span>
                       <span v-else>
                         <v-progress-circular
                           :width="1"
@@ -142,48 +143,29 @@ export default {
     HollowDotsSpinner,
   },
   created() {
-    console.log(
-      this.activatingAccountPersonalDetailsStateGetters["personalData"][0][
-        "first_name"
-      ]
-    );
     if (this.uuid !== null) {
-      console.log("This is the UUID.");
-      console.log(this.uuid);
-
-      // ! posting the uuid to get the details of the user.
-
-      // ! immedietly the application is run, get all the navigation components
-    // const UserInstance = new User();
-    // User.sampleFunction();
-    var obj = {};    
-    // console.log(localStorage.getItem('name') + '  This is the name.');    
-    if (this.$route.name ==='ActivatingAccount') {
-      obj['status'] = true;
-      obj['uuid'] = this.$route.params.uuid;
-      this.$store.dispatch("getAllNavigationComponents",obj);
-      // console.log("This is the param.",this.$route.params);
-    } else {
-      this.$store.dispatch("getAllNavigationComponents",false);
-    }
-    
+      var obj = {};
+      if (this.$route.name === "ActivatingAccount") {
+        obj["status"] = true;
+        obj["uuid"] = this.$route.params.uuid;
+        this.$store.dispatch("getAllNavigationComponents", obj);
+      } else {
+        this.$store.dispatch("getAllNavigationComponents", false);
+      }
     }
   },
   props: ["uuid"],
   methods: {
     activatingAccount() {
       if (this.$refs.form2.validate()) {
-          console.log(this.activatingAccountPersonalDetailsStateGetters);
-          console.log("this is the UUID: "+ this.uuid);
-          this.$store.commit("UPDATING_ACTIVATING_ACCOUNT_STATE", true);
+        this.$store.commit("UPDATING_ACTIVATING_ACCOUNT_STATE", true);
 
-          var obj = {};
-          obj['uuid'] = this.uuid;
-          obj['newPassword'] = this.personalData.password;
+        var obj = {};
+        obj["uuid"] = this.uuid;
+        obj["newPassword"] = this.personalData.password;
 
-          // ! calling method to post data to activate account.  
-          this.$store.dispatch("activateAccount",obj);
-        
+        // ! calling method to post data to activate account.
+        this.$store.dispatch("activateAccount", obj);
       }
     },
   },
@@ -196,14 +178,15 @@ export default {
       password: "",
       personalData: [],
       passwordRules: [
-      (v) => !!v || "Password is required",
-      (v) => (v && v.length >= 8) || "Password Must be more than 8 Chacters.",
-    ],
-    retypePassword:[
-      (v) => !!v || "Password is required",
-      (v) => (v && v === this.personalData.password) || "Password Must be similar to typed password.",
-    ],
-      
+        (v) => !!v || "Password is required",
+        (v) => (v && v.length >= 8) || "Password Must be more than 8 Chacters.",
+      ],
+      retypePassword: [
+        (v) => !!v || "Password is required",
+        (v) =>
+          (v && v === this.personalData.password) ||
+          "Password Must be similar to typed password.",
+      ],
     };
   },
   provide: {
@@ -219,6 +202,7 @@ export default {
     ...mapGetters([
       "activatingAccountPersonalDetailsStateGetters",
       "activatingAccountStateGetter",
+      "userPurchasesStateGetter",
     ]),
   },
 };
